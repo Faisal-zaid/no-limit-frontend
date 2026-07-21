@@ -4,8 +4,8 @@ import Image from "next/image"; //this line imports image itself
 export default function Hero() {
     return (
         <header>
-            <div class="bg-white flex flex-col">
-                <ul>
+            <div >
+                <ul className="flex justify-between items-center text-sm font-medium">
                      <li>
                          <Image
                 src="/images/nolimit-logo.png"
@@ -21,6 +21,7 @@ export default function Hero() {
                    
                 </ul>
             </div>
+           
             <div className="lower-nav">
                 <ul>
                      <li>COLLECTIONS</li>
