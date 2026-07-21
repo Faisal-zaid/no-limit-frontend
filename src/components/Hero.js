@@ -4,11 +4,11 @@ import Image from "next/image"; //this line imports image itself
 export default function Hero() {
     return (
         <header>
-            <div class="upper-nav">
+            <div class="bg-white flex flex-col">
                 <ul>
                      <li>
                          <Image
-                src="/images/no-limit-logo.png"
+                src="/images/nolimit-logo.png"
                 alt="Hero Image"
                 width={77}
                 height={75}
