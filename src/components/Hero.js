@@ -10,8 +10,8 @@ export default function Hero() {
                          <Image
                 src="/images/no-limit-logo.png"
                 alt="Hero Image"
-                width={700}
-                height={500}
+                width={77}
+                height={75}
             />
                     </li>
                     <li>NAIROBI,Ke</li>
@@ -23,9 +23,9 @@ export default function Hero() {
             </div>
             <div className="lower-nav">
                 <ul>
-                     <li>NO LIMIT BRANDS</li>
-                    <li></li>
-                    <li></li>
+                     <li>COLLECTIONS</li>
+                    <li>@</li>
+                    <li>NO LIMIT BRANDS</li>
                 </ul>
             </div>
         </header>
