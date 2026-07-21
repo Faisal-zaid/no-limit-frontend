@@ -3,10 +3,10 @@ export default function Hero() {
         <header>
             <div class="upper-nav">
                 <ul>
+                    <li>NAIROBI,Ke</li>
+                    <li>CUSTOM BRANDING & MERCHANDISE</li>
                     <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
+                    <li>NO LIMIT BRANDS</li>
                 </ul>
             </div>
         </header>
