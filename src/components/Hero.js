@@ -9,6 +9,13 @@ export default function Hero() {
                     <li>NO LIMIT BRANDS</li>
                 </ul>
             </div>
+            <div className="lower-nav">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
         </header>
     );
 }
