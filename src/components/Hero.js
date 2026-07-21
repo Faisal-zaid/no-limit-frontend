@@ -23,8 +23,8 @@ export default function Hero() {
                 </ul>
             </div>
            
-            <div className="lower-nav">
-                <ul>
+            <div >
+                <ul className="ml-[40%] flex flex-row list-none gap-[35%] text-[18px]">
                      <li>COLLECTIONS</li>
                     <li>@</li>
                     <li>NO LIMIT BRANDS</li>
