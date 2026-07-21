@@ -3,6 +3,7 @@ import Image from "next/image"; //this line imports image itself
 
 export default function Hero() {
     return (
+        <div className="bg-white text-black">
         <header>
             <div >
                 <ul className="flex justify-between items-center text-sm font-medium">
@@ -30,5 +31,6 @@ export default function Hero() {
                 </ul>
             </div>
         </header>
+        </div>
     );
 }
