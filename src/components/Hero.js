@@ -1,12 +1,12 @@
 import Image from "next/image"; //this line imports image itself
-import { rancho } from "../layout"; // or from "@/app/fonts"
+import { rancho } from "../app/layout"; // or from "@/app/fonts"
 
 export default function Hero() {
   return (
     <div className="bg-white text-black">
-      <header className={rancho.className}>
+      <header className={rancho.className  } >
         <div>
-          <ul className="flex justify-between items-center text-sm font-medium">
+          <ul className="flex justify-between items-center text-sm font-medium font-black">
             <li>
               <Image
                 src="/images/nolimit-logo.png"
