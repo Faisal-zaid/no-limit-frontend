@@ -32,7 +32,7 @@ export default function Hero() {
       </header>
 
       {/* part of the paragraph hero section */}
-      <section className="flex">
+      <section className="flex justify-between">
         <div className={londrina.className}>
           <div className="upper-words">
             <h2>
