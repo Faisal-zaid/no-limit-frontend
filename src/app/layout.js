@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 //using this in nav header
-const rancho = Rancho({     
+export const rancho = Rancho({     
   subsets: ["latin"],
   weight: "400",
 });

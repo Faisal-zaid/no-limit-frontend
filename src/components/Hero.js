@@ -1,9 +1,10 @@
 import Image from "next/image"; //this line imports image itself
+import { rancho } from "../layout"; // or from "@/app/fonts"
 
 export default function Hero() {
   return (
     <div className="bg-white text-black">
-      <header>
+      <header className={rancho.className}>
         <div>
           <ul className="flex justify-between items-center text-sm font-medium">
             <li>
