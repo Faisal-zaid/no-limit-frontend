@@ -31,6 +31,11 @@ export default function Hero() {
                 </ul>
             </div>
         </header>
+
+        // the body part of the hero section
+        <body>
+
+        </body>
         </div>
     );
 }
