@@ -4,7 +4,7 @@ import { londrina } from "../app/layout"; // or from "@/app/fonts"
 
 export default function Hero() {
   return (
-    <div className="bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover ml-[3%] mr-[3%]">  
+    <div className="ml-[3%] mr-[3%]">  
     {/* bg no repeat and bg cover prevent the background from repeating three times */}
       <header className={rancho.className}>
         <div>
