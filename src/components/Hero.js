@@ -4,7 +4,8 @@ import { londrina } from "../app/layout"; // or from "@/app/fonts"
 
 export default function Hero() {
   return (
-    <div className="bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover ml-[3%] mr-[3%]">  //bg no repeat and bg cover prevent the background from repeating three times
+    <div className="bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover ml-[3%] mr-[3%]">  
+    {/* bg no repeat and bg cover prevent the background from repeating three times */}
       <header className={rancho.className}>
         <div>
           <ul className="flex justify-between items-center text-sm font-medium font-black">
@@ -62,7 +63,7 @@ export default function Hero() {
         </div>
         <div className="w-1/2">
           <Image
-            src="/images/nolimit-hero.png"
+            src="/images/hero image.png"
             alt="Hero Image"
             width={570}
             height={550}
