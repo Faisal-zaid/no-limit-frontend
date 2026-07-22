@@ -40,7 +40,7 @@ export default function Hero() {
             </h2>
           </div>
           <div className="text-[20px]">
-            <p>
+            {/* <p>
               Transforming ideas into premium tangible assets. From custom
               apparel <br />
               and magic mugs to high-grade vinyl stickers and event banners, we
@@ -52,7 +52,7 @@ export default function Hero() {
               accuracy, and 
               <br />
               durable quality built to elevate your brand presence.
-            </p>
+            </p> */}
           </div>
           {/* div for buttons */}
           <div className="flex gap-[1%] ml-[5%]">
