@@ -32,13 +32,24 @@ export default function Hero() {
             </div>
         </header>
 
-        // the body part of the hero section
+        {/* part of the paragraph hero section */}
         <body>
            <div className="words">
-
+                <div className="upper-words">
+               <h2>NO LIMIT BRANDS <br /> CRAFTED FOR <br /> IMPACT </h2>
+               </div>
+                <div className="lower-words">
+                    <p>
+                        Transforming ideas into premium tangible assets. From custom apparel <br/>
+                        and magic mugs to high-grade vinyl stickers and event banners, we engineer<br/>
+                        print and branding solutions for businesses that refuse to blend in. Every <br/>
+                        piece is crafted with high-precision finish, vibrant color accuracy, and durable<br/>
+                         quality built to elevate your brand presence.
+                    </p>
+                </div>
            </div>
            <div className="image">
-            
+
            </div>
         </body>
         </div>
