@@ -34,7 +34,9 @@ export default function Hero() {
 
         // the body part of the hero section
         <body>
-
+           <div className="words">
+            
+           </div>
         </body>
         </div>
     );
