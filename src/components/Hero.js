@@ -34,7 +34,7 @@ export default function Hero() {
       {/* part of the paragraph hero section */}
       <section className="flex justify-between">
         <div className={`${londrina.className} flex flex-col gap-[10%]`}>
-          <div className="text-[30px] mb-[1%]">
+          <div className="text-[30px] mb-[1%] mt-[10%]">
             <h2>
               NO LIMIT BRANDS <br /> CRAFTED FOR <br /> IMPACT{" "}
             </h2>
