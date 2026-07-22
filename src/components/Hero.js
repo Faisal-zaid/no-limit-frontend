@@ -1,5 +1,6 @@
 import Image from "next/image"; //this line imports image itself
 import { rancho } from "../app/layout"; // or from "@/app/fonts"
+import { londrina } from "../app/layout"; // or from "@/app/fonts"
 
 export default function Hero() {
   return (
@@ -32,7 +33,7 @@ export default function Hero() {
 
       {/* part of the paragraph hero section */}
       <section className="flex">
-        <div className="words">
+        <div className={londrina.className}>
           <div className="upper-words">
             <h2>
               NO LIMIT BRANDS <br /> CRAFTED FOR <br /> IMPACT{" "}

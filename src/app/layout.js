@@ -19,7 +19,7 @@ export const rancho = Rancho({
 
 export const londrina = Londrina_Solid({     
   subsets: ["latin"],
-  // weight: "400",
+   weight: "400",
 });
 
 export const metadata = {
