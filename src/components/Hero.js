@@ -57,7 +57,7 @@ export default function Hero() {
           {/* div for buttons */}
           <div className="flex gap-[1%] ml-[5%]">
                 <button class="bg-black text-white border pr-[1%] pl-[1%] rounded-[10] ">VIEW PROJECTS</button>
-                <button class="border border-2 border-black-500 pr-[1%] pl-[1%] rounded-[10]">CONTACT ME</button>
+                <button class="border border-2 border-black-500 pr-[1%] pl-[1%] rounded-[10]">CONTACT US</button>
             </div>
         </div>
         <div className="w-1/2">
