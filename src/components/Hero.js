@@ -54,6 +54,11 @@ export default function Hero() {
               quality built to elevate your brand presence.
             </p>
           </div>
+          {/* div for buttons */}
+          <div class="flex gap-[1%] ml-[5%]">
+                <button class="bg-black text-white ">VIEW PROJECTS</button>
+                <button class="contact">CONTACT ME</button>
+            </div>
         </div>
         <div className="w-1/2">
           <Image
