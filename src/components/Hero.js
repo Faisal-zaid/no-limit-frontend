@@ -61,7 +61,7 @@ export default function Hero() {
             alt="Hero Image"
             width={570}
             height={550}
-            className="w-[85%] h-[95%]"
+            className="w-[85%] h-[95%]" // this code resizes the hero section image
           />
         </div>
       </section>
