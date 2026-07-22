@@ -5,7 +5,7 @@ import { londrina } from "../app/layout"; // or from "@/app/fonts"
 export default function Hero() {
   return (
     <div className="bg-white text-black">
-      <header className={rancho.className  } >
+      <header className={rancho.className}>
         <div>
           <ul className="flex justify-between items-center text-sm font-medium font-black">
             <li>
@@ -55,12 +55,13 @@ export default function Hero() {
             </p>
           </div>
         </div>
-        <div className="image">
+        <div className="w-1/2">
           <Image
             src="/images/nolimit-hero.png"
             alt="Hero Image"
             width={570}
             height={550}
+            className="w-[85%] h-[95%]"
           />
         </div>
       </section>
