@@ -32,9 +32,9 @@ export default function Hero() {
       </header>
 
       {/* part of the paragraph hero section */}
-      <section className="flex justify-between">
-        <div className={`${londrina.className} flex flex-col gap-[10%]`}>
-          <div className="text-[30px] mb-[1%] mt-[10%]">
+      <section className="flex justify-between gap-[2%] ">
+        <div className={`${londrina.className} w-1/2 flex flex-col gap-[5%]`}>
+          <div className="text-[30px] mb-[1%] mt-[8%]">
             <h2>
               NO LIMIT BRANDS <br /> CRAFTED FOR <br /> IMPACT{" "}
             </h2>
@@ -49,13 +49,13 @@ export default function Hero() {
               print and branding solutions for businesses that refuse to blend
               in. Every <br />
               piece is crafted with high-precision finish, vibrant color
-              accuracy, and durable
+              accuracy, and 
               <br />
-              quality built to elevate your brand presence.
+              durable quality built to elevate your brand presence.
             </p>
           </div>
           {/* div for buttons */}
-          <div class="flex gap-[1%] ml-[5%]">
+          <div className="flex gap-[1%] ml-[5%]">
                 <button class="bg-black text-white border pr-[1%] pl-[1%] rounded-[10] ">VIEW PROJECTS</button>
                 <button class="border border-2 border-black-500 pr-[1%] pl-[1%] rounded-[10]">CONTACT ME</button>
             </div>
