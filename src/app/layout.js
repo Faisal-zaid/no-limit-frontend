@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono,Rancho } from "next/font/google";
+import { Geist, Geist_Mono,Rancho,Londrina_Solid } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 export const rancho = Rancho({     
   subsets: ["latin"],
   weight: "400",
+});
+
+export const londrina = Londrina_Solid({     
+  subsets: ["latin"],
+  // weight: "400",
 });
 
 export const metadata = {
