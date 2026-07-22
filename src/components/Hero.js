@@ -4,7 +4,7 @@ import { londrina } from "../app/layout"; // or from "@/app/fonts"
 
 export default function Hero() {
   return (
-    <div className="bg-white text-black ml-[3%] mr-[3%]">
+    <div className="bg-[url('/images/nolimitbackground.png')] ml-[3%] mr-[3%]">
       <header className={rancho.className}>
         <div>
           <ul className="flex justify-between items-center text-sm font-medium font-black">
