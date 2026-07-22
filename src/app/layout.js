@@ -11,7 +11,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const rancho = Rancho({
+//using this in nav header
+const rancho = Rancho({     
   subsets: ["latin"],
   weight: "400",
 });
