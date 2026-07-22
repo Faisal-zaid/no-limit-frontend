@@ -44,12 +44,17 @@ export default function Hero() {
                         and magic mugs to high-grade vinyl stickers and event banners, we engineer<br/>
                         print and branding solutions for businesses that refuse to blend in. Every <br/>
                         piece is crafted with high-precision finish, vibrant color accuracy, and durable<br/>
-                         quality built to elevate your brand presence.
+                        quality built to elevate your brand presence.
                     </p>
                 </div>
            </div>
            <div className="image">
-
+               <Image
+                src="/images/nolimit-hero.png"
+                alt="Hero Image"
+                width={570}
+                height={550}
+            />
            </div>
         </body>
         </div>
