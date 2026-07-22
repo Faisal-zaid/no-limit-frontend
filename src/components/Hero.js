@@ -33,13 +33,13 @@ export default function Hero() {
 
       {/* part of the paragraph hero section */}
       <section className="flex justify-between">
-        <div className={londrina.className}>
-          <div className="upper-words">
+        <div className={`${londrina.className} flex flex-col gap-[10%]`}>
+          <div className="text-[30px] mb-[1%]">
             <h2>
               NO LIMIT BRANDS <br /> CRAFTED FOR <br /> IMPACT{" "}
             </h2>
           </div>
-          <div className="lower-words">
+          <div className="text-[20px]">
             <p>
               Transforming ideas into premium tangible assets. From custom
               apparel <br />
