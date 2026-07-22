@@ -63,7 +63,7 @@ export default function Hero() {
         </div>
         <div className="w-1/2">
           <Image
-            src="/images/hero image.png"
+            src="/images/latest background2.png"
             alt="Hero Image"
             width={570}
             height={550}
