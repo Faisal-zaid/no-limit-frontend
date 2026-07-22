@@ -1,62 +1,67 @@
 import Image from "next/image"; //this line imports image itself
 
-
 export default function Hero() {
-    return (
-        <div className="bg-white text-black">
-        <header>
-            <div >
-                <ul className="flex justify-between items-center text-sm font-medium">
-                     <li>
-                         <Image
+  return (
+    <div className="bg-white text-black">
+      <header>
+        <div>
+          <ul className="flex justify-between items-center text-sm font-medium">
+            <li>
+              <Image
                 src="/images/nolimit-logo.png"
                 alt="Hero Image"
                 width={77}
                 height={75}
-            />
-                    </li>
-                    <li>NAIROBI,Ke</li>
-                    <li></li>
-                    <li>CUSTOM BRANDING & MERCHANDISE</li>
-                    
-                   
-                </ul>
-            </div>
-           
-            <div >
-                <ul className="ml-[40%] flex flex-row list-none gap-[35%] text-[18px]">
-                     <li>COLLECTIONS</li>
-                    <li>@</li>
-                    <li>NO LIMIT BRANDS</li>
-                </ul>
-            </div>
-        </header>
-
-        {/* part of the paragraph hero section */}
-        <body>
-           <div className="words">
-                <div className="upper-words">
-               <h2>NO LIMIT BRANDS <br /> CRAFTED FOR <br /> IMPACT </h2>
-               </div>
-                <div className="lower-words">
-                    <p>
-                        Transforming ideas into premium tangible assets. From custom apparel <br/>
-                        and magic mugs to high-grade vinyl stickers and event banners, we engineer<br/>
-                        print and branding solutions for businesses that refuse to blend in. Every <br/>
-                        piece is crafted with high-precision finish, vibrant color accuracy, and durable<br/>
-                        quality built to elevate your brand presence.
-                    </p>
-                </div>
-           </div>
-           <div className="image">
-               <Image
-                src="/images/nolimit-hero.png"
-                alt="Hero Image"
-                width={570}
-                height={550}
-            />
-           </div>
-        </body>
+              />
+            </li>
+            <li>NAIROBI,Ke</li>
+            <li></li>
+            <li>CUSTOM BRANDING & MERCHANDISE</li>
+          </ul>
         </div>
-    );
+
+        <div>
+          <ul className="ml-[40%] flex flex-row list-none gap-[35%] text-[18px]">
+            <li>COLLECTIONS</li>
+            <li>@</li>
+            <li>NO LIMIT BRANDS</li>
+          </ul>
+        </div>
+      </header>
+
+      {/* part of the paragraph hero section */}
+      <section className="flex">
+        <div className="words">
+          <div className="upper-words">
+            <h2>
+              NO LIMIT BRANDS <br /> CRAFTED FOR <br /> IMPACT{" "}
+            </h2>
+          </div>
+          <div className="lower-words">
+            <p>
+              Transforming ideas into premium tangible assets. From custom
+              apparel <br />
+              and magic mugs to high-grade vinyl stickers and event banners, we
+              engineer
+              <br />
+              print and branding solutions for businesses that refuse to blend
+              in. Every <br />
+              piece is crafted with high-precision finish, vibrant color
+              accuracy, and durable
+              <br />
+              quality built to elevate your brand presence.
+            </p>
+          </div>
+        </div>
+        <div className="image">
+          <Image
+            src="/images/nolimit-hero.png"
+            alt="Hero Image"
+            width={570}
+            height={550}
+          />
+        </div>
+      </section>
+    </div>
+  );
 }
