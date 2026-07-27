@@ -5,5 +5,5 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation'; // pa
 export default function SearchBar() {
   const searchParams = useSearchParams(); // returns exactly what is needed from the url
   const pathname = usePathname(); // gets the current path you are on. e.g maybe you are on products it will let you know that
-  const { replace } = useRouter();
+  const { replace } = useRouter(); // suppose initial link was '/products' now after replace it can be '/products?search=laptop'
 }
