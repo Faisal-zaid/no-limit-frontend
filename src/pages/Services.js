@@ -1,5 +1,6 @@
 import Search from "@/components/Search";
 import Categories from "@/components/Category";
+import Categorydescription from "@/components/Categorydes";
 
 export default function Services() {
   return (
@@ -8,11 +9,13 @@ export default function Services() {
         <Search />
       </div>
 
-      <div className="content-area">
+      <div className="flex justify-between">
         <div className="border">
           <Categories/>
         </div>
-        <div className="category info"></div>
+        <div className="category info">
+          <Categorydescription/>
+        </div>
       </div>
     </section>
   );
