@@ -4,3 +4,14 @@ import { useEffect, useState } from "react";
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
+
+   useEffect(() => {
+    async function loadCategories() {
+      const response = await fetch("http://127.0.0.1:8001/category");
+      const data = await response.json();
+
+      setCategories(data);
+    }
+
+    loadCategories();
+  }, []);
