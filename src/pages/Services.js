@@ -1,4 +1,5 @@
 import Search from "@/components/Search";
+import Categories from "@/components/Category";
 
 export default function Services() {
   return (
@@ -8,7 +9,9 @@ export default function Services() {
       </div>
 
       <div className="content-area">
-        <div className="categories"></div>
+        <div className="categories">
+          <Categories/>
+        </div>
         <div className="category info"></div>
       </div>
     </section>
