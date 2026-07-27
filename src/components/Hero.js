@@ -45,8 +45,8 @@ export default function Hero() {
               Delivering custom print and branding experiences that blend visual clarity <br />
               with premium production. Built for brands, events, and businesses that aim<br />
               to lead rather than follow. Each order is executed with extreme attention to<br />
-              detail—focusing on material durability, vibrant color output, and seamless design<br />
-              integration. 
+              detail—focusing on material durability, vibrant color output, and seamless <br />
+              design integration. 
             </p> 
           </div>
           {/* div for buttons */}
