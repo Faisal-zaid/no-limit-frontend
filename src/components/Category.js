@@ -15,3 +15,16 @@ export default function Categories() {
 
     loadCategories();
   }, []);
+
+  return (
+    <div>
+      <h2>Categories</h2>
+
+      {categories.map((category) => (
+        <div key={category.id}>
+          <h3>{category.name}</h3>
+        </div>
+      ))}
+    </div>
+  );
+}
