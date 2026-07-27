@@ -18,7 +18,7 @@ export default function SearchBar() {
     replace(`${pathname}?${params.toString()}`);
   }
   return (
-    <div className="relative w-full max-w-md flex border border-2 border-black-500 rounded-lg gap-[2%]">
+    <div className="relative w-full max-w-md flex border border-2 border-black-500 rounded-lg">
       <input
         type="text"
         placeholder="Search product..."
@@ -26,7 +26,7 @@ export default function SearchBar() {
         onChange={(e) => handleSearch(e.target.value)}
         className="w-full px-4 py-2 text-black bg-white border border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#8A2BE2]"
       />
-      <button className='pr-[2%]'>Search</button>
+      <button className='pr-[2%] pl-[2%] border-l border-l-2 border-black-500'>Search</button>
     </div>
   );
 }
