@@ -26,7 +26,8 @@ export default function SearchBar() {
         onChange={(e) => handleSearch(e.target.value)}
         className="w-full px-4 py-2 text-black bg-white border border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#8A2BE2]"
       />
-      <button className='pr-[2%] pl-[2%] border-l border-l-2 border-black-500 hover:bg-[white] hover:text-[purple] cursor-pointer'>Search</button>
+      //the button is basically useless here its just for aesthetics
+      <button className='pr-[2%] pl-[2%] border-l border-l-2 border-black hover:bg-[white] hover:text-[purple] cursor-pointer'>Search</button>
     </div>
   );
 }
