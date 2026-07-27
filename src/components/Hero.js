@@ -42,20 +42,10 @@ export default function Hero() {
           </div>
           <div className="text-[20px]">
              <p>
-              Founded on the belief that every brand deserves to be seen,<br />
-              remembered, and trusted, No Limit Brands is a rapidly growing <br />
-              integrated branding, printing, and advertising company headquartered <br />
-              in Nairobi, Kenya. Operating from the heart of Nairobi's Central <br/>
-              Business District, we provide innovative branding solutions that <br />
-              transform ideas into impactful visual experiences.Our business<br />
-              combines creative strategy, cutting-edge print technology, and <br />
-              exceptional customer service to deliver branding solutions that help<br />
-              businesses establish a powerful market presence.As a hybrid business<br/>
-              serving both walk-in and digital clients, No Limit Brands has positioned<br />
-              itself as a reliable branding partner for businesses across Kenya,<br />
-              offering end-to-end solutions from concept development to production<br />
-              and installation. This aligns with the company's stated mission, <br />
-              vision, services, target market, and growth plans.
+              Delivering custom print and branding experiences that blend visual clarity with premium<br />
+              production. Built for brands, events, and businesses that aim to lead rather than follow. Each<br />
+              order is executed with extreme attention to detail—focusing on material durability, vibrant color <br />
+              output, and seamless design integration. 
             </p> 
           </div>
           {/* div for buttons */}
