@@ -42,10 +42,11 @@ export default function Hero() {
           </div>
           <div className="text-[20px]">
              <p>
-              Delivering custom print and branding experiences that blend visual clarity with premium<br />
-              production. Built for brands, events, and businesses that aim to lead rather than follow. Each<br />
-              order is executed with extreme attention to detail—focusing on material durability, vibrant color <br />
-              output, and seamless design integration. 
+              Delivering custom print and branding experiences that blend visual clarity <br />
+              with premium production. Built for brands, events, and businesses that aim<br />
+              to lead rather than follow. Each order is executed with extreme attention to<br />
+              detail—focusing on material durability, vibrant color output, and seamless design<br />
+              integration. 
             </p> 
           </div>
           {/* div for buttons */}
