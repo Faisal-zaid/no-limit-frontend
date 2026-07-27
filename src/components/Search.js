@@ -18,15 +18,15 @@ export default function SearchBar() {
     replace(`${pathname}?${params.toString()}`);
   }
   return (
-    <div className="relative w-full max-w-md flex">
+    <div className="relative w-full max-w-md flex border border-2 border-black-500 rounded-lg gap-[2%]">
       <input
         type="text"
         placeholder="Search product..."
         defaultValue={searchParams.get('q')?.toString()}
         onChange={(e) => handleSearch(e.target.value)}
-        className="w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8A2BE2]"
+        className="w-full px-4 py-2 text-black bg-white border border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#8A2BE2]"
       />
-      <button>Search</button>
+      <button className='pr-[2%]'>Search</button>
     </div>
   );
 }
