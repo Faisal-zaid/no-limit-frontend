@@ -10,7 +10,7 @@ export default function SearchBar() {
   function handleSearch(term) {
     const params = new URLSearchParams(searchParams);
     if (term) {
-      params.set('q', term);
+      params.set('q', term); // this part is like adding a new line below an existing one so it updates the category and add product
     } else {
       params.delete('q');
     }
