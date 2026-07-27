@@ -9,7 +9,7 @@ export default function Services() {
       </div>
 
       <div className="content-area">
-        <div className="categories">
+        <div className="border">
           <Categories/>
         </div>
         <div className="category info"></div>
