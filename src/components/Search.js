@@ -17,4 +17,15 @@ export default function SearchBar() {
     // Updates the URL without reloading the page (e.g., /shop?q=shirts)
     replace(`${pathname}?${params.toString()}`);
   }
+  return (
+    <div className="relative w-full max-w-md">
+      <input
+        type="text"
+        placeholder="Search product..."
+        defaultValue={searchParams.get('q')?.toString()}
+        onChange={(e) => handleSearch(e.target.value)}
+        className="w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8A2BE2]"
+      />
+    </div>
+  );
 }
