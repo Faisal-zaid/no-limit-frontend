@@ -1,1 +1,3 @@
 'use client';  //this tells next js this component should run on the client not only in the server side
+
+import { useEffect, useState } from "react";
