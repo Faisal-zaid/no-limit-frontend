@@ -20,13 +20,15 @@ export default function Categorydescription() {
 
   return (
     <div>
-     
+     <h2>Kenya's best {category.name}</h2>
 
       {categories.map((category) => (
+        
         <div key={category.id}>
-          <h2>Kenya's best {category.name}</h2>
+          
           <div>
           <h3>{category.name}</h3>
+          <p>Trusted across the country</p>
           </div>
         </div>
       ))}
