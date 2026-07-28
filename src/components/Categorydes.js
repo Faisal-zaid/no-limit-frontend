@@ -37,7 +37,10 @@ export default function Categorydescription({ selectedCategory }) {
       ) : (
         <p className="text-gray-400">Loading details...</p>
       )}
-      
+      <div className="flex gap-[5%]">
+        <button>Shop for Products</button>
+        <button>Get a Quote</button>
+      </div>
     </div>
   );
 }
