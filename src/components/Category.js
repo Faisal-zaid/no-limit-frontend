@@ -17,7 +17,7 @@ export default function Categories() {
   }, []);
 
   return (
-    <div>
+    <div >
       <h2 className="border-b">Categories</h2>
 
       {categories.map((category) => (
