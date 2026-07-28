@@ -28,7 +28,7 @@ export default function Categorydescription({ selectedCategory }) {
       <h2 className="text-2xl font-bold">
         Kenya's best {activeCategory?.name || "..."}
       </h2>
-      <div className="flex flex-col">
+      <div className="flex ">
         <div>
           <p className="text-gray-500">
             {activeCategory?.name ? `${activeCategory.name} - ` : ""}Trusted
