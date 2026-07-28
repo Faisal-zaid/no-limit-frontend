@@ -18,6 +18,9 @@ export default function Categorydescription({ selectedCategory }) {
     loadCategories();
   }, []);
 
+  // Use the selected category name if clicked, otherwise default to the first fetched category
+  const activeCategoryName = selectedCategory?.name || categories[0]?.name || "...";
+  
   return (
     <div>
      <h2>Kenya's best {category.name}</h2>
