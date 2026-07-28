@@ -22,7 +22,7 @@ export default function Categories() {
 
       {categories.map((category) => (
         <div key={category.id}>
-          <h3>{category.name}</h3>
+          <h3 className="mt-[10%]">{category.name}</h3>
         </div>
       ))}
     </div>
