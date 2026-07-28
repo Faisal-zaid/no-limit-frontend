@@ -11,7 +11,7 @@ export default function Services() {
 
       <div className="flex justify-between">
         <div className="border ml-[5%] mt-[3%] pl-[2%] pr-[2%]">
-          <h2 className="border-b">Categories</h2>
+          
           <Categories/>
         </div>
         <div className="category info">
