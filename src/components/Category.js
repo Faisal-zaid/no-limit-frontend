@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export default function Categories(onSelectCategory) {
+export default function Categories({onSelectCategory}) {
   const [categories, setCategories] = useState([]);
 
    useEffect(() => {
