@@ -16,11 +16,11 @@ export default function Services() {
             Categories
           </h2>
           <div className="pl-[35%] ">
-            <Categories />
+            <Categories onSelectCategory={setSelectedCategory}/>
           </div>
         </div>
         <div className="category info">
-          <Categorydescription />
+          <Categorydescription selectedCategory={selectedCategory}/>
         </div>
       </div>
     </section>
