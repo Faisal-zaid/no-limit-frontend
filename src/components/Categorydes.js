@@ -25,7 +25,8 @@ export default function Categorydescription({ selectedCategory }) {
   return (
     <div>
      <h2>Kenya's best {activeCategoryName}</h2>
-      <p>Trusted across the country</p>
+      <p>{activeCategoryName} Trusted across the country</p>
+      <h2>category.subheading</h2>
 
       {activeCategory ? (
         <div key={activeCategory.id} className="mt-4 p-4 border rounded-md">
@@ -36,6 +37,7 @@ export default function Categorydescription({ selectedCategory }) {
       ) : (
         <p className="text-gray-400">Loading details...</p>
       )}
+      
     </div>
   );
 }
