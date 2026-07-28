@@ -28,7 +28,7 @@ export default function Categorydescription({ selectedCategory }) {
       <h2 className="text-2xl font-bold">
         Kenya's best {activeCategory?.name || "..."}
       </h2>
-      <div>
+      <div className="flex flex-col">
         <div>
           <p className="text-gray-500">
             {activeCategory?.name ? `${activeCategory.name} - ` : ""}Trusted
@@ -63,16 +63,16 @@ export default function Categorydescription({ selectedCategory }) {
               Get a Quote
             </button>
           </div>
-          <div>
-            {/* Render Image from backend if available */}
-            {activeCategory?.image && (
-              <img
-                src={activeCategory.image}
-                alt={activeCategory.name}
-                className="my-4 max-h-48 object-cover rounded-lg"
-              />
-            )}
-          </div>
+        </div>
+        <div>
+          {/* Render Image from backend if available */}
+          {activeCategory?.image && (
+            <img
+              src={activeCategory.image}
+              alt={activeCategory.name}
+              className="my-4 max-h-48 object-cover rounded-lg"
+            />
+          )}
         </div>
       </div>
     </div>
