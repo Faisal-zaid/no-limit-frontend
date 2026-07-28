@@ -11,13 +11,15 @@ export default function Services() {
 
       <div className="flex justify-between">
         <div className="border ml-[5%] mt-[3%]">
-           <h2 className="border-b px-4 py-3 font-semibold text-lg">Categories</h2>
-           <div>
-          <Categories/>
-           </div>
+          <h2 className="border-b px-15 py-3 font-semibold text-lg">
+            Categories
+          </h2>
+          <div className="pl-[35%] ">
+            <Categories />
+          </div>
         </div>
         <div className="category info">
-          <Categorydescription/>
+          <Categorydescription />
         </div>
       </div>
     </section>
