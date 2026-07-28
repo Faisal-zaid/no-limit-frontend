@@ -6,6 +6,8 @@ import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
 
 export default function Services() {
+
+  const [selectedCategory, setSelectedCategory] = useState(null);
   return (
     <section>
       <div className="text-[20px] ml-[3%] mt-[5%]">
