@@ -20,10 +20,10 @@ export default function Categorydescription({ selectedCategory }) {
 
   // Use the selected category name if clicked, otherwise default to the first fetched category
   const activeCategoryName = selectedCategory?.name || categories[0]?.name || "...";
-  
+
   return (
     <div>
-     <h2>Kenya's best {category.name}</h2>
+     <h2>Kenya's best {activeCategoryName}</h2>
       <p>Trusted across the country</p>
 
       {categories.map((category) => (
