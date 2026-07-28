@@ -20,7 +20,7 @@ export default function Categorydescription() {
 
   return (
     <div>
-      <h2>Categories</h2>
+      <h2>Kenya's best {category.name}</h2>
 
       {categories.map((category) => (
         <div key={category.id}>
