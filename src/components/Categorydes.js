@@ -30,39 +30,49 @@ export default function Categorydescription({ selectedCategory }) {
       </h2>
       <div>
         <div>
-        <p className="text-gray-500">
-          {activeCategory?.name ? `${activeCategory.name} - ` : ""}Trusted
-          across the country
-        </p>
+          <p className="text-gray-500">
+            {activeCategory?.name ? `${activeCategory.name} - ` : ""}Trusted
+            across the country
+          </p>
 
-        {/* Render Subheading dynamically from backend */}
-        {activeCategory?.subheading && (
-          <h3 className="text-lg font-semibold mt-2 text-purple-700">
-            {activeCategory.subheading}
-          </h3>
-        )}
+          {/* Render Subheading dynamically from backend */}
+          {activeCategory?.subheading && (
+            <h3 className="text-lg font-semibold mt-2 text-purple-700">
+              {activeCategory.subheading}
+            </h3>
+          )}
 
-        {/* Render Description from backend */}
-        {activeCategory ? (
-          <div key={activeCategory.id} className="mt-4 p-4 border rounded-md">
-            <p className="text-gray-700">
-              {activeCategory.description ||
-                `High quality ${activeCategory.name} products and services.`}
-            </p>
+          {/* Render Description from backend */}
+          {activeCategory ? (
+            <div key={activeCategory.id} className="mt-4 p-4 border rounded-md">
+              <p className="text-gray-700">
+                {activeCategory.description ||
+                  `High quality ${activeCategory.name} products and services.`}
+              </p>
+            </div>
+          ) : (
+            <p className="text-gray-400">Loading details...</p>
+          )}
+
+          {/* Call to Action Buttons */}
+          <div className="flex gap-[5%] mt-6">
+            <button className="px-4 py-2 bg-black text-white rounded-md">
+              Shop for Products
+            </button>
+            <button className="px-4 py-2 border border-gray-400 rounded-md">
+              Get a Quote
+            </button>
           </div>
-        ) : (
-          <p className="text-gray-400">Loading details...</p>
-        )}
-
-        {/* Call to Action Buttons */}
-        <div className="flex gap-[5%] mt-6">
-          <button className="px-4 py-2 bg-black text-white rounded-md">
-            Shop for Products
-          </button>
-          <button className="px-4 py-2 border border-gray-400 rounded-md">
-            Get a Quote
-          </button>
-        </div>
+          <div>
+            {/* Render Image from backend if available */}
+            {activeCategory?.image && (
+              <img
+                src={activeCategory.image}
+                alt={activeCategory.name}
+                className="my-4 max-h-48 object-cover rounded-lg"
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
