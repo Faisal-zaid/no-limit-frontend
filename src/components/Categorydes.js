@@ -21,21 +21,21 @@ export default function Categorydescription({ selectedCategory }) {
   // Use the selected category name if clicked, otherwise default to the first fetched category
   const activeCategoryName = selectedCategory?.name || categories[0]?.name || "...";
 
+  const activeCategory = selectedCategory || categories[0]; // this helps in writing the description
   return (
     <div>
      <h2>Kenya's best {activeCategoryName}</h2>
       <p>Trusted across the country</p>
 
-      {categories.map((category) => (
-        
-        <div key={category.id}>
-          
-     
-          <h3>{category.name}</h3>
-         
-          
+      {activeCategory ? (
+        <div key={activeCategory.id} className="mt-4 p-4 border rounded-md">
+          <p className="text-gray-700">
+            {activeCategory.description || `High quality ${activeCategory.name} products and services.`}
+          </p>
         </div>
-      ))}
+      ) : (
+        <p className="text-gray-400">Loading details...</p>
+      )}
     </div>
   );
 }
