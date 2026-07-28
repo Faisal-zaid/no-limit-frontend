@@ -23,7 +23,7 @@ export default function Categories({onSelectCategory}) {
       {categories.map((category) => (
         <div key={category.id}>
           <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
-           className="mt-[10%]">{category.name}</h3>
+           className="mt-[10%]">{category.name}</h3>{category.description}
         </div>
       ))}
     </div>
