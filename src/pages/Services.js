@@ -17,7 +17,7 @@ export default function Services() {
           </div>
           <div>
             <h3>About</h3>
-            <h3>Cart</h3>
+            <h3> Cart</h3>
           </div>
         </div>
         <div className="flex ml-[3%] items-center justify-between mr-[3%]">
