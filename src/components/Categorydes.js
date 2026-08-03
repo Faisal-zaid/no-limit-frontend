@@ -56,10 +56,10 @@ export default function Categorydescription({ selectedCategory }) {
 
           {/* Call to Action Buttons */}
           <div className="flex gap-[5%] mt-6">
-            <button className="px-4 py-2 bg-black text-white rounded-md">
+            <button className="pl-2 pb-1 pr-2 pt-1 items-center text-[10px] bg-purple-600 text-white rounded-md">
               Shop for Products
             </button>
-            <button className="px-4 py-2 border border-gray-400 rounded-md">
+            <button className="pl-2 pb-1 pr-2 pt-1 items-center text-[10px] border border-gray-400 rounded-md">
               Get a Quote
             </button>
           </div>
