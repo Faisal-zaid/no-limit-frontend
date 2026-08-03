@@ -21,7 +21,7 @@ export default function Services() {
               <ul className="flex">
                 <li>
                   <Image
-                                  src="/images/Cart--Streamline-Platinum.png"
+                                  src="/images/info.png"
                                   alt="Hero Image"
                                   width={25}
                                   height={25}
