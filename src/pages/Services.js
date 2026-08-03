@@ -17,8 +17,32 @@ export default function Services() {
             <Search />
           </div>
           <div>
-            <h3>About</h3>
-            <h3> Cart</h3>
+            <div>
+              <ul>
+                <li>
+                  <Image
+                                  src="frontend/public/icons/Cart--Streamline-Platinum.png"
+                                  alt="Hero Image"
+                                  width={77}
+                                  height={75}
+                                />
+                </li>
+                <li>About</li>
+              </ul>
+            </div>
+            <div>
+              <ul>
+                <li>
+                  <Image
+                                  src="frontend/public/icons/Cart--Streamline-Platinum.png"
+                                  alt="Hero Image"
+                                  width={77}
+                                  height={75}
+                                />
+                </li>
+                <li>Cart</li>
+              </ul>
+            </div>
           </div>
         </div>
         <div className="flex ml-[3%] items-center justify-between mr-[3%]">
