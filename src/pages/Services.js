@@ -12,11 +12,17 @@ export default function Services() {
     <section>
       <div>
         <div className="text-[20px] ml-[3%] mt-[5%]">
-          <Search />
+          <div>
+            <Search />
+          </div>
+          <div>
+            <h3>About</h3>
+            <h3>Cart</h3>
+          </div>
         </div>
         <div className="flex ml-[3%] items-center justify-between mr-[3%]">
           <div className="mr">All Products </div>
-          <div >
+          <div>
             <Navbar />
           </div>
           <div className="ml">Shop All</div>
