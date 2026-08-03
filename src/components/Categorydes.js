@@ -44,7 +44,7 @@ export default function Categorydescription({ selectedCategory }) {
 
           {/* Render Description from backend */}
           {activeCategory ? (
-            <div key={activeCategory.id} className="mt-4 p-4 border rounded-md">
+            <div key={activeCategory.id} className="mt-4 p-4 ">
               <p className="text-gray-700">
                 {activeCategory.description ||
                   `High quality ${activeCategory.name} products and services.`}
