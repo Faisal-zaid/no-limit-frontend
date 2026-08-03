@@ -26,7 +26,7 @@ export default function Services() {
             </ul>
             <Search />
           </div>
-          <div className="flex gap-[8%]">
+          <div className="flex items-center gap-[8%]">
             <div>
               <ul className="flex items-center">
                 <li>
