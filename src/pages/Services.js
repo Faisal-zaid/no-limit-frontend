@@ -12,13 +12,13 @@ export default function Services() {
   return (
     <section>
       <div>
-        <div className="text-[20px] ml-[3%] mt-[5%]">
+        <div className="flex justify-between text-[20px] ml-[3%] mt-[5%]">
           <div>
             <Search />
           </div>
-          <div>
+          <div className="flex">
             <div>
-              <ul>
+              <ul className="flex">
                 <li>
                   <Image
                                   src="/images/Cart--Streamline-Platinum.png"
@@ -31,7 +31,7 @@ export default function Services() {
               </ul>
             </div>
             <div>
-              <ul>
+              <ul className="flex">
                 <li>
                   <Image
                                   src="/images/Cart--Streamline-Platinum.png"
