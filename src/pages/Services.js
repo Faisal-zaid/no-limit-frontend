@@ -68,7 +68,7 @@ export default function Services() {
             </button>
           </div>
         </div>
-        <div className="flex ml-[3%] items-center justify-between mr-[3%]">
+        <div className="flex ml-[3%] items-center mt-6 justify-between mr-[3%]">
           <div className="mr">All Products </div>
           <div className="flex-1 flex justify-center mx-4 overflow-hidden">
             <Navbar />
