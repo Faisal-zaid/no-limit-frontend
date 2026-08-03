@@ -14,7 +14,7 @@ export default function Services() {
         <div className="text-[20px] ml-[3%] mt-[5%]">
           <Search />
         </div>
-        <div className="flex ml-[3%] gap-[10%] mr-[3%]">
+        <div className="flex ml-[3%] items-center justify-between mr-[3%]">
           <div className="mr">All Products</div>
           <div>
             <Navbar />
