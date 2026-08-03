@@ -12,7 +12,7 @@ export default function Services() {
   return (
     <section>
       <div className="bg-white text-black-100 ">
-        <div className="flex gap-[50%] text-[20px] ml-[3%] mt-[5%] pt-[1%]">
+        <div className="flex gap-[40%] text-[20px] ml-[3%] mt-[5%] pt-[1%]">
          
           <div className="flex gap-[10%]">
             <ul className="flex justify-between items-center text-sm font-medium font-black">
@@ -40,9 +40,7 @@ export default function Services() {
                 </li>
                 <li>About</li>
               </ul>
-              <button>
-                Sign In
-              </button>
+             
             </div>
             <div>
               <ul className="flex">
@@ -57,6 +55,9 @@ export default function Services() {
                 <li>Cart</li>
               </ul>
             </div>
+             <button>
+                Sign In
+              </button>
           </div>
         </div>
         <div className="flex ml-[3%] items-center justify-between mr-[3%]">
