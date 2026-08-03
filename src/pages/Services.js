@@ -5,6 +5,7 @@ import Search from "@/components/Search";
 import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 
 export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
