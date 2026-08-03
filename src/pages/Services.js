@@ -14,12 +14,12 @@ export default function Services() {
         <div className="text-[20px] ml-[3%] mt-[5%]">
           <Search />
         </div>
-        <div className="flex justify-between ml-[3%] mr-[3%]">
-          <div>All Products</div>
+        <div className="flex ml-[3%] mr-[3%]">
+          <div className="mr-[10%]">All Products</div>
           <div>
             <Navbar />
           </div>
-          <div>Shop All</div>
+          <div className="ml-[10%]">Shop All</div>
         </div>
       </div>
 
