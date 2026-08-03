@@ -11,10 +11,10 @@ export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   return (
     <section>
-      <div>
-        <div className="flex gap-[25%] text-[20px] ml-[3%] mt-[5%]">
+      <div className="bg-white text-black-100 ">
+        <div className="flex gap-[50%] text-[20px] ml-[3%] mt-[5%] pt-[1%]">
          
-          <div>
+          <div className="flex gap-[10%]">
             <ul className="flex justify-between items-center text-sm font-medium font-black">
                         <li>
                           <Image
@@ -40,6 +40,9 @@ export default function Services() {
                 </li>
                 <li>About</li>
               </ul>
+              <button>
+                Sign In
+              </button>
             </div>
             <div>
               <ul className="flex">
