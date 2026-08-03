@@ -69,7 +69,19 @@ export default function Services() {
           </div>
         </div>
         <div className="flex ml-[3%] items-center mt-6 justify-between mr-[3%]">
-          <div className="pr-3 pl-3 pt-2 pb-2 bg-gray-100 rounded-[10px]">All Products </div>
+          <div className="pr-3 pl-3 pt-2 pb-2 bg-gray-100 rounded-[10px]">
+            <ul className="flex items-center gap-3">
+                <li>
+                  <Image
+                    src="/images/menu.png"
+                    alt="Hero Image"
+                    width={25}
+                    height={25}
+                  />
+                </li>
+                <li>All Products</li>
+              </ul>
+               </div>
           <div className="flex-1 flex justify-center mx-4 overflow-hidden">
             <Navbar />
           </div>
