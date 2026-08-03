@@ -11,7 +11,7 @@ export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   return (
     <section>
-      <div className="bg-white text-black-100 ">
+      <div className="bg-white border-b-gray-700 shadow-xl text-gray-700 ">
         <div className="flex gap-[40%] text-[20px] ml-[3%] mt-[5%] pt-[1%]">
           <div className="flex gap-[10%]">
             <ul className="flex justify-between items-center text-sm font-medium font-black">
@@ -26,7 +26,7 @@ export default function Services() {
             </ul>
             <Search />
           </div>
-          <div className="flex gap-[10%]">
+          <div className="flex gap-[8%]">
             <div>
               <ul className="flex">
                 <li>
@@ -77,7 +77,7 @@ export default function Services() {
         </div>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between mt-[3%] mr-[3%]">
         <div className="border ml-[5%] mt-[3%]">
           <h2 className="border-b px-15 py-3 font-semibold text-lg">
             Categories
