@@ -14,6 +14,18 @@ export default function Services() {
       <div>
         <div className="flex gap-[55%] text-[20px] ml-[3%] mt-[5%]">
           <div>
+             <ul className="flex justify-between items-center text-sm font-medium font-black">
+                        <li>
+                          <Image
+                            src="/images/nolimit-logo.png"
+                            alt="Hero Image"
+                            width={77}
+                            height={75}
+                          />
+                        </li>
+                        </ul>
+          </div>
+          <div>
             <Search />
           </div>
           <div className="flex gap-[10%]">
