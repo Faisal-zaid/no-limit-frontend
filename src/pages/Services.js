@@ -78,7 +78,7 @@ export default function Services() {
       </div>
 
       <div className="flex border rounded-[20] justify-between ml-[3%] mt-[3%] mr-[3%]">
-        <div className="border ml-[5%] mt-[3%]">
+        <div className="border ml-7 mt-[3%]">
           <h2 className="border-b px-15 py-3 font-semibold text-lg">
             Categories
           </h2>
@@ -86,7 +86,7 @@ export default function Services() {
             <Categories onSelectCategory={setSelectedCategory} />
           </div>
         </div>
-        <div className="category info">
+        <div className="mr-7 mt-[3%] border px-15 py-3">
           <Categorydescription selectedCategory={selectedCategory} />
         </div>
       </div>
