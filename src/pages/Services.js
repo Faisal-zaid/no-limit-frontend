@@ -12,9 +12,10 @@ export default function Services() {
   return (
     <section>
       <div>
-        <div className="flex gap-[55%] text-[20px] ml-[3%] mt-[5%]">
+        <div className="flex gap-[25%] text-[20px] ml-[3%] mt-[5%]">
+         
           <div>
-             <ul className="flex justify-between items-center text-sm font-medium font-black">
+            <ul className="flex justify-between items-center text-sm font-medium font-black">
                         <li>
                           <Image
                             src="/images/nolimit-logo.png"
@@ -24,8 +25,6 @@ export default function Services() {
                           />
                         </li>
                         </ul>
-          </div>
-          <div>
             <Search />
           </div>
           <div className="flex gap-[10%]">
