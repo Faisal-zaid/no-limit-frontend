@@ -11,7 +11,7 @@ export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   return (
     <section>
-      <div className="bg-white border-b-gray-700 shadow-xl text-gray-700 ">
+      <div className="bg-white border-b-gray-700 shadow-xl text-gray-700 pb-3">
         <div className="flex gap-[40%] text-[20px] ml-[3%] mt-[5%] pt-[1%]">
           <div className="flex gap-[10%]">
             <ul className="flex justify-between items-center text-sm font-medium font-black">
@@ -71,8 +71,8 @@ export default function Services() {
         <div className="flex ml-[3%] items-center justify-between mr-[3%]">
           <div className="mr">All Products </div>
           <div className="flex-1 flex justify-center mx-4 overflow-hidden">
-    <Navbar />
-  </div>
+            <Navbar />
+          </div>
           <div className="ml">Shop All</div>
         </div>
       </div>
