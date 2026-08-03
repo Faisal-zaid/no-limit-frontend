@@ -14,7 +14,7 @@ export default function Services() {
         <div className="text-[20px] ml-[3%] mt-[5%]">
           <Search />
         </div>
-        <div>
+        <div className="flex gap-[5%]">
           <div>All Products</div>
           <div>
             <Navbar/>
