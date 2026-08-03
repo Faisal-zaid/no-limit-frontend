@@ -56,7 +56,18 @@ export default function Services() {
               </ul>
             </div>
              <button>
-                SignIn
+                <ul className="flex">
+                <li>
+                  <Image
+                                  src="/images/login.png"
+                                  alt="Hero Image"
+                                  width={25}
+                                  height={25}
+                                />
+                </li>
+                <li>Cart</li>
+              </ul>
+                
               </button>
           </div>
         </div>
