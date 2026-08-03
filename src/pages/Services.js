@@ -4,6 +4,7 @@ import { useState } from "react";
 import Search from "@/components/Search";
 import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
+import Navbar from "@/components/Navbar";
 
 export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
