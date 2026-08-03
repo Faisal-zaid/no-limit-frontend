@@ -21,7 +21,11 @@
 
 body {
  
-  /* background: white; */
+   background: url('/images/nolimitbackground.png');
+   background-repeat: no-repeat;    /* Prevents the image from repeating */
+  background-size: cover;          /* Scales the image to fill the entire screen */
+  background-position: center;     /* Centers the background image */
+  background-attachment: fixed;    /* (Optional) Keeps the background fixed while scrolling */ 
   color: black;
   font-family: Arial, Helvetica, sans-serif;
 }
