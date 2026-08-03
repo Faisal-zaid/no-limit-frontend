@@ -73,7 +73,7 @@ export default function Services() {
           <div className="flex-1 flex justify-center mx-4 overflow-hidden">
             <Navbar />
           </div>
-          <div className="ml">Shop All</div>
+          <div className="ml text-purple-600">Shop All</div>
         </div>
       </div>
 
