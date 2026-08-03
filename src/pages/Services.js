@@ -15,7 +15,9 @@ export default function Services() {
         <Search />
       </div>
       <div>
-        
+        <div>All Products</div>
+        <div></div>
+        <div>Shop All</div>
       </div>
       </div>
 
