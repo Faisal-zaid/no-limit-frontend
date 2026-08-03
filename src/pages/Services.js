@@ -82,11 +82,11 @@ export default function Services() {
           <h2 className="border-b px-15 py-3 font-semibold text-lg">
             Categories
           </h2>
-          <div className="pl-[35%] ">
+          <div className="pl-[35 ">
             <Categories onSelectCategory={setSelectedCategory} />
           </div>
         </div>
-        <div className="mr-7 mt-[3%] border px-15 py-3">
+        <div className="mr-7 mt-[3%] border  flex-1 border border-gray-200 rounded-xl shadow-sm overflow-hidden">
           <Categorydescription selectedCategory={selectedCategory} />
         </div>
       </div>

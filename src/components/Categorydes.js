@@ -25,10 +25,10 @@ export default function Categorydescription({ selectedCategory }) {
   return (
     <div>
       {/* Dynamic Header */}
-      <h2 className="text-2xl font-bold">
+      <h2 className="w-full text-2xl font-bold border-b border-gray-200 pb-3 px-6 pt-4">
         Kenya's best {activeCategory?.name || "..."}
       </h2>
-      <div className="flex ">
+      <div className="flex px-15 py-3 ">
         <div>
           <p className="text-gray-500">
             {activeCategory?.name ? `${activeCategory.name} - ` : ""}Trusted
