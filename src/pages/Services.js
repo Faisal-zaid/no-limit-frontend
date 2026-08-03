@@ -53,7 +53,7 @@ export default function Services() {
                 <li>Cart</li>
               </ul>
             </div>
-            <button className="bg-purple-600 pt-1 text-white border pr-[1%] pl-[1%] rounded-[10px]">
+            <button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-1.5 rounded-lg transition-colors">
               <ul className="flex items-center">
                 <li>
                   <Image
