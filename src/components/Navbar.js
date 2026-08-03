@@ -23,7 +23,7 @@ export default function Navbar({onSelectCategory}) {
       {categories.map((category) => (
         <div key={category.id}>
           <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
-           className="mt-[10%]">{category.name}</h3>{category.description}{category.image}{category.subheading}
+           className="nav">{category.name}</h3>
         </div>
       ))}
     </div>
