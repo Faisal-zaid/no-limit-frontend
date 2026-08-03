@@ -16,7 +16,9 @@ export default function Services() {
         </div>
         <div>
           <div>All Products</div>
-          <div></div>
+          <div>
+            <Navbar/>
+          </div>
           <div>Shop All</div>
         </div>
       </div>
