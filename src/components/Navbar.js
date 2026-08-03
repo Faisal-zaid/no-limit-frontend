@@ -17,11 +17,11 @@ export default function Navbar({onSelectCategory}) {
   }, []);
 
   return (
-    <div >
+    <div className="flex" >
      
 
       {categories.map((category) => (
-        <div key={category.id}>
+        <div key={category.id} >
           <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
            className="nav">{category.name}</h3>
         </div>
