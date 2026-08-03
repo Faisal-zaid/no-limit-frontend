@@ -10,8 +10,10 @@ export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   return (
     <section>
+      <div>
       <div className="text-[20px] ml-[3%] mt-[5%]">
         <Search />
+      </div>
       </div>
 
       <div className="flex justify-between">
