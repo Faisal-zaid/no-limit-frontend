@@ -12,19 +12,19 @@ export default function Services() {
   return (
     <section>
       <div>
-        <div className="flex justify-between text-[20px] ml-[3%] mt-[5%]">
+        <div className="flex gap-[55%] text-[20px] ml-[3%] mt-[5%]">
           <div>
             <Search />
           </div>
-          <div className="flex">
+          <div className="flex gap-[10%]">
             <div>
               <ul className="flex">
                 <li>
                   <Image
                                   src="/images/Cart--Streamline-Platinum.png"
                                   alt="Hero Image"
-                                  width={77}
-                                  height={75}
+                                  width={25}
+                                  height={25}
                                 />
                 </li>
                 <li>About</li>
@@ -36,8 +36,8 @@ export default function Services() {
                   <Image
                                   src="/images/Cart--Streamline-Platinum.png"
                                   alt="Hero Image"
-                                  width={77}
-                                  height={75}
+                                  width={25}
+                                  height={25}
                                 />
                 </li>
                 <li>Cart</li>
