@@ -16,7 +16,7 @@ export default function Services() {
         </div>
         <div className="flex ml-[3%] items-center justify-between mr-[3%]">
           <div className="mr">All Products</div>
-          <div>
+          <div >
             <Navbar />
           </div>
           <div className="ml">Shop All</div>
