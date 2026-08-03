@@ -27,7 +27,7 @@ export default function Services() {
                         </ul>
             <Search />
           </div>
-          <div className="flex gap-[10%]">
+          <div className="flex gap-[1%]">
             <div>
               <ul className="flex">
                 <li>
@@ -56,7 +56,7 @@ export default function Services() {
               </ul>
             </div>
              <button>
-                Sign In
+                SignIn
               </button>
           </div>
         </div>
