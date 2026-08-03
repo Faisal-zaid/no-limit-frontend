@@ -25,13 +25,13 @@ export default function Categorydescription({ selectedCategory }) {
   return (
     <div>
       {/* Dynamic Header */}
-      <h2 className="w-full text-2xl font-bold border-b border-gray-200 pb-3 px-6 pt-4">
-        Kenya's best {activeCategory?.name || "..."}
+      <h2 className="w-full text-2xl font-bold border-b border-gray-200 pb-3 px-6 pt-4 text-[15px] text-center pb-6">
+        Kenya's best <span className="text-purple-600">{activeCategory?.name || "..."}</span>
       </h2>
       <div className="flex px-15 py-3 ">
         <div>
-          <p className="text-gray-500">
-            {activeCategory?.name ? `${activeCategory.name} - ` : ""}Trusted
+          <p className="text-gray-800 text-[13px] ">
+            <span className="border border-none pt-1 text-[18px] pb-1 pl-3 pr-2 rounded-[30px] bg-purple-600 text-white">{activeCategory?.name ? `${activeCategory.name}  ` : ""} </span> Trusted
             across the country
           </p>
 
