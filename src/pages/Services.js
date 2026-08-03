@@ -78,11 +78,11 @@ export default function Services() {
       </div>
 
       <div className="flex border rounded-[20] justify-between ml-[3%] mt-[3%] mr-[3%]">
-        <div className="border ml-7 mt-[3%]">
+        <div className="border ml-7 mr-7 mt-[3%]">
           <h2 className="border-b px-15 py-3 font-semibold text-lg">
             Categories
           </h2>
-          <div className="pl-[35 ">
+          <div className="pl-[35%] ">
             <Categories onSelectCategory={setSelectedCategory} />
           </div>
         </div>
