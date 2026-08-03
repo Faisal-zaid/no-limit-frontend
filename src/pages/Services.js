@@ -13,62 +13,59 @@ export default function Services() {
     <section>
       <div className="bg-white text-black-100 ">
         <div className="flex gap-[40%] text-[20px] ml-[3%] mt-[5%] pt-[1%]">
-         
           <div className="flex gap-[10%]">
             <ul className="flex justify-between items-center text-sm font-medium font-black">
-                        <li>
-                          <Image
-                            src="/images/nolimit-logo.png"
-                            alt="Hero Image"
-                            width={77}
-                            height={75}
-                          />
-                        </li>
-                        </ul>
+              <li>
+                <Image
+                  src="/images/nolimit-logo.png"
+                  alt="Hero Image"
+                  width={77}
+                  height={75}
+                />
+              </li>
+            </ul>
             <Search />
           </div>
-          <div className="flex gap-[1%]">
+          <div className="flex gap-[10%]">
             <div>
               <ul className="flex">
                 <li>
                   <Image
-                                  src="/images/info.png"
-                                  alt="Hero Image"
-                                  width={25}
-                                  height={25}
-                                />
+                    src="/images/info.png"
+                    alt="Hero Image"
+                    width={25}
+                    height={25}
+                  />
                 </li>
                 <li>About</li>
               </ul>
-             
             </div>
             <div>
               <ul className="flex">
                 <li>
                   <Image
-                                  src="/images/Cart--Streamline-Platinum.png"
-                                  alt="Hero Image"
-                                  width={25}
-                                  height={25}
-                                />
+                    src="/images/Cart--Streamline-Platinum.png"
+                    alt="Hero Image"
+                    width={25}
+                    height={25}
+                  />
                 </li>
                 <li>Cart</li>
               </ul>
             </div>
-             <button>
-                <ul className="flex">
+            <button>
+              <ul className="flex">
                 <li>
                   <Image
-                                  src="/images/login.png"
-                                  alt="Hero Image"
-                                  width={25}
-                                  height={25}
-                                />
+                    src="/images/login.png"
+                    alt="Hero Image"
+                    width={25}
+                    height={25}
+                  />
                 </li>
                 <li>Cart</li>
               </ul>
-                
-              </button>
+            </button>
           </div>
         </div>
         <div className="flex ml-[3%] items-center justify-between mr-[3%]">
