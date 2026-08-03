@@ -63,7 +63,7 @@ export default function Services() {
                     height={25}
                   />
                 </li>
-                <li>Cart</li>
+                <li>SignIn</li>
               </ul>
             </button>
           </div>
