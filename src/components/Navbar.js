@@ -17,7 +17,7 @@ export default function Navbar({onSelectCategory}) {
   }, []);
 
   return (
-    <div className="flex " >
+    <div className="flex gap-[15%]" >
      
 
       {categories.map((category) => (
