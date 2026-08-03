@@ -28,7 +28,7 @@ export default function Services() {
           </div>
           <div className="flex gap-[8%]">
             <div>
-              <ul className="flex">
+              <ul className="flex items-center">
                 <li>
                   <Image
                     src="/images/info.png"
@@ -41,7 +41,7 @@ export default function Services() {
               </ul>
             </div>
             <div>
-              <ul className="flex">
+              <ul className="flex items-center">
                 <li>
                   <Image
                     src="/images/Cart--Streamline-Platinum.png"
@@ -53,8 +53,8 @@ export default function Services() {
                 <li>Cart</li>
               </ul>
             </div>
-            <button>
-              <ul className="flex">
+            <button className="bg-purple-600 pt-1 text-white border pr-[1%] pl-[1%] rounded-[10px]">
+              <ul className="flex items-center">
                 <li>
                   <Image
                     src="/images/login.png"
