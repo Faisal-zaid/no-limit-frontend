@@ -21,7 +21,7 @@ export default function Services() {
               <ul>
                 <li>
                   <Image
-                                  src="frontend/public/icons/Cart--Streamline-Platinum.png"
+                                  src="frontend/public/images/Cart--Streamline-Platinum.png"
                                   alt="Hero Image"
                                   width={77}
                                   height={75}
@@ -34,7 +34,7 @@ export default function Services() {
               <ul>
                 <li>
                   <Image
-                                  src="frontend/public/icons/Cart--Streamline-Platinum.png"
+                                  src="frontend/public/images/Cart--Streamline-Platinum.png"
                                   alt="Hero Image"
                                   width={77}
                                   height={75}
