@@ -109,7 +109,7 @@ export default function Categorydescription({ selectedCategory }) {
             </div>
           </div>
         </div>
-        <div>
+        <div className="flex">
           <div>
           {/* Render Image from backend if available */}
           {activeCategory?.image && (
