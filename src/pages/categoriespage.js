@@ -11,8 +11,8 @@ export default function CategoriesPage() {
   return (
     /* 1. Added bg-white (or bg-gray-50) and minimum height so the background is visible */
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover pt-6">
-      <div className="items-center pt-10 ">
-        <div className="border border-purple-700 ">Our Sevices</div></div>
+      <div className=" pt-10 ">
+        <button className="border justify-center text-center border-purple-700 ">Our Sevices</button></div>
       <div className="w-[100%] bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover flex gap-6 border border-gray-200 rounded-2xl p-6 shadow-sm">
         
         {/* Left Sidebar */}
