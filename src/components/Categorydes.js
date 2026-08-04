@@ -72,7 +72,7 @@ export default function Categorydescription({ selectedCategory }) {
               <ul className="flex items-center">
                 <li>
                   <Image
-                    src="/images/info.png"
+                    src="/images/thunder.png"
                     alt="Hero Image"
                     width={25}
                     height={25}
