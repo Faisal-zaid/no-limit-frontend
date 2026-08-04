@@ -25,7 +25,6 @@ export default function Categorydescription({ selectedCategory }) {
 
   return (
     <div>
-      <div>
       {/* Dynamic Header */}
       <h2 className="w-full text-2xl font-bold border-b border-gray-200 pb-3 px-6 pt-4 text-[15px] text-center pb-6">
         Kenya's best{" "}
@@ -111,6 +110,7 @@ export default function Categorydescription({ selectedCategory }) {
           </div>
         </div>
         <div>
+          <div>
           {/* Render Image from backend if available */}
           {activeCategory?.image && (
             <img
@@ -119,11 +119,27 @@ export default function Categorydescription({ selectedCategory }) {
               className="my-4 max-h-48 object-cover rounded-lg"
             />
           )}
+          </div>
+          <div>
+            {/* Render Image from backend if available */}
+          {activeCategory?.image && (
+            <img
+              src={activeCategory.image}
+              alt={activeCategory.name}
+              className="my-4 max-h-48 object-cover rounded-lg"
+            />
+          )}
+
+          {/* Render Image from backend if available */}
+          {activeCategory?.image && (
+            <img
+              src={activeCategory.image}
+              alt={activeCategory.name}
+              className="my-4 max-h-48 object-cover rounded-lg"
+            />
+          )}
+          </div>
         </div>
-      </div>
-      </div>
-      <div>
-        
       </div>
     </div>
   );
