@@ -63,6 +63,11 @@ export default function Categorydescription({ selectedCategory }) {
               Get a Quote
             </button>
           </div>
+          <div className="flex mt-5 gap-4 text-[11px]">
+            <p>Expert Designers</p>
+            <p>Unlimited Revisions</p>
+            <p>Fast Turnaround</p>
+          </div>
         </div>
         <div>
           {/* Render Image from backend if available */}
