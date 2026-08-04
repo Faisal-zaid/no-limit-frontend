@@ -95,7 +95,7 @@ export default function Services() {
             Categories
           </h2>
           <div className="r ">
-            <div className="pl-[35%]">
+            <div className="pl-[25%]">
               <Categories onSelectCategory={setSelectedCategory} />
             </div>
             <div className="flex justify-center align-center mb-3">
