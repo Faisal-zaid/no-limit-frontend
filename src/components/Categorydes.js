@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Categorydescription({ selectedCategory }) {
   const [categories, setCategories] = useState([]);
@@ -26,13 +27,16 @@ export default function Categorydescription({ selectedCategory }) {
     <div>
       {/* Dynamic Header */}
       <h2 className="w-full text-2xl font-bold border-b border-gray-200 pb-3 px-6 pt-4 text-[15px] text-center pb-6">
-        Kenya's best <span className="text-purple-600">{activeCategory?.name || "..."}</span>
+        Kenya's best{" "}
+        <span className="text-purple-600">{activeCategory?.name || "..."}</span>
       </h2>
       <div className="flex px-15 py-3 ">
         <div>
           <p className="text-gray-800 text-[13px] ">
-            <span className="border border-none pt-1 text-[18px] pb-1 pl-3 pr-2 rounded-[30px] bg-purple-600 text-white">{activeCategory?.name ? `${activeCategory.name}  ` : ""} </span> Trusted
-            across the country
+            <span className="border border-none pt-1 text-[18px] pb-1 pl-3 pr-2 rounded-[30px] bg-purple-600 text-white">
+              {activeCategory?.name ? `${activeCategory.name}  ` : ""}{" "}
+            </span>{" "}
+            Trusted across the country
           </p>
 
           {/* Render Subheading dynamically from backend */}
@@ -64,9 +68,45 @@ export default function Categorydescription({ selectedCategory }) {
             </button>
           </div>
           <div className="flex mt-5 gap-4 text-[11px]">
-            <p>Expert Designers</p>
-            <p>Unlimited Revisions</p>
-            <p>Fast Turnaround</p>
+            <div>
+              <ul className="flex items-center">
+                <li>
+                  <Image
+                    src="/images/info.png"
+                    alt="Hero Image"
+                    width={25}
+                    height={25}
+                  />
+                </li>
+                <li>Expert Designers</li>
+              </ul>
+            </div>
+            <div>
+              <ul className="flex items-center">
+                <li>
+                  <Image
+                    src="/images/info.png"
+                    alt="Hero Image"
+                    width={25}
+                    height={25}
+                  />
+                </li>
+                <li>Unlimited Revisions</li>
+              </ul>
+            </div>
+            <div>
+              <ul className="flex items-center">
+                <li>
+                  <Image
+                    src="/images/info.png"
+                    alt="Hero Image"
+                    width={25}
+                    height={25}
+                  />
+                </li>
+                <li>Fast Turnaround</li>
+              </ul>
+            </div>
           </div>
         </div>
         <div>
