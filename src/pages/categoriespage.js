@@ -1,30 +1,38 @@
+"use client";
+
+import { useState } from "react";
+import Search from "@/components/Search";
 import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
+import Navbar from "@/components/Navbar";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function Categoriespage({onSelectCategory}) {
-  const [categories, setCategories] = useState([]);
-
-   useEffect(() => {
-    async function loadCategories() {
-      const response = await fetch("http://127.0.0.1:8001/category");
-      const data = await response.json();
-
-      setCategories(data);
-    }
-
-    loadCategories();
-  }, []);
-
+export default function categoriespage() {
+  const [selectedCategory, setSelectedCategory] = useState(null);
   return (
-    <div className="flex items-center gap-15  justify-center" >
-     
+    <section>
+      
 
-      {categories.slice(0,8).map((category) => (
-        <div key={category.id} >
-          <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
-           className="nav">{category.name}</h3>
+      <div className="flex border rounded-[20] justify-between ml-[3%] mt-[3%] mr-[3%]">
+        <div className="border rounded-[15px] ml-7 mr-7 mt-[3%]">
+          <h2 className="border-b px-15 py-3 font-semibold text-lg">
+            Categories
+          </h2>
+          <div className="r ">
+            <div className="pl-[25%]">
+              <Categories onSelectCategory={setSelectedCategory} />
+            </div>
+            <div className="flex justify-center align-center mb-3">
+            <Link href="/categoriespage"  className="mt-3 pr-3 pl-3 pt-1 pb-1 bg-purple-600 rounded-[6px] hover:bg-[white] hover:text-[purple] cursor-pointer">
+              {" "}
+              View all Categories
+            </Link>
+            </div>
+          </div>
         </div>
-      ))}
-    </div>
+       
+      </div>
+    </section>
   );
 }
