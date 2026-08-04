@@ -101,7 +101,7 @@ export default function Services() {
             <div className="flex justify-center align-center mb-3">
             <button className="mt-3 pr-3 pl-3 pt-1 pb-1 bg-purple-600 rounded-[6px] hover:bg-[white] hover:text-[purple] cursor-pointer">
               {" "}
-              View all Services
+              View all Categories
             </button>
             </div>
           </div>
