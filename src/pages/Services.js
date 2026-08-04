@@ -100,7 +100,7 @@ export default function Services() {
               <Categories onSelectCategory={setSelectedCategory} />
             </div>
             <div className="flex justify-center align-center mb-3">
-            <Link href="/Categoriespage"  className="mt-3 pr-3 pl-3 pt-1 pb-1 bg-purple-600 rounded-[6px] hover:bg-[white] hover:text-[purple] cursor-pointer">
+            <Link href="/categoriespage"  className="mt-3 pr-3 pl-3 pt-1 pb-1 bg-purple-600 rounded-[6px] hover:bg-[white] hover:text-[purple] cursor-pointer">
               {" "}
               View all Categories
             </Link>
