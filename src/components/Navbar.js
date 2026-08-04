@@ -20,7 +20,7 @@ export default function Navbar({onSelectCategory}) {
     <div className="flex items-center gap-15  justify-center" >
      
 
-      {categories.map((category) => (
+      {categories.slice(0,8).map((category) => (
         <div key={category.id} >
           <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
            className="nav">{category.name}</h3>
