@@ -20,7 +20,7 @@ export default function Categories({onSelectCategory}) {
     <div >
      
 
-      {categories.map((category) => (
+      {categories.slice(0,4).map((category) => (
         <div key={category.id}>
           <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
            className="mt-[10%]">{category.name}</h3>
