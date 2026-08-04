@@ -94,8 +94,10 @@ export default function Services() {
           <h2 className="border-b px-15 py-3 font-semibold text-lg">
             Categories
           </h2>
-          <div className="pl-[35%] ">
+          <div className="r ">
+            <div className="pl-[35%]">
             <Categories onSelectCategory={setSelectedCategory} />
+            </div>
             <button className="mt-3 pr-3 pl-3 pt-1 pb-1 bg-purple-600 rounded-[6px]"> View all Services</button>
           </div>
         </div>
