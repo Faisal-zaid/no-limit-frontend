@@ -10,7 +10,7 @@ export default function CategoriesPage() {
 
   return (
     /* 1. Added bg-white (or bg-gray-50) and minimum height so the background is visible */
-    <section className="min-h-screen bg-gray-50 p-6">
+    <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover p-6">
       <div className="max-w-7xl mx-auto flex gap-6 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         
         {/* Left Sidebar */}
