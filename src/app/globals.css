@@ -21,7 +21,7 @@
 
 body {
  
-   background: url('/images/nolimitbackground.png');
+   background: url('/images/nolimitbackground.png') !important;
    background-repeat: no-repeat;    
   background-size: cover;          
   background-position: center;    
