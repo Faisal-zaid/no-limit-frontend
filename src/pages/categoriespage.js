@@ -41,10 +41,7 @@ export default function CategoriesPage() {
           </div>
         </div>
 
-        {/* Right Details Panel */}
-        <div className="flex-1 border border-gray-200 rounded-xl p-4 bg-white">
-          <Categorydescription selectedCategory={selectedCategory} />
-        </div>
+       
       </div>
     </section>
   );
