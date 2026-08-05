@@ -9,6 +9,13 @@ import Link from "next/link";
 export default function CategoriesPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  const phoneNumber = "254780887324"; 
+  
+  // Optional pre-filled message (use encodeURIComponent so spaces/symbols format correctly in the URL)
+  const defaultMessage = encodeURIComponent("Hello No Limit Brands! I would like to consult on your branding services.");
+  
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
+
   return (
     /* 1. Added bg-white (or bg-gray-50) and minimum height so the background is visible */
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover pt-6">
