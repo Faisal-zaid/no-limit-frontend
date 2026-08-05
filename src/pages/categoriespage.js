@@ -12,11 +12,18 @@ export default function CategoriesPage() {
     /* 1. Added bg-white (or bg-gray-50) and minimum height so the background is visible */
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover pt-6">
       <div className=" pt-10 ">
-        <button className="border justify-center text-center border-purple-700 ">Our Sevices</button>
+        <button className="border justify-center text-center border-purple-700 ">
+          Our Sevices
+        </button>
         <h2>Professional Branding Services</h2>
-        </div>
+        <p>
+          No Limit Brands delivers high-impact branding solutions across Nairobi, Kenya, and East Africa<br/>
+          specializing in complete brand identity development, corporate branding, vehicle wraps and matatu <br/>
+          graphics, professional signage, promotional printing, packaging design, and corporate stationery for <br/>
+          ambitious startups, SMEs, and enterprise corporations.
+        </p>
+      </div>
       <div className="w-[100%] bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover flex gap-6 border border-gray-200 rounded-2xl p-6 shadow-sm">
-        
         {/* Left Sidebar */}
         <div className="w-1/4 border border-gray-200 rounded-xl p-4 bg-white">
           <h2 className="border-b pb-3 mb-4 font-semibold text-lg text-gray-800">
@@ -25,8 +32,8 @@ export default function CategoriesPage() {
           <div>
             <Categories onSelectCategory={setSelectedCategory} />
             <div className="flex justify-center mt-4">
-              <Link 
-                href="/categoriespage" 
+              <Link
+                href="/categoriespage"
                 className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors"
               >
                 View all Categories
@@ -39,7 +46,6 @@ export default function CategoriesPage() {
         <div className="flex-1 border border-gray-200 rounded-xl p-4 bg-white">
           <Categorydescription selectedCategory={selectedCategory} />
         </div>
-
       </div>
     </section>
   );
