@@ -29,7 +29,7 @@ export default function CategoriesPage() {
         <div className="w-1/4 border border-gray-200 rounded-xl p-4 bg-white">
           
           <div>
-            <Categories onSelectCategory={setSelectedCategory} />
+            <Categorydisplay onSelectCategory={setSelectedCategory} />
             <div className="flex justify-center mt-4">
               <Link
                 href="/categoriespage"
