@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
+import Categorydisplay from "@/components/categorydisplay";
 import Link from "next/link";
 
 export default function CategoriesPage() {
