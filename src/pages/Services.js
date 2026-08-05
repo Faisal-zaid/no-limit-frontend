@@ -85,7 +85,7 @@ export default function Services() {
                 className="mt-3 pt-1 pb-1  hover:bg-[white] hover:text-[purple] cursor-pointer"
               >
                 {" "}
-                View all Categories
+                All Products
               </Link></li>
             </ul>
           </div>
