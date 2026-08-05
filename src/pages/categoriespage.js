@@ -5,6 +5,9 @@ import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
 import Categorydisplay from "@/components/categorydisplay";
 import Link from "next/link";
+import Search from "@/components/Search";
+import Image from "next/image";
+import Navbar from "@/components/Navbar";
 
 export default function CategoriesPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -19,6 +22,84 @@ export default function CategoriesPage() {
   return (
     
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover pt-6">
+
+            <div className="bg-white border-b-gray-700 shadow-xl text-gray-700 pb-3">
+              <div className="flex gap-[40%] text-[20px] ml-[3%] mt-[5%] pt-[1%]">
+                <div className="flex gap-[10%]">
+                  <ul className="flex justify-between items-center text-sm font-medium font-black">
+                    <li>
+                      <Image
+                        src="/images/nolimit-logo.png"
+                        alt="Hero Image"
+                        width={77}
+                        height={75}
+                      />
+                    </li>
+                  </ul>
+                  <Search />
+                </div>
+                <div className="flex items-center gap-4">
+                  <div>
+                    <ul className="flex items-center">
+                      <li>
+                        <Image
+                          src="/images/info.png"
+                          alt="Hero Image"
+                          width={25}
+                          height={25}
+                        />
+                      </li>
+                      <li>About</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <ul className="flex items-center">
+                      <li>
+                        <Image
+                          src="/images/Cart--Streamline-Platinum.png"
+                          alt="Hero Image"
+                          width={25}
+                          height={25}
+                        />
+                      </li>
+                      <li>Cart</li>
+                    </ul>
+                  </div>
+                  <button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-1.5 rounded-lg transition-colors">
+                    <ul className="flex items-center">
+                      <li>
+                        <Image
+                          src="/images/login.png"
+                          alt="Hero Image"
+                          width={25}
+                          height={25}
+                        />
+                      </li>
+                      <li>SignIn</li>
+                    </ul>
+                  </button>
+                </div>
+              </div>
+              <div className="flex ml-[3%] items-center mt-6 justify-between mr-[3%]">
+                <div className="pr-3 pl-3 pt-2 pb-2 bg-gray-100 rounded-[10px]">
+                  <ul className="flex items-center gap-3">
+                    <li>
+                      <Image
+                        src="/images/menu.png"
+                        alt="Hero Image"
+                        width={25}
+                        height={25}
+                      />
+                    </li>
+                    <li>All Products</li>
+                  </ul>
+                </div>
+                <div className="flex-1 flex justify-center mx-4 overflow-hidden">
+                  <Navbar />
+                </div>
+                <div className="ml text-purple-600">Shop All</div>
+              </div>
+            </div>
       <div className=" pt-10  items-center text-center">
         <button className="border pt-2 pb-2 pr-3 pl-3 rounded-[30px] justify-center text-center border-purple-700 ">
           Our Sevices
