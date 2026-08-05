@@ -3,7 +3,7 @@ import Services from "../pages/Services";
 
 export default function Home() {
     return (
-        <main>
+        <main className="bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
             <Hero />
             <Services />
         </main>
