@@ -13,7 +13,7 @@ export default function CategoriesPage() {
     /* 1. Added bg-white (or bg-gray-50) and minimum height so the background is visible */
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover pt-6">
       <div className=" pt-10  items-center text-center">
-        <button className="border justify-center text-center border-purple-700 ">
+        <button className="border pt-2 pb-2 pr-3 pl-3 rounded-[30px] justify-center text-center border-purple-700 ">
           Our Sevices
         </button>
         <h2>Professional Branding Services</h2>
