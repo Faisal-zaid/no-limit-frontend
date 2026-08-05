@@ -104,12 +104,12 @@ export default function CategoriesPage() {
         <button className="border pt-2 pb-2 pr-3 pl-3 rounded-[30px] justify-center text-center border-purple-700 ">
           Our Sevices
         </button>
-        <h2>Professional Branding Services</h2>
+        <h2 className="font-bold text-[25px]">Professional Branding Services</h2>
         <p>
-          No Limit Brands delivers high-impact branding solutions across
-          Nairobi, Kenya, and East Africa
+          <span className="font-bold">No Limit Brands</span> delivers high-impact branding solutions across
+          <span className="font-bold">Nairobi, Kenya, and East Africa</span>
           <br />
-          specializing in complete brand identity development, corporate
+          specializing in <span className="font-bold">complete brand identity</span> development, corporate
           branding, vehicle wraps and matatu <br />
           graphics, professional signage, promotional printing, packaging
           design, and corporate stationery for <br />
