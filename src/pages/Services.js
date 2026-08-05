@@ -70,7 +70,7 @@ export default function Services() {
           </div>
         </div>
         <div className="flex ml-[3%] items-center mt-6 justify-between mr-[3%]">
-          <div className="pr-3 pl-3 pt-2 pb-2 bg-gray-100 rounded-[10px]">
+          <div className="pr-3 pl-3 pt-2 pb-2  bg-gray-100 hover:bg-gray-100 rounded-[10px]">
             <ul className="flex items-center gap-3">
               <li>
                 <Image
@@ -82,7 +82,7 @@ export default function Services() {
               </li>
               <li><Link
                 href="/productspage"
-                className="mt-3 pt-1 pb-1  hover:bg-[white] hover:text-[purple] cursor-pointer"
+                className="mt-3 pt-1 pb-1  hover:bg-gray-100 hover:text-[purple] cursor-pointer"
               >
                 {" "}
                 All Products
