@@ -80,7 +80,13 @@ export default function Services() {
                   height={25}
                 />
               </li>
-              <li>All Products</li>
+              <li><Link
+                href="/productspage"
+                className="mt-3 pt-1 pb-1  hover:bg-[white] hover:text-[purple] cursor-pointer"
+              >
+                {" "}
+                View all Categories
+              </Link></li>
             </ul>
           </div>
           <div className="flex-1 flex justify-center mx-4 overflow-hidden">
