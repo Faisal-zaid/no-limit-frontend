@@ -132,7 +132,9 @@ export default function CategoriesPage() {
           <div>
             <Categorydisplay onSelectCategory={setSelectedCategory} />
           </div>
-          <div>
+          
+        </div>
+        <div>
             <h2>Ready to Transform your Brand?</h2>
             <p>Contact us for a free Consultation</p>
             <Link
@@ -152,7 +154,6 @@ export default function CategoriesPage() {
               Consult Us
             </Link>
           </div>
-        </div>
       </div>
     </section>
   );
