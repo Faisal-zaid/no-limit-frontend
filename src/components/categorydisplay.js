@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-export default function Categorydescription({ selectedCategory }) {
+export default function Categorydisplay({ selectedCategory }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
