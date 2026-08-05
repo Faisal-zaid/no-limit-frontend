@@ -102,7 +102,17 @@ export default function CategoriesPage() {
       </div>
       <div className=" pt-10  items-center text-center">
         <button className="border pt-2 pb-2 pr-3 pl-3 rounded-[30px] justify-center text-center border-purple-700 bg-purple-600 ">
-          Our Sevices
+          <ul className="flex items-center">
+                          <li>
+                            <Image
+                              src="/images/star.png"
+                              alt="Hero Image"
+                              width={25}
+                              height={25}
+                            />
+                          </li>
+                          <li>Categories</li>
+                        </ul>
         </button>
         <h2 className="font-bold text-[25px]">Professional Branding Services</h2>
         <p>
