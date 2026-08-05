@@ -25,7 +25,12 @@ export default function Categorydisplay({ selectedCategory }) {
 
   return (
    <div>
-    
+      {categories.map((category) => (
+        <div key={category.id}>
+          <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
+           className="mt-[18%] rounded-[5px] border border-transparent  pl-[20%] hover:bg-purple-700 hover:border-purple-700 w-[70%] justify-center">{category.name}</h3>
+        </div>
+      ))}
    </div>
   );
 }
