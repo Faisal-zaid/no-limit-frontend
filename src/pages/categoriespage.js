@@ -24,15 +24,13 @@ export default function CategoriesPage() {
           ambitious startups, SMEs, and enterprise corporations.
         </p>
       </div>
-      <div className="w-[100%] flex gap-6  p-6 shadow-sm">
+      <div className="w-[100%] gap-6  p-6 shadow-sm">
         {/* Left Sidebar */}
         <div className=" border border-gray-200 rounded-xl p-4 bg-white">
           
           <div>
             <Categorydisplay onSelectCategory={setSelectedCategory} />
-            <div className="flex justify-center mt-4">
-             
-            </div>
+            
           </div>
         </div>
 
