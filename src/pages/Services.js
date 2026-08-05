@@ -92,7 +92,13 @@ export default function Services() {
           <div className="flex-1 flex justify-center mx-4 overflow-hidden">
             <Navbar />
           </div>
-          <div className="ml text-purple-600">Shop All</div>
+          <div className="ml text-purple-600"><Link
+                href="/categoriespage"
+                className="mt-3 pt-1 pb-1 hover:bg-[white] hover:text-[purple] cursor-pointer"
+              >
+                {" "}
+                Shop All
+              </Link></div>
         </div>
       </div>
 
