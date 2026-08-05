@@ -23,7 +23,7 @@ export default function CategoriesPage() {
           ambitious startups, SMEs, and enterprise corporations.
         </p>
       </div>
-      <div className="w-[100%] bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover flex gap-6 border border-gray-200 rounded-2xl p-6 shadow-sm">
+      <div className="w-[100%] flex gap-6  p-6 shadow-sm">
         {/* Left Sidebar */}
         <div className="w-1/4 border border-gray-200 rounded-xl p-4 bg-white">
           <h2 className="border-b pb-3 mb-4 font-semibold text-lg text-gray-800">
