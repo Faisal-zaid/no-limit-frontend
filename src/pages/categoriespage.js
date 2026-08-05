@@ -26,7 +26,7 @@ export default function CategoriesPage() {
       </div>
       <div className="w-[100%] flex gap-6  p-6 shadow-sm">
         {/* Left Sidebar */}
-        <div className="w-1/4 border border-gray-200 rounded-xl p-4 bg-white">
+        <div className=" border border-gray-200 rounded-xl p-4 bg-white">
           
           <div>
             <Categorydisplay onSelectCategory={setSelectedCategory} />
