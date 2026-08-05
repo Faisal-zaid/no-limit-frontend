@@ -9,7 +9,7 @@ import Search from "@/components/Search";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 
-export default function CategoriesPage() {
+export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const phoneNumber = "254780887324";
