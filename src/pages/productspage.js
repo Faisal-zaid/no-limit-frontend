@@ -119,7 +119,7 @@ export default function ProductsPage() {
         </div>
         {/* right side */}
         <div className="mr-7 mt-[3%] border  flex-1 border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-          <Categorydescription selectedCategory={selectedCategory} />
+          <Productdisplay selectedCategory={selectedCategory} />
         </div>
       </div>
     </section>
