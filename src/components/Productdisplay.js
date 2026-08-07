@@ -59,12 +59,12 @@ export default function Productdisplay({ onSelectCategory }) {
               </p>
             </div>
 
-            <Link
+            {/* <Link
               href={`/categoriespage/${category.id}`}
               className="mt-auto text-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors"
             >
               View Products
-            </Link>
+            </Link> */}
           </div>
         ))}
       </div>
