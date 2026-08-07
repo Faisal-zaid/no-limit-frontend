@@ -12,8 +12,6 @@ import Navbar from "@/components/Navbar";
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  
-
   return (
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover ">
       <div className="bg-white border-b-gray-700 shadow-xl text-gray-700 pb-3 mt-0">
@@ -109,21 +107,20 @@ export default function ProductsPage() {
             <li>Products</li>
           </ul>
         </button>
-        <h2 className="font-bold text-[25px]">
-          Shop by Category
-        </h2>
-        <p>
-          Check our Products by Category to find what you woud Like
-        </p>
+        <h2 className="font-bold text-[25px]">Shop by Category</h2>
+        <p>Check our Products by Category to find what you woud Like</p>
       </div>
-      <div className="w-[100%] gap-6  p-6 shadow-sm">
+      <div className="w-[50%] gap-6 flex p-6 shadow-sm">
         {/* Left Sidebar */}
         <div className=" border border-gray-200 rounded-xl p-4 bg-white">
           <div>
             <Categorydisplay onSelectCategory={setSelectedCategory} />
           </div>
         </div>
-       
+        {/* right side */}
+        <div className="mr-7 mt-[3%] border  flex-1 border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+          <Categorydescription selectedCategory={selectedCategory} />
+        </div>
       </div>
     </section>
   );
