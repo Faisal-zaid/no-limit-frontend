@@ -93,6 +93,8 @@ export default function ProductsPage() {
           <div className="ml text-purple-600">Shop All</div>
         </div>
       </div>
+
+      {/* this is where content outside navbar begins */}
       <div className=" pt-10  items-center text-center">
         <button className="border pt-2 pb-2 pr-3 pl-3 rounded-[30px] justify-center text-center border-purple-700 bg-purple-600 ">
           <ul className="flex items-center">
