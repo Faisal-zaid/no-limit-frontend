@@ -11,6 +11,18 @@ import Navbar from "@/components/Navbar";
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
+  
+     useEffect(() => {
+      async function loadCategories() {
+        const response = await fetch("http://127.0.0.1:8001/category");
+        const data = await response.json();
+  
+        setCategories(data);
+      }
+  
+      loadCategories();
+    }, []);
 
   return (
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover ">
