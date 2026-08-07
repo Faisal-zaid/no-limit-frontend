@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Categories from "@/components/Category";
 import Productdisplay from "@/components/Productdisplay";
 import Categorydisplay from "@/components/categorydisplay";
@@ -126,7 +126,12 @@ export default function ProductsPage() {
         {/* Left Sidebar */}
         <div className=" border w-[50%] border-gray-200 rounded-xl p-4 bg-white">
           <div>
-            <Categorydisplay onSelectCategory={setSelectedCategory} />
+            {categories.map((category) => (
+        <div key={category.id}>
+          <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
+           className="mt-[18%] rounded-[5px] border border-transparent  pl-[20%] hover:bg-purple-700 hover:border-purple-700 w-[70%] justify-center">{category.name}</h3>
+        </div>
+      ))}
           </div>
         </div>
         {/* right side */}
