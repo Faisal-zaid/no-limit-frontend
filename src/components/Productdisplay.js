@@ -45,7 +45,9 @@ export default function Productdisplay({ selectedCategory }) {
   }
   return (
     <div className="p-6  bg-white rounded-xl">
-      <h2 className="text-xl font-bold mb-6 text-gray-800">All Categories</h2>
+      <h2 className="text-xl font-bold mb-6 text-gray-800">
+        {selectedCategory ? `${selectedCategory.name} Products` : "All Products"}
+      </h2>
       
       {/* 3 columns on medium screens and up, 1 column on mobile */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
