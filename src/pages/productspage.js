@@ -134,7 +134,13 @@ export default function ProductsPage() {
               <div key={category.id}>
                 <div>
                   {/* add image here */}
-                  
+                  {category.image && (
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-[25%] h-[100%] h-40 object-cover rounded-lg mb-3"
+                />
+              )}
                 </div>
                 <div>
                 <h3
