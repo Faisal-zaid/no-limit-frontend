@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Categories from "@/components/Category";
-import Categorydescription from "@/components/Categorydes";
+import Productdisplay from "@/components/Productdisplay";
 import Categorydisplay from "@/components/categorydisplay";
 import Link from "next/link";
 import Search from "@/components/Search";
