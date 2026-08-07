@@ -106,23 +106,14 @@ export default function ProductsPage() {
                 height={25}
               />
             </li>
-            <li>Categories</li>
+            <li>Products</li>
           </ul>
         </button>
         <h2 className="font-bold text-[25px]">
-          Professional Branding Services
+          Shop by Category
         </h2>
         <p>
-          <span className="font-bold">No Limit Brands</span> delivers
-          high-impact branding solutions across
-          <span className="font-bold">Nairobi, Kenya, and East Africa</span>
-          <br />
-          specializing in{" "}
-          <span className="font-bold">complete brand identity</span>{" "}
-          development, corporate branding, vehicle wraps and matatu <br />
-          graphics, professional signage, promotional printing, packaging
-          design, and corporate stationery for <br />
-          ambitious startups, SMEs, and enterprise corporations.
+          Check our Products by Category to find what you woud Like
         </p>
       </div>
       <div className="w-[100%] gap-6  p-6 shadow-sm">
