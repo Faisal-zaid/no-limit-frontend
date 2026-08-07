@@ -132,12 +132,18 @@ export default function ProductsPage() {
             
             {categories.map((category) => (
               <div key={category.id}>
+                <div>
+                  {/* add image here */}
+                  
+                </div>
+                <div>
                 <h3
                   onClick={() => setSelectedCategory(category)}
                   className="mt-[10%] rounded-[5px] border border-transparent  pl-[20%] hover:bg-purple-700 hover:border-purple-700 w-[70%] justify-center"
                 >
                   {category.name}
                 </h3>
+                </div>
               </div>
             ))}
           </div>
