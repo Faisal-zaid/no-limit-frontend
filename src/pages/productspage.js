@@ -126,29 +126,30 @@ export default function ProductsPage() {
         {/* Left Sidebar */}
         <div className=" border w-[20%] border-gray-200 rounded-xl p-4 bg-white">
           <p className="font-bold text-[15px]">Browse by Category</p>
-            <p className="text-[12px] mt-2 mb-2">Filter according to what interests you</p>
-            <Search/>
+          <p className="text-[12px] mt-2 mb-2">
+            Filter according to what interests you
+          </p>
+          <Search />
           <div>
-            
             {categories.map((category) => (
-              <div key={category.id}>
+              <div key={category.id} className="flex">
                 <div>
                   {/* add image here */}
                   {category.image && (
-                <img
-                  src={category.image}
-                  alt={category.name}
-                  className="w-[25%] h-[100%] h-40 object-cover rounded-lg mb-3"
-                />
-              )}
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="w-[25%] h-[100%] h-40 object-cover rounded-lg mb-3"
+                    />
+                  )}
                 </div>
                 <div>
-                <h3
-                  onClick={() => setSelectedCategory(category)}
-                  className="mt-[10%] rounded-[5px] border border-transparent  pl-[20%] hover:bg-purple-700 hover:border-purple-700 w-[70%] justify-center"
-                >
-                  {category.name}
-                </h3>
+                  <h3
+                    onClick={() => setSelectedCategory(category)}
+                    className="mt-[10%] rounded-[5px] border border-transparent  pl-[20%] hover:bg-purple-700 hover:border-purple-700 w-[70%] justify-center"
+                  >
+                    {category.name}
+                  </h3>
                 </div>
               </div>
             ))}
