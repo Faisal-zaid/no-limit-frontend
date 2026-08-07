@@ -1,6 +1,6 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Categories from "@/components/Category";
 import Productdisplay from "@/components/Productdisplay";
 import Categorydisplay from "@/components/categorydisplay";
@@ -12,17 +12,17 @@ import Navbar from "@/components/Navbar";
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([]);
-  
-     useEffect(() => {
-      async function loadCategories() {
-        const response = await fetch("http://127.0.0.1:8001/category");
-        const data = await response.json();
-  
-        setCategories(data);
-      }
-  
-      loadCategories();
-    }, []);
+
+  useEffect(() => {
+    async function loadCategories() {
+      const response = await fetch("http://127.0.0.1:8001/category");
+      const data = await response.json();
+
+      setCategories(data);
+    }
+
+    loadCategories();
+  }, []);
 
   return (
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover ">
@@ -124,14 +124,22 @@ export default function ProductsPage() {
       </div>
       <div className="w-[100%] gap-6 flex p-6 shadow-sm">
         {/* Left Sidebar */}
-        <div className=" border w-[50%] border-gray-200 rounded-xl p-4 bg-white">
+        <div className=" border w-[20%] border-gray-200 rounded-xl p-4 bg-white">
+          <p>Browse by Category</p>
+            <p>Filter according to what interests you</p>
+            <Search/>
           <div>
+            
             {categories.map((category) => (
-        <div key={category.id}>
-          <h3 onClick={() => onSelectCategory && onSelectCategory(category)}
-           className="mt-[18%] rounded-[5px] border border-transparent  pl-[20%] hover:bg-purple-700 hover:border-purple-700 w-[70%] justify-center">{category.name}</h3>
-        </div>
-      ))}
+              <div key={category.id}>
+                <h3
+                  onClick={() => onSelectCategory && onSelectCategory(category)}
+                  className="mt-[10%] rounded-[5px] border border-transparent  pl-[20%] hover:bg-purple-700 hover:border-purple-700 w-[70%] justify-center"
+                >
+                  {category.name}
+                </h3>
+              </div>
+            ))}
           </div>
         </div>
         {/* right side */}
