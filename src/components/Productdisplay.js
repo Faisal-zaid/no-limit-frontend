@@ -51,11 +51,10 @@ export default function Productdisplay({ selectedCategory }) {
       
       {/* 3 columns on medium screens and up, 1 column on mobile */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div
             key={product.id}
-            onClick={() => onSelectCategory && onSelectCategory(product)}
-            className="border border-gray-200 rounded-xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer bg-white"
+            className="border border-gray-200 rounded-xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow bg-white"
           >
             <div>
               {product.image && (
@@ -72,13 +71,6 @@ export default function Productdisplay({ selectedCategory }) {
                 {product.description || "No description available."}
               </p>
             </div>
-
-            {/* <Link
-              href={`/categoriespage/${category.id}`}
-              className="mt-auto text-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              View Products
-            </Link> */}
           </div>
         ))}
       </div>
