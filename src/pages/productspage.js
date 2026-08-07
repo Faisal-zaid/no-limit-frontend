@@ -125,7 +125,7 @@ export default function ProductsPage() {
       <div className="w-[100%] gap-6 flex p-6 shadow-sm">
         {/* Left Sidebar */}
         <div className=" border w-[20%] border-gray-200 rounded-xl p-4 bg-white">
-          <p>Browse by Category</p>
+          <p className="font-bold text-[15px]">Browse by Category</p>
             <p>Filter according to what interests you</p>
             <Search/>
           <div>
