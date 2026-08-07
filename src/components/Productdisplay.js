@@ -37,25 +37,25 @@ export default function Productdisplay({ onSelectCategory }) {
       
       {/* 3 columns on medium screens and up, 1 column on mobile */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {categories.map((category) => (
+        {products.map((product) => (
           <div
-            key={category.id}
-            onClick={() => onSelectCategory && onSelectCategory(category)}
+            key={product.id}
+            onClick={() => onSelectCategory && onSelectCategory(product)}
             className="border border-gray-200 rounded-xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer bg-white"
           >
             <div>
-              {category.image && (
+              {product.image && (
                 <img
-                  src={category.image}
-                  alt={category.name}
+                  src={product.image}
+                  alt={product.name}
                   className="w-full h-40 object-cover rounded-lg mb-3"
                 />
               )}
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {category.name}
+                {product.name}
               </h3>
               <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-                {category.description || "No description available."}
+                {product.description || "No description available."}
               </p>
             </div>
 
