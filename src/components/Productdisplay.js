@@ -3,32 +3,32 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function Categorydisplay({ onSelectCategory }) {
-  const [categories, setCategories] = useState([]);
+export default function Productdisplay({ onSelectCategory }) {
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadCategories() {
+    async function loadProducts() {
       try {
-        const response = await fetch("http://127.0.0.1:8001/category");
+        const response = await fetch("http://127.0.0.1:8001/product");
         const data = await response.json();
-        setCategories(data);
+        setProducts(data);
       } catch (error) {
-        console.error("Failed to load category details:", error);
+        console.error("Failed to load product details:", error);
       } finally {
         setLoading(false);
       }
     }
 
-    loadCategories();
+    loadProducts();
   }, []);
 
   if (loading) {
-    return <div className="p-6 text-gray-500">Loading categories...</div>;
+    return <div className="p-6 text-gray-500">Loading products...</div>;
   }
 
-  if (categories.length === 0) {
-    return <div className="p-6 text-gray-500">No categories found.</div>;
+  if (products.length === 0) {
+    return <div className="p-6 text-gray-500">No products found.</div>;
   }
 
   return (
