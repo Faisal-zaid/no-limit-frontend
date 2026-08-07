@@ -110,9 +110,9 @@ export default function ProductsPage() {
         <h2 className="font-bold text-[25px]">Shop by Category</h2>
         <p>Check our Products by Category to find what you woud Like</p>
       </div>
-      <div className="w-[50%] gap-6 flex p-6 shadow-sm">
+      <div className="w-[100%] gap-6 flex p-6 shadow-sm">
         {/* Left Sidebar */}
-        <div className=" border border-gray-200 rounded-xl p-4 bg-white">
+        <div className=" border w-[50%] border-gray-200 rounded-xl p-4 bg-white">
           <div>
             <Categorydisplay onSelectCategory={setSelectedCategory} />
           </div>
