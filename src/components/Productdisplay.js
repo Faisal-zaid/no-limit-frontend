@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function Productdisplay({ onSelectCategory }) {
+export default function Productdisplay({ selectedCategory }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,10 +27,22 @@ export default function Productdisplay({ onSelectCategory }) {
     return <div className="p-6 text-gray-500">Loading products...</div>;
   }
 
-  if (products.length === 0) {
-    return <div className="p-6 text-gray-500">No products found.</div>;
-  }
+  // Filter products by selectedCategory if one is picked; otherwise show all products
+  const filteredProducts = selectedCategory
+    ? products.filter(
+        (product) =>
+          product.category_id === selectedCategory.id ||
+          product.category === selectedCategory.name
+      )
+    : products;
 
+  if (filteredProducts.length === 0) {
+    return (
+      <div className="p-6 text-gray-500">
+        No products found for {selectedCategory?.name || "this category"}.
+      </div>
+    );
+  }
   return (
     <div className="p-6  bg-white rounded-xl">
       <h2 className="text-xl font-bold mb-6 text-gray-800">All Categories</h2>
