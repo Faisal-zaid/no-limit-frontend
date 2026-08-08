@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
+export default function Admin(){
 return(
     <section>
         <div>
@@ -11,3 +11,5 @@ return(
         </div>
     </section>
 )
+}
+
