@@ -19,7 +19,7 @@ export default function Admin(){
   //fetching product 
   useEffect(() => {
     async function loadProducts() {
-      const response = await fetch("http://127.0.0.1:8001/category");
+      const response = await fetch("http://127.0.0.1:8001/product");
       const data = await response.json();
 
       setProducts(data);
@@ -32,7 +32,7 @@ export default function Admin(){
 
   useEffect(() => {
     async function loadProductField() {
-      const response = await fetch("http://127.0.0.1:8001/category");
+      const response = await fetch("http://127.0.0.1:8001/productfield");
       const data = await response.json();
 
       setProductField(data);
@@ -45,7 +45,7 @@ export default function Admin(){
 
   useEffect(() => {
     async function loadProductFieldOption() {
-      const response = await fetch("http://127.0.0.1:8001/category");
+      const response = await fetch("http://127.0.0.1:8001/productfieldoption");
       const data = await response.json();
 
       setProductFieldOption(data);
