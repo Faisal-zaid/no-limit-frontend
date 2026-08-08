@@ -16,7 +16,7 @@ export default function Admin(){
     loadCategories();
   }, []);
 
-  //fetching product field
+  //fetching product 
   useEffect(() => {
     async function loadProducts() {
       const response = await fetch("http://127.0.0.1:8001/category");
@@ -28,6 +28,8 @@ export default function Admin(){
     loadProducts();
   }, []);
 
+  // fetching product field
+
   useEffect(() => {
     async function loadProductField() {
       const response = await fetch("http://127.0.0.1:8001/category");
@@ -37,6 +39,19 @@ export default function Admin(){
     }
 
     loadProductField();
+  }, []);
+
+  //fetching productfieldoption
+
+  useEffect(() => {
+    async function loadProductFieldOption() {
+      const response = await fetch("http://127.0.0.1:8001/category");
+      const data = await response.json();
+
+      setProductFieldOption(data);
+    }
+
+    loadProductFieldOption();
   }, []);
 
 return(
