@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 export default function Admin(){
 
+
+    // fetching categories
     useEffect(() => {
     async function loadCategories() {
       const response = await fetch("http://127.0.0.1:8001/category");
@@ -13,7 +15,7 @@ export default function Admin(){
 
     loadCategories();
   }, []);
-  
+
 return(
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
         <div className="flex gap-3">
