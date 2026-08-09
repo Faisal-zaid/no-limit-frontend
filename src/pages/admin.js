@@ -56,7 +56,7 @@ const [productFieldOptions, setProductFieldOptions] = useState([]);
       setProductFieldOption(data);
     }
 
-    loadProductFieldOption();
+    loadProductFieldOptions();
   }, []);
 
 return(
