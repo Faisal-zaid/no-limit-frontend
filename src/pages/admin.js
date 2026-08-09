@@ -36,7 +36,7 @@ const [productFieldOptions, setProductFieldOptions] = useState([]);
   // fetching product field
 
   useEffect(() => {
-    async function loadProductField() {
+    async function loadProductFields() {
       const response = await fetch("http://127.0.0.1:8001/productfield");
       const data = await response.json();
 
@@ -49,7 +49,7 @@ const [productFieldOptions, setProductFieldOptions] = useState([]);
   //fetching productfieldoption
 
   useEffect(() => {
-    async function loadProductFieldOption() {
+    async function loadProductFieldOptions() {
       const response = await fetch("http://127.0.0.1:8001/productfieldoption");
       const data = await response.json();
 
