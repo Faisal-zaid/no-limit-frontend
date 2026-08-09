@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getCategories ,deleteCategory } from "@/lib/api";
 export default function Admin(){
 
   const [categories, setCategories] = useState([]);
