@@ -3,6 +3,11 @@
 import { useState, useEffect } from "react";
 export default function Admin(){
 
+  const [categories, setCategories] = useState([]);
+const [products, setProducts] = useState([]);
+const [productFields, setProductFields] = useState([]);
+const [productFieldOptions, setProductFieldOptions] = useState([]);
+
 
     // fetching categories
     useEffect(() => {
