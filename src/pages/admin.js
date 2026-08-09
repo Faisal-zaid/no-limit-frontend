@@ -70,6 +70,21 @@ async function updateCategory(categoryId, categoryData) {
   console.log(data);
 }
 
+//delete category 
+
+async function deleteCategory(categoryId) {
+  const response = await fetch(
+    `http://127.0.0.1:8001/category/${categoryId}`,
+    {
+      method: "DELETE"
+    }
+  );
+
+  const data = await response.json();
+
+  console.log(data);
+}
+
   //fetching product 
   useEffect(() => {
     async function loadProducts() {
