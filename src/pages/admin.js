@@ -44,6 +44,32 @@ const [productFieldOptions, setProductFieldOptions] = useState([]);
   console.log(data);
 }
 
+//patch category
+
+async function updateCategory(categoryId, categoryData) {
+  const formData = new FormData();
+
+  formData.append("name", categoryData.name);
+  formData.append("description", categoryData.description);
+  formData.append("subheading", categoryData.subheading);
+
+  if (categoryData.image) {
+    formData.append("image", categoryData.image);
+  }
+
+  const response = await fetch(
+    `http://127.0.0.1:8001/category/${categoryId}`,
+    {
+      method: "PATCH",
+      body: formData
+    }
+  );
+
+  const data = await response.json();
+
+  console.log(data);
+}
+
   //fetching product 
   useEffect(() => {
     async function loadProducts() {
