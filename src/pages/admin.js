@@ -1,17 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getCategories ,deleteCategory } from "@/lib/api";
-export default function Admin(){
-
+import { getCategories, deleteCategory } from "@/lib/api";
+export default function Admin() {
   const [categories, setCategories] = useState([]);
-const [products, setProducts] = useState([]);
-const [productFields, setProductFields] = useState([]);
-const [productFieldOptions, setProductFieldOptions] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [productFields, setProductFields] = useState([]);
+  const [productFieldOptions, setProductFieldOptions] = useState([]);
 
-
-    // fetching categories
-    useEffect(() => {
+  // fetching categories
+  useEffect(() => {
     async function loadCategories() {
       const response = await fetch("http://127.0.0.1:8001/category");
       const data = await response.json();
@@ -25,68 +23,65 @@ const [productFieldOptions, setProductFieldOptions] = useState([]);
   // creating category
 
   async function createCategory(categoryData) {
-  const formData = new FormData();
+    const formData = new FormData();
 
-  formData.append("name", categoryData.name);
-  formData.append("description", categoryData.description);
-  formData.append("subheading", categoryData.subheading);
-  formData.append("image", categoryData.image);
-
-  const response = await fetch(
-    "http://127.0.0.1:8001/category",
-    {
-      method: "POST",
-      body: formData
-    }
-  );
-
-  const data = await response.json();
-
-  console.log(data);
-}
-
-//patch category
-
-async function updateCategory(categoryId, categoryData) {
-  const formData = new FormData();
-
-  formData.append("name", categoryData.name);
-  formData.append("description", categoryData.description);
-  formData.append("subheading", categoryData.subheading);
-
-  if (categoryData.image) {
+    formData.append("name", categoryData.name);
+    formData.append("description", categoryData.description);
+    formData.append("subheading", categoryData.subheading);
     formData.append("image", categoryData.image);
+
+    const response = await fetch("http://127.0.0.1:8001/category", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    console.log(data);
   }
 
-  const response = await fetch(
-    `http://127.0.0.1:8001/category/${categoryId}`,
-    {
-      method: "PATCH",
-      body: formData
+  //patch category
+
+  async function updateCategory(categoryId, categoryData) {
+    const formData = new FormData();
+
+    formData.append("name", categoryData.name);
+    formData.append("description", categoryData.description);
+    formData.append("subheading", categoryData.subheading);
+
+    if (categoryData.image) {
+      formData.append("image", categoryData.image);
     }
-  );
 
-  const data = await response.json();
+    const response = await fetch(
+      `http://127.0.0.1:8001/category/${categoryId}`,
+      {
+        method: "PATCH",
+        body: formData,
+      },
+    );
 
-  console.log(data);
-}
+    const data = await response.json();
 
-//delete category 
+    console.log(data);
+  }
 
-async function deleteCategory(categoryId) {
-  const response = await fetch(
-    `http://127.0.0.1:8001/category/${categoryId}`,
-    {
-      method: "DELETE"
-    }
-  );
+  //delete category
 
-  const data = await response.json();
+  async function deleteCategory(categoryId) {
+    const response = await fetch(
+      `http://127.0.0.1:8001/category/${categoryId}`,
+      {
+        method: "DELETE",
+      },
+    );
 
-  console.log(data);
-}
+    const data = await response.json();
 
-  //fetching product 
+    console.log(data);
+  }
+
+  //fetching product
   useEffect(() => {
     async function loadProducts() {
       const response = await fetch("http://127.0.0.1:8001/product");
@@ -124,15 +119,12 @@ async function deleteCategory(categoryId) {
     loadProductFieldOptions();
   }, []);
 
-return(
+  return (
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
-        <div className="flex gap-3">
-            <h2 >
-                Admin Panel
-            </h2>
-            <button>Log out</button>
-        </div>
+      <div className="flex gap-3">
+        <h2>Admin Panel</h2>
+        <button>Log out</button>
+      </div>
     </section>
-)
+  );
 }
-
