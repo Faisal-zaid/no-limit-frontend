@@ -21,6 +21,29 @@ const [productFieldOptions, setProductFieldOptions] = useState([]);
     loadCategories();
   }, []);
 
+  // creating category
+
+  async function createCategory(categoryData) {
+  const formData = new FormData();
+
+  formData.append("name", categoryData.name);
+  formData.append("description", categoryData.description);
+  formData.append("subheading", categoryData.subheading);
+  formData.append("image", categoryData.image);
+
+  const response = await fetch(
+    "http://127.0.0.1:8001/category",
+    {
+      method: "POST",
+      body: formData
+    }
+  );
+
+  const data = await response.json();
+
+  console.log(data);
+}
+
   //fetching product 
   useEffect(() => {
     async function loadProducts() {
