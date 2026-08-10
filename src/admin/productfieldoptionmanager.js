@@ -6,7 +6,7 @@ export default function ProductFieldOptionManager() {
 const [options, setOptions] = useState([]);
 
 useEffect(() => {
-    async function loadProductFields() {
+    async function loadProductFieldoptions() {
       const response = await fetch("http://127.0.0.1:8001/productfield");
 
       const data = await response.json();
@@ -14,7 +14,7 @@ useEffect(() => {
       setProductFields(data);
     }
 
-    loadProductFields();
+    loadProductFieldoptions();
   }, []);
 
 
