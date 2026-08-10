@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 export default function ProductFieldOptionManager() {
 const [options, setOptions] = useState([]);
+ const [products, setProducts]=useState([]);
 
 useEffect(() => {
     async function loadProductFields() {
