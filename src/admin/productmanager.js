@@ -19,15 +19,16 @@ export default function ProductManager() {
 
   // creating category
 
-  async function createCategory(categoryData) {
+  async function createProduct(productData) {
     const formData = new FormData();
 
-    formData.append("name", categoryData.name);
-    formData.append("description", categoryData.description);
-    formData.append("subheading", categoryData.subheading);
-    formData.append("image", categoryData.image);
+    formData.append("name", productData.name);
+    formData.append("name", productData.category_id);
+    formData.append("description", productData.description);
+    formData.append("subheading", productData.base_price);
+    formData.append("image", productData.image);
 
-    const response = await fetch("http://127.0.0.1:8001/category", {
+    const response = await fetch("http://127.0.0.1:8001/product", {
       method: "POST",
       body: formData,
     });
