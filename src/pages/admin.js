@@ -16,6 +16,17 @@ export default function Admin() {
         <h2>Admin Panel</h2>
         <button>Log out</button>
       </div>
+      <div className="space-y-10">
+
+                <CategoryManager />
+
+                <ProductManager />
+
+                <ProductFieldManager />
+
+                <ProductFieldOptionManager />
+
+            </div>
     </section>
   );
 }
