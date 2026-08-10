@@ -14,7 +14,7 @@ export default function Admin() {
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
       <div className="flex justify-between ml-7 mr-7">
         <div></div>
-        <div><h2>Admin Panel</h2></div>
+        <div><h2 className="text-[30px]">Admin Panel</h2></div>
         <div><button>Log out</button></div>
       </div>
       <div className="space-y-10">
