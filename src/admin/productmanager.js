@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 export default function ProductManager() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories]=useState([]);
 
     // fetching categories
   useEffect(() => {
