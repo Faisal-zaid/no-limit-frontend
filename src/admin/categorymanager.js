@@ -2,12 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { getCategories, deleteCategory } from "@/lib/api";
-export default function Admin() {
+export default function CategoryManager() {
   const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [productFields, setProductFields] = useState([]);
-  const [productFieldOptions, setProductFieldOptions] = useState([]);
-
+  
   // fetching categories
   useEffect(() => {
     async function loadCategories() {
