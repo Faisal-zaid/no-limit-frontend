@@ -5,6 +5,19 @@ import { useState, useEffect } from "react";
 export default function ProductFieldOptionManager() {
 const [options, setOptions] = useState([]);
 
+useEffect(() => {
+    async function loadProductFields() {
+      const response = await fetch("http://127.0.0.1:8001/productfield");
+
+      const data = await response.json();
+
+      setProductFields(data);
+    }
+
+    loadProductFields();
+  }, []);
+
+
 
 useEffect(() => {
 async function loadOptions() {
