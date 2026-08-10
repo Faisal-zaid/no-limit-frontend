@@ -7,11 +7,11 @@ export default function ProductManager() {
   
   // fetching categories
   useEffect(() => {
-    async function loadCategories() {
-      const response = await fetch("http://127.0.0.1:8001/category");
+    async function loadProducts() {
+      const response = await fetch("http://127.0.0.1:8001/product");
       const data = await response.json();
 
-      setCategories(data);
+      setProducts(data);
     }
 
     loadCategories();
