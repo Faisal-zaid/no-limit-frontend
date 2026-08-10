@@ -54,7 +54,7 @@ export default function ProductManager() {
     }
 
     const response = await fetch(
-      `http://127.0.0.1:8001/product/${categoryId}`,
+      `http://127.0.0.1:8001/product/${productId}`,
       {
         method: "PATCH",
         body: formData,
@@ -68,9 +68,9 @@ export default function ProductManager() {
 
   //delete category
 
-  async function deleteCategory(categoryId) {
+  async function deleteProduct(productId) {
     const response = await fetch(
-      `http://127.0.0.1:8001/category/${categoryId}`,
+      `http://127.0.0.1:8001/category/${productId}`,
       {
         method: "DELETE",
       },
