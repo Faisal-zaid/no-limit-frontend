@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getCategories, deleteCategory } from "@/lib/api";
 import CategoryManager from "@/admin/categorymanager";
 import ProductManager from "@/admin/productmanager";
+import ProductFieldManager from "@/admin/productfieldmanager";
 export default function Admin() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
