@@ -5,9 +5,7 @@ import { useState, useEffect } from "react";
 export default function ProductFieldOptionManager() {
 const [options, setOptions] = useState([]);
 
-// =========================
-// GET ALL OPTIONS
-// =========================
+
 useEffect(() => {
 async function loadOptions() {
 const response = await fetch(
@@ -25,9 +23,7 @@ loadOptions();
 
 }, []);
 
-// =========================
-// CREATE OPTION
-// =========================
+
 async function createOption(optionData) {
 const formData = new FormData();
 
@@ -50,9 +46,7 @@ console.log(data);
 
 }
 
-// =========================
-// UPDATE OPTION
-// =========================
+
 async function updateOption(optionId, optionData) {
 const formData = new FormData();
 
@@ -75,9 +69,6 @@ console.log(data);
 
 }
 
-// =========================
-// DELETE OPTION
-// =========================
 async function deleteOption(optionId) {
 const response = await fetch(
 `http://127.0.0.1:8001/productfieldoption/${optionId}`,
