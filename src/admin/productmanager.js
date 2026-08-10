@@ -5,6 +5,18 @@ import { useState, useEffect } from "react";
 export default function ProductManager() {
   const [products, setProducts] = useState([]);
 
+    // fetching categories
+  useEffect(() => {
+    async function loadCategories() {
+      const response = await fetch("http://127.0.0.1:8001/category");
+      const data = await response.json();
+
+      setCategories(data);
+    }
+
+    loadCategories();
+  }, []);
+
   // GET products
   useEffect(() => {
     async function loadProducts() {
