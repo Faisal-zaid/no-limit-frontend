@@ -40,19 +40,21 @@ export default function ProductManager() {
 
   //patch category
 
-  async function updateCategory(categoryId, categoryData) {
+  async function updateProduct(productId, productData) {
     const formData = new FormData();
 
-    formData.append("name", categoryData.name);
-    formData.append("description", categoryData.description);
-    formData.append("subheading", categoryData.subheading);
+    formData.append("name", productData.name);
+    formData.append("name", productData.category_id);
+    formData.append("description", productData.description);
+    formData.append("subheading", productData.base_price);
+    formData.append("image", productData.image);
 
-    if (categoryData.image) {
-      formData.append("image", categoryData.image);
+    if (productData.image) {
+      formData.append("image", productData.image);
     }
 
     const response = await fetch(
-      `http://127.0.0.1:8001/category/${categoryId}`,
+      `http://127.0.0.1:8001/product/${categoryId}`,
       {
         method: "PATCH",
         body: formData,
