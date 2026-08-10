@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 export default function ProductFieldManager() {
   const [productFields, setProductFields] = useState([]);
+   const [products, setProducts]=useState([]);
 
    // GET products
   useEffect(() => {
