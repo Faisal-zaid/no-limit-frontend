@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function ProductFieldManager() {
-  const [productFields, setProductFields] = useState([]);
+export default function ProductManager() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   // Form state
-  const [productId, setProductId] = useState("");
-  const [label, setLabel] = useState("");
-  const [fieldType, setFieldType] = useState("text");
-  const [required, setRequired] = useState(false);
-  const [placeholder, setPlaceholder] = useState("");
+  const [name, setName] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [basePrice, setBasePrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
 
   // Editing state
   const [editingId, setEditingId] = useState(null);
@@ -21,11 +21,38 @@ export default function ProductFieldManager() {
 
 
   // =====================================================
+  // GET CATEGORIES
+  // =====================================================
+
+  async function loadCategories() {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8001/category"
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to load categories");
+      }
+
+      const data = await response.json();
+
+      setCategories(data);
+
+    } catch (error) {
+      console.error(error);
+      setError("Could not load categories.");
+    }
+  }
+
+
+  // =====================================================
   // GET PRODUCTS
   // =====================================================
 
   async function loadProducts() {
     try {
+      setLoading(true);
+
       const response = await fetch(
         "http://127.0.0.1:8001/product"
       );
@@ -41,33 +68,6 @@ export default function ProductFieldManager() {
     } catch (error) {
       console.error(error);
       setError("Could not load products.");
-    }
-  }
-
-
-  // =====================================================
-  // GET PRODUCT FIELDS
-  // =====================================================
-
-  async function loadProductFields() {
-    try {
-      setLoading(true);
-
-      const response = await fetch(
-        "http://127.0.0.1:8001/productfield"
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to load product fields");
-      }
-
-      const data = await response.json();
-
-      setProductFields(data);
-
-    } catch (error) {
-      console.error(error);
-      setError("Could not load product fields.");
 
     } finally {
       setLoading(false);
@@ -76,41 +76,48 @@ export default function ProductFieldManager() {
 
 
   // =====================================================
-  // LOAD EVERYTHING WHEN COMPONENT OPENS
+  // INITIAL LOAD
   // =====================================================
 
   useEffect(() => {
+    loadCategories();
     loadProducts();
-    loadProductFields();
   }, []);
 
 
   // =====================================================
-  // CREATE PRODUCT FIELD
+  // CREATE PRODUCT
   // =====================================================
 
-  async function createProductField() {
+  async function createProduct() {
 
     try {
 
       setError("");
 
-      if (!productId || !label || !fieldType) {
-        setError("Please fill in all required fields.");
+      if (
+        !name ||
+        !categoryId ||
+        !basePrice ||
+        !description ||
+        !image
+      ) {
+        setError("Please fill in all fields and select an image.");
         return;
       }
 
+
       const formData = new FormData();
 
-      formData.append("product_id", productId);
-      formData.append("label", label);
-      formData.append("field_type", fieldType);
-      formData.append("required", required);
-      formData.append("placeholder", placeholder);
+      formData.append("name", name);
+      formData.append("category_id", categoryId);
+      formData.append("base_price", basePrice);
+      formData.append("description", description);
+      formData.append("image", image);
 
 
       const response = await fetch(
-        "http://127.0.0.1:8001/productfield",
+        "http://127.0.0.1:8001/product",
         {
           method: "POST",
           body: formData,
@@ -123,7 +130,7 @@ export default function ProductFieldManager() {
 
       if (!response.ok) {
         throw new Error(
-          data.detail || "Failed to create product field"
+          data.detail || "Failed to create product"
         );
       }
 
@@ -132,7 +139,7 @@ export default function ProductFieldManager() {
 
       clearForm();
 
-      await loadProductFields();
+      await loadProducts();
 
     } catch (error) {
 
@@ -146,10 +153,10 @@ export default function ProductFieldManager() {
 
 
   // =====================================================
-  // UPDATE PRODUCT FIELD
+  // UPDATE PRODUCT
   // =====================================================
 
-  async function updateProductField() {
+  async function updateProduct() {
 
     try {
 
@@ -157,15 +164,21 @@ export default function ProductFieldManager() {
 
       const formData = new FormData();
 
-      formData.append("product_id", productId);
-      formData.append("label", label);
-      formData.append("field_type", fieldType);
-      formData.append("required", required);
-      formData.append("placeholder", placeholder);
+      formData.append("name", name);
+      formData.append("category_id", categoryId);
+      formData.append("base_price", basePrice);
+      formData.append("description", description);
+
+
+      // Image is optional during update
+
+      if (image) {
+        formData.append("image", image);
+      }
 
 
       const response = await fetch(
-        `http://127.0.0.1:8001/productfield/${editingId}`,
+        `http://127.0.0.1:8001/product/${editingId}`,
         {
           method: "PATCH",
           body: formData,
@@ -178,7 +191,7 @@ export default function ProductFieldManager() {
 
       if (!response.ok) {
         throw new Error(
-          data.detail || "Failed to update product field"
+          data.detail || "Failed to update product"
         );
       }
 
@@ -187,7 +200,7 @@ export default function ProductFieldManager() {
 
       clearForm();
 
-      await loadProductFields();
+      await loadProducts();
 
     } catch (error) {
 
@@ -201,13 +214,13 @@ export default function ProductFieldManager() {
 
 
   // =====================================================
-  // DELETE PRODUCT FIELD
+  // DELETE PRODUCT
   // =====================================================
 
-  async function deleteProductField(fieldId) {
+  async function deleteProduct(productId) {
 
     const confirmed = window.confirm(
-      "Are you sure you want to delete this product field?"
+      "Are you sure you want to delete this product?"
     );
 
     if (!confirmed) {
@@ -220,7 +233,7 @@ export default function ProductFieldManager() {
       setError("");
 
       const response = await fetch(
-        `http://127.0.0.1:8001/productfield/${fieldId}`,
+        `http://127.0.0.1:8001/product/${productId}`,
         {
           method: "DELETE",
         }
@@ -232,14 +245,14 @@ export default function ProductFieldManager() {
 
       if (!response.ok) {
         throw new Error(
-          data.detail || "Failed to delete product field"
+          data.detail || "Failed to delete product"
         );
       }
 
 
       console.log(data);
 
-      await loadProductFields();
+      await loadProducts();
 
     } catch (error) {
 
@@ -256,19 +269,26 @@ export default function ProductFieldManager() {
   // START EDITING
   // =====================================================
 
-  function startEditing(field) {
+  function startEditing(product) {
 
-    setEditingId(field.id);
+    setEditingId(product.id);
 
-    setProductId(String(field.product_id));
+    setName(product.name);
 
-    setLabel(field.label);
+    setCategoryId(
+      String(product.category_id)
+    );
 
-    setFieldType(field.field_type);
+    setBasePrice(
+      String(product.base_price)
+    );
 
-    setRequired(field.required);
+    setDescription(
+      product.description || ""
+    );
 
-    setPlaceholder(field.placeholder || "");
+    // Don't put old image into file input
+    setImage(null);
 
   }
 
@@ -281,21 +301,25 @@ export default function ProductFieldManager() {
 
     setEditingId(null);
 
-    setProductId("");
+    setName("");
+    setCategoryId("");
+    setBasePrice("");
+    setDescription("");
+    setImage(null);
 
-    setLabel("");
 
-    setFieldType("text");
+    const fileInput =
+      document.getElementById("product-image");
 
-    setRequired(false);
-
-    setPlaceholder("");
+    if (fileInput) {
+      fileInput.value = "";
+    }
 
   }
 
 
   // =====================================================
-  // FORM SUBMIT
+  // SUBMIT FORM
   // =====================================================
 
   async function handleSubmit(event) {
@@ -304,11 +328,11 @@ export default function ProductFieldManager() {
 
     if (editingId) {
 
-      await updateProductField();
+      await updateProduct();
 
     } else {
 
-      await createProductField();
+      await createProduct();
 
     }
 
@@ -316,18 +340,19 @@ export default function ProductFieldManager() {
 
 
   // =====================================================
-  // FIND PRODUCT NAME
+  // GET CATEGORY NAME
   // =====================================================
 
-  function getProductName(productId) {
+  function getCategoryName(categoryId) {
 
-    const product = products.find(
-      (product) => product.id === productId
+    const category = categories.find(
+      (category) =>
+        category.id === categoryId
     );
 
-    return product
-      ? product.name
-      : `Product #${productId}`;
+    return category
+      ? category.name
+      : `Category #${categoryId}`;
 
   }
 
@@ -345,11 +370,11 @@ export default function ProductFieldManager() {
       <div className="flex justify-between items-center mb-6">
 
         <h2 className="text-2xl font-bold">
-          Product Fields
+          Products
         </h2>
 
         <span>
-          {productFields.length} fields
+          {products.length} products
         </span>
 
       </div>
@@ -369,7 +394,7 @@ export default function ProductFieldManager() {
 
 
       {/* =================================================
-          FORM
+          PRODUCT FORM
       ================================================= */}
 
       <form
@@ -380,40 +405,61 @@ export default function ProductFieldManager() {
         <h3 className="text-xl font-semibold">
 
           {editingId
-            ? "Edit Product Field"
-            : "Create Product Field"}
+            ? "Edit Product"
+            : "Create Product"}
 
         </h3>
 
 
-        {/* PRODUCT */}
+        {/* NAME */}
 
         <div>
 
           <label className="block mb-1">
-            Product
+            Product name
+          </label>
+
+          <input
+            type="text"
+            placeholder="Product name"
+            value={name}
+            onChange={(event) =>
+              setName(event.target.value)
+            }
+            className="w-full border p-3 rounded"
+          />
+
+        </div>
+
+
+        {/* CATEGORY */}
+
+        <div>
+
+          <label className="block mb-1">
+            Category
           </label>
 
           <select
-            value={productId}
+            value={categoryId}
             onChange={(event) =>
-              setProductId(event.target.value)
+              setCategoryId(event.target.value)
             }
             className="w-full border p-3 rounded"
           >
 
             <option value="">
-              Select a product
+              Select a category
             </option>
 
-            {products.map((product) => (
+            {categories.map((category) => (
 
               <option
-                key={product.id}
-                value={product.id}
+                key={category.id}
+                value={category.id}
               >
 
-                {product.name}
+                {category.name}
 
               </option>
 
@@ -424,20 +470,20 @@ export default function ProductFieldManager() {
         </div>
 
 
-        {/* LABEL */}
+        {/* PRICE */}
 
         <div>
 
           <label className="block mb-1">
-            Field label
+            Base price
           </label>
 
           <input
-            type="text"
-            placeholder="e.g. Size"
-            value={label}
+            type="number"
+            placeholder="Price"
+            value={basePrice}
             onChange={(event) =>
-              setLabel(event.target.value)
+              setBasePrice(event.target.value)
             }
             className="w-full border p-3 rounded"
           />
@@ -445,80 +491,42 @@ export default function ProductFieldManager() {
         </div>
 
 
-        {/* FIELD TYPE */}
+        {/* DESCRIPTION */}
 
         <div>
 
           <label className="block mb-1">
-            Field type
+            Description
           </label>
 
-          <select
-            value={fieldType}
+          <textarea
+            placeholder="Product description"
+            value={description}
             onChange={(event) =>
-              setFieldType(event.target.value)
+              setDescription(event.target.value)
             }
             className="w-full border p-3 rounded"
-          >
-
-            <option value="text">
-              Text
-            </option>
-
-            <option value="number">
-              Number
-            </option>
-
-            <option value="dropdown">
-              Dropdown
-            </option>
-
-            <option value="textarea">
-              Textarea
-            </option>
-
-            <option value="date">
-              Date
-            </option>
-
-          </select>
+          />
 
         </div>
 
 
-        {/* REQUIRED */}
-
-        <label className="flex items-center gap-2">
-
-          <input
-            type="checkbox"
-            checked={required}
-            onChange={(event) =>
-              setRequired(event.target.checked)
-            }
-          />
-
-          Required field
-
-        </label>
-
-
-        {/* PLACEHOLDER */}
+        {/* IMAGE */}
 
         <div>
 
           <label className="block mb-1">
-            Placeholder
+            Product image
           </label>
 
           <input
-            type="text"
-            placeholder="e.g. Enter your size"
-            value={placeholder}
+            id="product-image"
+            type="file"
+            accept="image/*"
             onChange={(event) =>
-              setPlaceholder(event.target.value)
+              setImage(event.target.files[0])
             }
-            className="w-full border p-3 rounded"
+            className="w-full"
           />
 
         </div>
@@ -534,8 +542,8 @@ export default function ProductFieldManager() {
           >
 
             {editingId
-              ? "Update Field"
-              : "Create Field"}
+              ? "Update Product"
+              : "Create Product"}
 
           </button>
 
@@ -560,78 +568,83 @@ export default function ProductFieldManager() {
 
 
       {/* =================================================
-          EXISTING FIELDS
+          PRODUCTS
       ================================================= */}
 
       <div>
 
         <h3 className="text-xl font-semibold mb-5">
-          Existing Product Fields
+          Existing Products
         </h3>
 
 
         {loading ? (
 
-          <p>Loading fields...</p>
+          <p>Loading products...</p>
 
-        ) : productFields.length === 0 ? (
+        ) : products.length === 0 ? (
 
-          <p>No product fields found.</p>
+          <p>No products found.</p>
 
         ) : (
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-            {productFields.map((field) => (
+            {products.map((product) => (
 
               <div
-                key={field.id}
-                className="bg-white/90 p-5 rounded-xl shadow"
+                key={product.id}
+                className="bg-white/90 rounded-xl overflow-hidden shadow"
               >
 
-                <div className="flex justify-between">
+                {/* IMAGE */}
 
-                  <div>
+                {product.image && (
 
-                    <h3 className="text-xl font-bold">
-                      {field.label}
-                    </h3>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-48 object-cover"
+                  />
 
-                    <p>
-                      Product:{" "}
-                      {getProductName(field.product_id)}
-                    </p>
+                )}
 
-                    <p>
-                      Type: {field.field_type}
-                    </p>
 
-                    <p>
-                      Required:{" "}
-                      {field.required
-                        ? "Yes"
-                        : "No"}
-                    </p>
+                {/* PRODUCT INFORMATION */}
 
-                    {field.placeholder && (
+                <div className="p-5">
 
-                      <p>
-                        Placeholder:{" "}
-                        {field.placeholder}
-                      </p>
+                  <h3 className="text-xl font-bold">
+                    {product.name}
+                  </h3>
 
+
+                  <p className="mt-2">
+                    Category:{" "}
+                    {getCategoryName(
+                      product.category_id
                     )}
+                  </p>
 
-                  </div>
+
+                  <p className="mt-2">
+                    Price:{" "}
+                    {product.base_price}
+                  </p>
+
+
+                  <p className="mt-2 text-sm">
+                    {product.description}
+                  </p>
 
 
                   {/* ACTIONS */}
 
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 mt-5">
 
                     <button
                       onClick={() =>
-                        startEditing(field)
+                        startEditing(product)
                       }
                       className="px-4 py-2 border rounded"
                     >
@@ -641,7 +654,7 @@ export default function ProductFieldManager() {
 
                     <button
                       onClick={() =>
-                        deleteProductField(field.id)
+                        deleteProduct(product.id)
                       }
                       className="px-4 py-2 bg-red-600 text-white rounded"
                     >
