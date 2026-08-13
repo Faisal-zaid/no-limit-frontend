@@ -1,11 +1,44 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-const CartContext = createContext();
+const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+
+  // ==========================================
+  // LOAD CART FROM LOCAL STORAGE
+  // ==========================================
+
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem("cart");
+
+      if (savedCart) {
+        setCart(JSON.parse(savedCart));
+      }
+    } catch (error) {
+      console.error("Failed to load cart:", error);
+    }
+  }, []);
+
+  // ==========================================
+  // SAVE CART TO LOCAL STORAGE
+  // ==========================================
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } catch (error) {
+      console.error("Failed to save cart:", error);
+    }
+  }, [cart]);
 
   // ==========================================
   // ADD TO CART
@@ -14,31 +47,46 @@ export function CartProvider({ children }) {
   function addToCart(product) {
     setCart((previousCart) => {
       /*
-        We deliberately DON'T merge products just because
-        they have the same product_id.
+       * We use cart_id instead of product_id as the
+       * unique identifier because the same product can
+       * have different customizations.
+       */
 
-        Example:
+      const existingItem = previousCart.find(
+        (item) =>
+          item.product_id === product.product_id &&
+          JSON.stringify(item.custom_values || {}) ===
+            JSON.stringify(product.custom_values || {})
+      );
 
-        T-Shirt
-        Size: Large
-        Color: Black
+      // If same product + same customization already exists
+      if (existingItem) {
+        return previousCart.map((item) =>
+          item.cart_id === existingItem.cart_id
+            ? {
+                ...item,
+                quantity:
+                  item.quantity + product.quantity,
+              }
+            : item
+        );
+      }
 
-        and
+      // Otherwise create a new cart item
+      const newItem = {
+        ...product,
 
-        T-Shirt
-        Size: Small
-        Color: White
+        cart_id:
+          Date.now().toString() +
+          Math.random().toString(36).substring(2),
 
-        are two different cart items.
-      */
+        quantity: product.quantity || 1,
 
-      return [
-        ...previousCart,
-        {
-          ...product,
-          cart_id: Date.now() + Math.random(),
-        },
-      ];
+        custom_values:
+          product.custom_values || {},
+      };
+
+      return [...previousCart, newItem];
     });
   }
 
@@ -77,17 +125,18 @@ export function CartProvider({ children }) {
 
   function decreaseQuantity(cartId) {
     setCart((previousCart) =>
-      previousCart.map((item) =>
-        item.cart_id === cartId
-          ? {
-              ...item,
-              quantity: Math.max(
-                1,
-                item.quantity - 1
-              ),
-            }
-          : item
-      )
+      previousCart
+        .map((item) =>
+          item.cart_id === cartId
+            ? {
+                ...item,
+                quantity: Math.max(
+                  1,
+                  item.quantity - 1
+                ),
+              }
+            : item
+        )
     );
   }
 
@@ -100,47 +149,40 @@ export function CartProvider({ children }) {
   }
 
   // ==========================================
-  // TOTAL ITEMS
-  // ==========================================
-
-  const cartCount = cart.reduce(
-    (total, item) =>
-      total + item.quantity,
-    0
-  );
-
-  // ==========================================
-  // TOTAL PRICE
+  // CART TOTAL
   // ==========================================
 
   const cartTotal = cart.reduce(
     (total, item) =>
       total +
-      Number(item.base_price) *
-        Number(item.quantity),
+      Number(item.base_price || 0) *
+        Number(item.quantity || 1),
     0
   );
 
+  // ==========================================
+  // CONTEXT VALUE
+  // ==========================================
+
+  const value = {
+    cart,
+    addToCart,
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+    clearCart,
+    cartTotal,
+  };
+
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        addToCart,
-        removeFromCart,
-        increaseQuantity,
-        decreaseQuantity,
-        clearCart,
-        cartCount,
-        cartTotal,
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );
 }
 
 // ==========================================
-// USE CART
+// useCart HOOK
 // ==========================================
 
 export function useCart() {
@@ -148,7 +190,7 @@ export function useCart() {
 
   if (!context) {
     throw new Error(
-      "useCart must be used inside CartProvider"
+      "useCart must be used inside a CartProvider"
     );
   }
 
