@@ -13,11 +13,11 @@ export default function ProductManager() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
-  // Product fields
+  // Custom fields
   const [fields, setFields] = useState([]);
 
   // ==============================
-  // GET CATEGORIES
+  // LOAD CATEGORIES
   // ==============================
 
   async function loadCategories() {
@@ -26,8 +26,11 @@ export default function ProductManager() {
         "http://127.0.0.1:8001/category"
       );
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to load categories");
+      }
 
+      const data = await response.json();
       setCategories(data);
     } catch (error) {
       console.error("Error loading categories:", error);
@@ -35,7 +38,7 @@ export default function ProductManager() {
   }
 
   // ==============================
-  // GET PRODUCTS
+  // LOAD PRODUCTS
   // ==============================
 
   async function loadProducts() {
@@ -44,8 +47,11 @@ export default function ProductManager() {
         "http://127.0.0.1:8001/product"
       );
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to load products");
+      }
 
+      const data = await response.json();
       setProducts(data);
     } catch (error) {
       console.error("Error loading products:", error);
@@ -58,24 +64,20 @@ export default function ProductManager() {
   }, []);
 
   // ==============================
-  // ADD NEW FIELD
+  // ADD FIELD
   // ==============================
 
   function addField() {
-    const newField = {
-      temporaryId: Date.now(),
-
-      label: "",
-      field_type: "text",
-      required: false,
-      placeholder: "",
-
-      options: [],
-    };
-
-    setFields((previousFields) => [
-      ...previousFields,
-      newField,
+    setFields((previous) => [
+      ...previous,
+      {
+        temporaryId: Date.now() + Math.random(),
+        label: "",
+        field_type: "text",
+        required: false,
+        placeholder: "",
+        options: [],
+      },
     ]);
   }
 
@@ -84,8 +86,8 @@ export default function ProductManager() {
   // ==============================
 
   function removeField(fieldId) {
-    setFields((previousFields) =>
-      previousFields.filter(
+    setFields((previous) =>
+      previous.filter(
         (field) => field.temporaryId !== fieldId
       )
     );
@@ -96,8 +98,8 @@ export default function ProductManager() {
   // ==============================
 
   function updateField(fieldId, property, value) {
-    setFields((previousFields) =>
-      previousFields.map((field) => {
+    setFields((previous) =>
+      previous.map((field) => {
         if (field.temporaryId === fieldId) {
           return {
             ...field,
@@ -111,27 +113,26 @@ export default function ProductManager() {
   }
 
   // ==============================
-  // ADD OPTION TO FIELD
+  // ADD OPTION
   // ==============================
 
   function addOption(fieldId) {
-    setFields((previousFields) =>
-      previousFields.map((field) => {
-        if (field.temporaryId === fieldId) {
-          return {
-            ...field,
-
-            options: [
-              ...field.options,
-              {
-                temporaryId: Date.now() + Math.random(),
-                value: "",
-              },
-            ],
-          };
+    setFields((previous) =>
+      previous.map((field) => {
+        if (field.temporaryId !== fieldId) {
+          return field;
         }
 
-        return field;
+        return {
+          ...field,
+          options: [
+            ...field.options,
+            {
+              temporaryId: Date.now() + Math.random(),
+              value: "",
+            },
+          ],
+        };
       })
     );
   }
@@ -140,25 +141,20 @@ export default function ProductManager() {
   // UPDATE OPTION
   // ==============================
 
-  function updateOption(
-    fieldId,
-    optionId,
-    value
-  ) {
-    setFields((previousFields) =>
-      previousFields.map((field) => {
+  function updateOption(fieldId, optionId, value) {
+    setFields((previous) =>
+      previous.map((field) => {
         if (field.temporaryId !== fieldId) {
           return field;
         }
 
         return {
           ...field,
-
           options: field.options.map((option) => {
             if (option.temporaryId === optionId) {
               return {
                 ...option,
-                value: value,
+                value,
               };
             }
 
@@ -174,15 +170,14 @@ export default function ProductManager() {
   // ==============================
 
   function removeOption(fieldId, optionId) {
-    setFields((previousFields) =>
-      previousFields.map((field) => {
+    setFields((previous) =>
+      previous.map((field) => {
         if (field.temporaryId !== fieldId) {
           return field;
         }
 
         return {
           ...field,
-
           options: field.options.filter(
             (option) =>
               option.temporaryId !== optionId
@@ -201,7 +196,30 @@ export default function ProductManager() {
 
     try {
       // ==================================
-      // STEP 1 — CREATE PRODUCT
+      // VALIDATE CUSTOM FIELDS
+      // ==================================
+
+      for (const field of fields) {
+        if (!field.label.trim()) {
+          alert("Every custom field needs a label.");
+          return;
+        }
+
+        if (
+          field.field_type === "dropdown" &&
+          field.options.some(
+            (option) => !option.value.trim()
+          )
+        ) {
+          alert(
+            `Please fill in all options for "${field.label}".`
+          );
+          return;
+        }
+      }
+
+      // ==================================
+      // STEP 1: CREATE PRODUCT
       // ==================================
 
       const productForm = new FormData();
@@ -219,7 +237,10 @@ export default function ProductManager() {
         "description",
         description
       );
-      productForm.append("image", image);
+
+      if (image) {
+        productForm.append("image", image);
+      }
 
       const productResponse = await fetch(
         "http://127.0.0.1:8001/product",
@@ -234,29 +255,22 @@ export default function ProductManager() {
 
       if (!productResponse.ok) {
         console.error(productData);
-        alert("Failed to create product");
+
+        alert(
+          productData.detail ||
+            "Failed to create product."
+        );
+
         return;
       }
 
       console.log(
-        "Product created:",
+        "PRODUCT CREATED:",
         productData
       );
 
       // ==================================
-      // IMPORTANT
-      // ==================================
-      //
-      // Your current backend returns:
-      //
-      // {"message": "Product created successfully"}
-      //
-      // It does NOT return the newly-created
-      // product ID.
-      //
-      // Therefore we retrieve the products again
-      // and find the product we just created.
-      //
+      // STEP 2: GET CREATED PRODUCT
       // ==================================
 
       const productsResponse = await fetch(
@@ -266,11 +280,26 @@ export default function ProductManager() {
       const allProducts =
         await productsResponse.json();
 
+      /*
+        Your backend currently returns only:
+
+        {
+          "message":
+          "Product created successfully"
+        }
+
+        Therefore we find the product again.
+      */
+
       const createdProduct =
-        allProducts.find(
-          (product) =>
-            product.name === name
-        );
+        allProducts
+          .filter(
+            (product) =>
+              product.name === name
+          )
+          .sort(
+            (a, b) => b.id - a.id
+          )[0];
 
       if (!createdProduct) {
         alert(
@@ -284,71 +313,74 @@ export default function ProductManager() {
         createdProduct.id;
 
       console.log(
-        "Created product ID:",
+        "CREATED PRODUCT ID:",
         productId
       );
 
       // ==================================
-      // STEP 2 — CREATE PRODUCT FIELDS
+      // STEP 3: CREATE CUSTOM FIELDS
       // ==================================
 
       for (const field of fields) {
-        const fieldForm =
-          new FormData();
+        /*
+          IMPORTANT:
 
-        fieldForm.append(
-          "product_id",
-          productId
-        );
+          ProductFieldSchema on your backend
+          expects JSON.
 
-        fieldForm.append(
-          "label",
-          field.label
-        );
-
-        fieldForm.append(
-          "field_type",
-          field.field_type
-        );
-
-        fieldForm.append(
-          "required",
-          field.required
-        );
-
-        fieldForm.append(
-          "placeholder",
-          field.placeholder
-        );
+          NOT FormData.
+        */
 
         const fieldResponse =
           await fetch(
             "http://127.0.0.1:8001/productfield",
             {
               method: "POST",
-              body: fieldForm,
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify({
+                product_id: Number(
+                  productId
+                ),
+
+                label:
+                  field.label.trim(),
+
+                field_type:
+                  field.field_type,
+
+                required:
+                  Boolean(field.required),
+
+                placeholder:
+                  field.placeholder || "",
+              }),
             }
           );
 
         const fieldData =
           await fieldResponse.json();
 
+        console.log(
+          "FIELD RESPONSE:",
+          fieldData
+        );
+
         if (!fieldResponse.ok) {
           console.error(
-            "Failed to create field:",
+            "FIELD CREATION FAILED:",
             fieldData
           );
 
           continue;
         }
 
-        console.log(
-          "Field created:",
-          fieldData
-        );
-
         // ==================================
-        // FIND THE CREATED FIELD
+        // STEP 4: FIND CREATED FIELD
         // ==================================
 
         const fieldsResponse =
@@ -363,16 +395,22 @@ export default function ProductManager() {
           allFields
             .filter(
               (item) =>
-                item.product_id === productId
+                Number(item.product_id) ===
+                Number(productId)
             )
-            .find(
+            .filter(
               (item) =>
-                item.label === field.label
-            );
+                item.label ===
+                field.label.trim()
+            )
+            .sort(
+              (a, b) => b.id - a.id
+            )[0];
 
         if (!createdField) {
           console.error(
-            "Could not find created field"
+            "Could not find created field:",
+            field
           );
 
           continue;
@@ -381,66 +419,78 @@ export default function ProductManager() {
         const fieldId =
           createdField.id;
 
+        console.log(
+          "CREATED FIELD:",
+          createdField
+        );
+
         // ==================================
-        // STEP 3 — CREATE OPTIONS
+        // STEP 5: CREATE OPTIONS
         // ==================================
 
-        for (const option of field.options) {
-          if (!option.value.trim()) {
-            continue;
-          }
+        if (
+          field.field_type ===
+          "dropdown"
+        ) {
+          for (const option of field.options) {
+            if (!option.value.trim()) {
+              continue;
+            }
 
-          const optionForm =
-            new FormData();
+            /*
+              ProductFieldOptionSchema
+              also expects JSON.
+            */
 
-          optionForm.append(
-            "field_id",
-            fieldId
-          );
+            const optionResponse =
+              await fetch(
+                "http://127.0.0.1:8001/productfieldoption",
+                {
+                  method: "POST",
 
-          optionForm.append(
-            "value",
-            option.value
-          );
+                  headers: {
+                    "Content-Type":
+                      "application/json",
+                  },
 
-          const optionResponse =
-            await fetch(
-              "http://127.0.0.1:8001/productfieldoption",
-              {
-                method: "POST",
-                body: optionForm,
-              }
-            );
+                  body: JSON.stringify({
+                    field_id: Number(
+                      fieldId
+                    ),
 
-          const optionData =
-            await optionResponse.json();
+                    value:
+                      option.value.trim(),
+                  }),
+                }
+              );
 
-          if (!optionResponse.ok) {
-            console.error(
-              "Failed to create option:",
+            const optionData =
+              await optionResponse.json();
+
+            console.log(
+              "OPTION RESPONSE:",
               optionData
             );
 
-            continue;
+            if (!optionResponse.ok) {
+              console.error(
+                "OPTION CREATION FAILED:",
+                optionData
+              );
+            }
           }
-
-          console.log(
-            "Option created:",
-            optionData
-          );
         }
       }
 
       // ==================================
-      // EVERYTHING CREATED
+      // SUCCESS
       // ==================================
 
       alert(
-        "Product created successfully!"
+        "Product and customization options created successfully!"
       );
 
       // Clear form
-
       setName("");
       setCategoryId("");
       setBasePrice("");
@@ -448,13 +498,12 @@ export default function ProductManager() {
       setImage(null);
       setFields([]);
 
-      // Refresh product list
-
-      loadProducts();
+      // Refresh products
+      await loadProducts();
 
     } catch (error) {
       console.error(
-        "Error creating product:",
+        "ERROR CREATING PRODUCT:",
         error
       );
 
@@ -464,16 +513,16 @@ export default function ProductManager() {
     }
   }
 
+  // ==============================
+  // UI
+  // ==============================
+
   return (
     <section className="p-6">
 
       <h1 className="text-3xl font-bold mb-8">
         Product Manager
       </h1>
-
-      {/* =================================
-          CREATE PRODUCT
-      ================================= */}
 
       <form
         onSubmit={createProduct}
@@ -513,7 +562,6 @@ export default function ProductManager() {
             className="border p-2 rounded w-full"
             required
           >
-
             <option value="">
               Select category
             </option>
@@ -528,7 +576,6 @@ export default function ProductManager() {
                 </option>
               )
             )}
-
           </select>
         </div>
 
@@ -578,278 +625,285 @@ export default function ProductManager() {
             type="file"
             accept="image/*"
             onChange={(e) =>
-              setImage(e.target.files[0])
+              setImage(
+                e.target.files?.[0] ||
+                  null
+              )
             }
             required
           />
         </div>
 
-        {/* =================================
-            CUSTOM FIELDS
-        ================================= */}
+        {/* ================================= */}
+        {/* CUSTOMIZATION */}
+        {/* ================================= */}
 
         <div className="border-t pt-6">
 
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-5">
 
             <h2 className="text-2xl font-bold">
-              Custom Fields
+              Product Customization
             </h2>
 
             <button
               type="button"
               onClick={addField}
-              className="bg-blue-600 text-white px-4 py-2 rounded"
+              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
             >
-              + Add Field
+              + Add Custom Field
             </button>
 
           </div>
 
-          {/* FIELD LIST */}
+          {/* FIELDS */}
 
           <div className="space-y-6">
 
-            {fields.map((field) => (
+            {fields.map(
+              (field, index) => (
 
-              <div
-                key={field.temporaryId}
-                className="border rounded-lg p-5"
-              >
+                <div
+                  key={field.temporaryId}
+                  className="border rounded-xl p-5 bg-gray-50"
+                >
 
-                <div className="flex justify-between">
+                  <div className="flex justify-between">
 
-                  <h3 className="text-xl font-semibold">
-                    Field
-                  </h3>
+                    <h3 className="text-xl font-semibold">
+                      Custom Field {index + 1}
+                    </h3>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      removeField(
-                        field.temporaryId
-                      )
-                    }
-                    className="text-red-600"
-                  >
-                    Remove Field
-                  </button>
-
-                </div>
-
-                {/* FIELD LABEL */}
-
-                <div className="mt-4">
-
-                  <label className="block font-semibold mb-2">
-                    Label
-                  </label>
-
-                  <input
-                    type="text"
-                    placeholder="e.g. Size"
-                    value={field.label}
-                    onChange={(e) =>
-                      updateField(
-                        field.temporaryId,
-                        "label",
-                        e.target.value
-                      )
-                    }
-                    className="border p-2 rounded w-full"
-                  />
-
-                </div>
-
-                {/* FIELD TYPE */}
-
-                <div className="mt-4">
-
-                  <label className="block font-semibold mb-2">
-                    Field Type
-                  </label>
-
-                  <select
-                    value={field.field_type}
-                    onChange={(e) =>
-                      updateField(
-                        field.temporaryId,
-                        "field_type",
-                        e.target.value
-                      )
-                    }
-                    className="border p-2 rounded w-full"
-                  >
-
-                    <option value="text">
-                      Text
-                    </option>
-
-                    <option value="number">
-                      Number
-                    </option>
-
-                    <option value="dropdown">
-                      Dropdown
-                    </option>
-
-                  </select>
-
-                </div>
-
-                {/* REQUIRED */}
-
-                <div className="mt-4">
-
-                  <label className="flex gap-2">
-
-                    <input
-                      type="checkbox"
-                      checked={field.required}
-                      onChange={(e) =>
-                        updateField(
-                          field.temporaryId,
-                          "required",
-                          e.target.checked
+                    <button
+                      type="button"
+                      onClick={() =>
+                        removeField(
+                          field.temporaryId
                         )
                       }
-                    />
-
-                    Required field
-
-                  </label>
-
-                </div>
-
-                {/* PLACEHOLDER */}
-
-                <div className="mt-4">
-
-                  <label className="block font-semibold mb-2">
-                    Placeholder
-                  </label>
-
-                  <input
-                    type="text"
-                    placeholder="e.g. Select your size"
-                    value={field.placeholder}
-                    onChange={(e) =>
-                      updateField(
-                        field.temporaryId,
-                        "placeholder",
-                        e.target.value
-                      )
-                    }
-                    className="border p-2 rounded w-full"
-                  />
-
-                </div>
-
-                {/* =================================
-                    OPTIONS
-                ================================= */}
-
-                {field.field_type ===
-                  "dropdown" && (
-
-                  <div className="mt-6">
-
-                    <div className="flex justify-between items-center">
-
-                      <h4 className="font-semibold">
-                        Options
-                      </h4>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          addOption(
-                            field.temporaryId
-                          )
-                        }
-                        className="text-blue-600"
-                      >
-                        + Add Option
-                      </button>
-
-                    </div>
-
-                    <div className="space-y-2 mt-3">
-
-                      {field.options.map(
-                        (option) => (
-
-                          <div
-                            key={
-                              option.temporaryId
-                            }
-                            className="flex gap-2"
-                          >
-
-                            <input
-                              type="text"
-                              placeholder="Option value"
-                              value={
-                                option.value
-                              }
-                              onChange={(e) =>
-                                updateOption(
-                                  field.temporaryId,
-                                  option.temporaryId,
-                                  e.target.value
-                                )
-                              }
-                              className="border p-2 rounded flex-1"
-                            />
-
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeOption(
-                                  field.temporaryId,
-                                  option.temporaryId
-                                )
-                              }
-                              className="text-red-600"
-                            >
-                              Remove
-                            </button>
-
-                          </div>
-
-                        )
-                      )}
-
-                    </div>
+                      className="text-red-600"
+                    >
+                      Remove Field
+                    </button>
 
                   </div>
 
-                )}
+                  {/* LABEL */}
 
-              </div>
+                  <div className="mt-4">
 
-            ))}
+                    <label className="block font-semibold mb-2">
+                      Label
+                    </label>
+
+                    <input
+                      type="text"
+                      placeholder="e.g. Size"
+                      value={field.label}
+                      onChange={(e) =>
+                        updateField(
+                          field.temporaryId,
+                          "label",
+                          e.target.value
+                        )
+                      }
+                      className="border p-2 rounded w-full"
+                    />
+
+                  </div>
+
+                  {/* TYPE */}
+
+                  <div className="mt-4">
+
+                    <label className="block font-semibold mb-2">
+                      Field Type
+                    </label>
+
+                    <select
+                      value={
+                        field.field_type
+                      }
+                      onChange={(e) =>
+                        updateField(
+                          field.temporaryId,
+                          "field_type",
+                          e.target.value
+                        )
+                      }
+                      className="border p-2 rounded w-full"
+                    >
+
+                      <option value="text">
+                        Text
+                      </option>
+
+                      <option value="number">
+                        Number
+                      </option>
+
+                      <option value="dropdown">
+                        Dropdown
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* REQUIRED */}
+
+                  <div className="mt-4">
+
+                    <label className="flex gap-2 items-center">
+
+                      <input
+                        type="checkbox"
+                        checked={
+                          field.required
+                        }
+                        onChange={(e) =>
+                          updateField(
+                            field.temporaryId,
+                            "required",
+                            e.target.checked
+                          )
+                        }
+                      />
+
+                      Required field
+
+                    </label>
+
+                  </div>
+
+                  {/* PLACEHOLDER */}
+
+                  <div className="mt-4">
+
+                    <label className="block font-semibold mb-2">
+                      Placeholder
+                    </label>
+
+                    <input
+                      type="text"
+                      placeholder="e.g. Enter your name"
+                      value={
+                        field.placeholder
+                      }
+                      onChange={(e) =>
+                        updateField(
+                          field.temporaryId,
+                          "placeholder",
+                          e.target.value
+                        )
+                      }
+                      className="border p-2 rounded w-full"
+                    />
+
+                  </div>
+
+                  {/* DROPDOWN OPTIONS */}
+
+                  {field.field_type ===
+                    "dropdown" && (
+
+                    <div className="mt-6 border-t pt-4">
+
+                      <div className="flex justify-between items-center">
+
+                        <h4 className="font-semibold">
+                          Dropdown Options
+                        </h4>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addOption(
+                              field.temporaryId
+                            )
+                          }
+                          className="text-purple-600"
+                        >
+                          + Add Option
+                        </button>
+
+                      </div>
+
+                      <div className="space-y-2 mt-3">
+
+                        {field.options.map(
+                          (option) => (
+
+                            <div
+                              key={
+                                option.temporaryId
+                              }
+                              className="flex gap-2"
+                            >
+
+                              <input
+                                type="text"
+                                placeholder="e.g. Small"
+                                value={
+                                  option.value
+                                }
+                                onChange={(e) =>
+                                  updateOption(
+                                    field.temporaryId,
+                                    option.temporaryId,
+                                    e.target.value
+                                  )
+                                }
+                                className="border p-2 rounded flex-1"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  removeOption(
+                                    field.temporaryId,
+                                    option.temporaryId
+                                  )
+                                }
+                                className="text-red-600 px-2"
+                              >
+                                Remove
+                              </button>
+
+                            </div>
+
+                          )
+                        )}
+
+                      </div>
+
+                    </div>
+
+                  )}
+
+                </div>
+
+              )
+            )}
 
           </div>
 
         </div>
 
-        {/* =================================
-            SUBMIT
-        ================================= */}
+        {/* SUBMIT */}
 
         <button
           type="submit"
-          className="bg-green-600 text-white px-6 py-3 rounded font-semibold"
+          className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700"
         >
           Create Product
         </button>
 
       </form>
 
-      {/* =================================
-          EXISTING PRODUCTS
-      ================================= */}
+      {/* ================================= */}
+      {/* EXISTING PRODUCTS */}
+      {/* ================================= */}
 
       <div className="mt-16">
 
@@ -864,21 +918,24 @@ export default function ProductManager() {
 
               <div
                 key={product.id}
-                className="border p-4 rounded"
+                className="border p-4 rounded-lg"
               >
 
-                 <img
-          src={product.image}
-          alt={product.name}
-          className="w-40 h-40 object-cover rounded-lg"
-        />
+                {product.image && (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-40 h-40 object-cover rounded-lg mb-3"
+                  />
+                )}
 
                 <h3 className="font-bold">
                   {product.name}
                 </h3>
 
                 <p>
-                  Price: {product.base_price}
+                  Price: KSh{" "}
+                  {product.base_price}
                 </p>
 
                 <p>
