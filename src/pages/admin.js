@@ -9,6 +9,14 @@ import ProductFieldOptionManager from "@/admin/productfieldoptionmanager";
 
 
 export default function Admin() {
+
+  function handleLogout(){
+    // when implementing authentication
+    //localstorage.removeItem("token");
+    //router.push("/admin-login");
+
+    console.log("Admin logged out")
+  }
   
   return (
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
