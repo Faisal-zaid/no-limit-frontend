@@ -6,6 +6,7 @@ import { useCart } from "@/context/CartContext";
 export default function Productdisplay({
   selectedCategory,
 }) {
+   const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [productFields, setProductFields] =
     useState([]);
