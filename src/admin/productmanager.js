@@ -867,6 +867,12 @@ export default function ProductManager() {
                 className="border p-4 rounded"
               >
 
+                 <img
+          src={product.image}
+          alt={product.name}
+          className="w-40 h-40 object-cover rounded-lg"
+        />
+
                 <h3 className="font-bold">
                   {product.name}
                 </h3>
