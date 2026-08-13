@@ -231,65 +231,42 @@ export default function Productdisplay({
   // ADD TO CART
   // ==========================================
 
-  function addToCart() {
-    if (!selectedProduct) {
+ function handleAddToCart() {
+  if (!selectedProduct) {
+    return;
+  }
+
+  // Check required fields
+  for (const field of selectedProductFields) {
+    const value = customValues[field.id];
+
+    if (
+      field.required &&
+      (!value || String(value).trim() === "")
+    ) {
+      alert(`${field.label} is required.`);
       return;
     }
-
-    // Validate required fields
-
-    for (const field of selectedProductFields) {
-      const value =
-        customValues[field.id];
-
-      if (
-        field.required &&
-        (!value ||
-          String(value).trim() === "")
-      ) {
-        alert(
-          `${field.label} is required.`
-        );
-
-        return;
-      }
-    }
-
-    const cartItem = {
-      product_id:
-        selectedProduct.id,
-
-      name:
-        selectedProduct.name,
-
-      description:
-        selectedProduct.description,
-
-      base_price:
-        selectedProduct.base_price,
-
-      image:
-        selectedProduct.image,
-
-      quantity,
-
-      custom_values:
-        customValues,
-    };
-
-    console.log(
-      "ADDING TO CART:",
-      cartItem
-    );
-
-    /*
-      Later connect this to CartContext:
-
-      addToCart(cartItem);
-    */
-
-    closeCustomizer();
   }
+
+  const cartItem = {
+    product_id: selectedProduct.id,
+    name: selectedProduct.name,
+    description: selectedProduct.description,
+    base_price: Number(selectedProduct.base_price),
+    image: selectedProduct.image,
+    quantity: quantity,
+
+    // Save the customer's customization
+    custom_values: customValues,
+  };
+
+  console.log("ADDING TO CART:", cartItem);
+
+  addToCart(cartItem);
+
+  closeCustomizer();
+}
 
   // ==========================================
   // LOADING
