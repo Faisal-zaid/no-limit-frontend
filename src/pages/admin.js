@@ -1,30 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getCategories, deleteCategory } from "@/lib/api";
 import CategoryManager from "@/admin/categorymanager";
 import ProductManager from "@/admin/productmanager";
-import ProductFieldManager from "@/admin/productfieldmanager";
-import ProductFieldOptionManager from "@/admin/productfieldoptionmanager";
 
 export default function Admin() {
-  function handleLogout() {
-    // when implementing authentication
-    //localstorage.removeItem("token");
-    //router.push("/admin-login");
-
-    console.log("Admin logged out");
-  }
-
   return (
-    <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
-      <div className="flex justify-between ml-7 mr-7">
+    <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover bg-fixed">
+
+      {/* Header */}
+      <div className="flex justify-between items-center ml-7 mr-7 py-5">
+        
         <div></div>
+
         <div>
-          <h2 className="text-[30px]">Admin Panel</h2>
+          <h2 className="text-[30px] font-semibold">
+            Admin Panel
+          </h2>
         </div>
+
         <div>
-          <button onClick={handleLogout} className="flex items-center">
+          <button className="flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
@@ -34,22 +29,27 @@ export default function Admin() {
               <path d="M0 0h24v24H0z" fill="none" />
               <path
                 fill="currentColor"
-                d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+                d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l-2.55-2.55L16 7l5 5z"
               />
             </svg>
+
             Log out
           </button>
         </div>
+
       </div>
-      <div className="space-y-10">
+
+      {/* Admin content */}
+      <div className="space-y-10 px-7 pb-10">
+
+        {/* Categories */}
         <CategoryManager />
 
+        {/* Products + Product Fields + Product Field Options */}
         <ProductManager />
 
-        <ProductFieldManager />
-
-        <ProductFieldOptionManager />
       </div>
+
     </section>
   );
 }
