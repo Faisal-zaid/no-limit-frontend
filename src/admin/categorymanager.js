@@ -4,7 +4,16 @@ import { useState, useEffect } from "react";
 import { getCategories, deleteCategory } from "@/lib/api";
 export default function CategoryManager() {
   const [categories, setCategories] = useState([]);
-  
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // form state
+  const [name, setName] = useState("");
+  const [description, seDescription] = useState("");
+  const [subheading, setSubheading] = useState("");
+  const [image, setImage] = useState(null);
+
   // fetching categories
   useEffect(() => {
     async function loadCategories() {
@@ -78,12 +87,9 @@ export default function CategoryManager() {
     console.log(data);
   }
 
-  
   return (
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
-      <div className="flex gap-3">
-        
-      </div>
+      <div className="flex gap-3"></div>
     </section>
   );
 }
