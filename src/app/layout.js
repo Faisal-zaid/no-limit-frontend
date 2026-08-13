@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono,Rancho,Londrina_Solid } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
