@@ -844,7 +844,7 @@ export default function Productdisplay({
                 {/* ADD TO CART */}
 
                 <button
-                  onClick={addToCart}
+                  onClick={handleAddToCart}
                   className="
                     w-full
                     mt-7
