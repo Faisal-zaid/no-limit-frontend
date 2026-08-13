@@ -20,12 +20,29 @@ export default function CategoryManager() {
   // fetching categories
   useEffect(() => {
     async function loadCategories() {
+
+      try {
+      setLoading(true);
+      setError("");
+
       const response = await fetch("http://127.0.0.1:8001/category");
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+
       const data = await response.json();
 
       setCategories(data);
+       } catch (error) {
+      console.error(error);
+      setError("Could not load categories.");
+    } finally {
+      setLoading(false);
+    }
+  
     }
 
+    useEffect(() => {
     loadCategories();
   }, []);
 
