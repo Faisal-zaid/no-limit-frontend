@@ -41,19 +41,28 @@ export default function Services() {
                 <li>About</li>
               </ul>
             </div>
-            <div>
-              <ul className="flex items-center">
-                <li>
-                  <Image
-                    src="/images/Cart--Streamline-Platinum.png"
-                    alt="Hero Image"
-                    width={25}
-                    height={25}
-                  />
-                </li>
-                <li>Cart</li>
-              </ul>
-            </div>
+            <Link
+  href="/cartpage"
+  className="
+    flex
+    items-center
+    hover:text-purple-600
+    cursor-pointer
+  "
+>
+  <ul className="flex items-center">
+    <li>
+      <Image
+        src="/images/Cart--Streamline-Platinum.png"
+        alt="Cart"
+        width={25}
+        height={25}
+      />
+    </li>
+
+    <li>Cart</li>
+  </ul>
+</Link>
             <button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-1.5 rounded-lg transition-colors">
               <ul className="flex items-center">
                 <li>
