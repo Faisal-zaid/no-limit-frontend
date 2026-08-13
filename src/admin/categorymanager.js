@@ -14,6 +14,9 @@ export default function CategoryManager() {
   const [subheading, setSubheading] = useState("");
   const [image, setImage] = useState(null);
 
+  //editing state
+  const[editingId, setEditingId]=useState(null);
+
   // fetching categories
   useEffect(() => {
     async function loadCategories() {
