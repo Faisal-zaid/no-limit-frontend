@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useCart } from "@/context/CartContext";
 
 export default function Productdisplay({
   selectedCategory,
