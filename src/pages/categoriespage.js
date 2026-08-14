@@ -5,7 +5,7 @@ import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
 import Categorydisplay from "@/components/categorydisplay";
 import Link from "next/link";
-import Search from "@/components/Search";
+import SearchWrapper from "@/components/SearchWrapper";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 
@@ -36,7 +36,7 @@ export default function CategoriesPage() {
                 />
               </li>
             </ul>
-            <Search />
+            <SearchWrapper />
           </div>
           <div className="flex items-center gap-4">
             <div>
