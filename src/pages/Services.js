@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Search from "@/components/Search";
+import SearchWrapper from "@/components/SearchWrapper";
 import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
 import Navbar from "@/components/Navbar";
@@ -25,7 +25,7 @@ export default function Services() {
                 />
               </li>
             </ul>
-            <Search />
+            <SearchWrapper />
           </div>
           <div className="flex items-center gap-4">
             <div>
