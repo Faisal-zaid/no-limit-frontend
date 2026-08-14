@@ -10,7 +10,10 @@ export default function Categorydisplay({ onSelectCategory }) {
   useEffect(() => {
     async function loadCategories() {
       try {
-        const response = await fetch("http://127.0.0.1:8001/category");
+        const response = await fetch(
+          "http://127.0.0.1:8001/category"
+        );
+
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -24,50 +27,131 @@ export default function Categorydisplay({ onSelectCategory }) {
   }, []);
 
   if (loading) {
-    return <div className="p-6 text-gray-500">Loading categories...</div>;
+    return (
+      <div className="p-6 text-gray-500">
+        Loading categories...
+      </div>
+    );
   }
 
   if (categories.length === 0) {
-    return <div className="p-6 text-gray-500">No categories found.</div>;
+    return (
+      <div className="p-6 text-gray-500">
+        No categories found.
+      </div>
+    );
   }
 
   return (
-    <div className="p-6  bg-white rounded-xl">
-      <h2 className="text-xl font-bold mb-6 text-gray-800">All Categories</h2>
-      
-      {/* 3 columns on medium screens and up, 1 column on mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="p-4 sm:p-6 bg-white rounded-xl">
+
+      <h2 className="
+        text-lg
+        sm:text-xl
+        font-bold
+        mb-4
+        sm:mb-6
+        text-gray-800
+      ">
+        All Categories
+      </h2>
+
+      <div className="
+        grid
+        grid-cols-1
+        sm:grid-cols-2
+        lg:grid-cols-3
+        gap-4
+        sm:gap-6
+      ">
+
         {categories.map((category) => (
+
           <div
             key={category.id}
-            onClick={() => onSelectCategory && onSelectCategory(category)}
-            className="border border-gray-200 rounded-xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer bg-white"
+            onClick={() =>
+              onSelectCategory &&
+              onSelectCategory(category)
+            }
+            className="
+              border
+              border-gray-200
+              rounded-xl
+              p-4
+              flex
+              flex-col
+              justify-between
+              hover:shadow-md
+              transition-shadow
+              cursor-pointer
+              bg-white
+            "
           >
+
             <div>
+
               {category.image && (
                 <img
                   src={category.image}
                   alt={category.name}
-                  className="w-full h-40 object-cover rounded-lg mb-3"
+                  className="
+                    w-full
+                    h-40
+                    sm:h-48
+                    object-cover
+                    rounded-lg
+                    mb-3
+                  "
                 />
               )}
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+
+              <h3 className="
+                text-base
+                sm:text-lg
+                font-semibold
+                text-gray-900
+                mb-2
+              ">
                 {category.name}
               </h3>
-              <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-                {category.description || "No description available."}
+
+              <p className="
+                text-sm
+                text-gray-600
+                line-clamp-2
+                mb-4
+              ">
+                {category.description ||
+                  "No description available."}
               </p>
+
             </div>
 
             <Link
               href={`/categoriespage/${category.id}`}
-              className="mt-auto text-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors"
+              className="
+                mt-auto
+                text-center
+                px-4
+                py-2
+                bg-purple-600
+                text-white
+                text-sm
+                font-medium
+                rounded-lg
+                hover:bg-purple-700
+                transition-colors
+              "
             >
               View Products
             </Link>
+
           </div>
+
         ))}
+
       </div>
+
     </div>
   );
 }
