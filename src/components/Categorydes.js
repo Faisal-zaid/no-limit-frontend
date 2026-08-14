@@ -9,7 +9,10 @@ export default function Categorydescription({ selectedCategory }) {
   useEffect(() => {
     async function loadCategories() {
       try {
-        const response = await fetch("http://127.0.0.1:8001/category");
+        const response = await fetch(
+          "http://127.0.0.1:8001/category"
+        );
+
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -20,127 +23,272 @@ export default function Categorydescription({ selectedCategory }) {
     loadCategories();
   }, []);
 
-  // Use the clicked category; fallback to the first category from the API response
+  // Use clicked category, otherwise use first category
   const activeCategory = selectedCategory || categories[0];
 
   return (
-    <div>
-      {/* Dynamic Header */}
-      <h2 className="w-full text-2xl font-bold border-b border-gray-200 pb-3 px-6 pt-4 text-[15px] text-center pb-6">
+    <div className="w-full">
+
+      {/* HEADER */}
+      <h2
+        className="
+          w-full
+          text-xl
+          sm:text-2xl
+          font-bold
+          border-b
+          border-gray-200
+          px-4
+          sm:px-6
+          pt-4
+          pb-4
+          text-center
+        "
+      >
         Kenya's best{" "}
-        <span className="text-purple-600">{activeCategory?.name || "..."}</span>
+        <span className="text-purple-600">
+          {activeCategory?.name || "..."}
+        </span>
       </h2>
-      <div className="flex px-15 py-3 ">
-        <div>
-          <p className="text-gray-800 text-[13px] ">
-            <span className="border border-none pt-1 text-[18px] pb-1 pl-3 pr-2 rounded-[30px] bg-purple-600 text-white">
-              {activeCategory?.name ? `${activeCategory.name}  ` : ""}{" "}
-            </span>{" "}
-            Trusted across the country
+
+      {/* MAIN CONTENT */}
+      <div
+        className="
+          flex
+          flex-col
+          lg:flex-row
+          gap-6
+          px-4
+          sm:px-6
+          lg:px-10
+          py-5
+        "
+      >
+
+        {/* LEFT / TEXT CONTENT */}
+        <div className="w-full lg:w-1/2">
+
+          {/* Category name + trusted */}
+          <p className="text-gray-800 text-sm sm:text-base">
+
+            {activeCategory?.name && (
+              <span
+                className="
+                  inline-block
+                  border-none
+                  px-3
+                  py-1
+                  rounded-full
+                  bg-purple-600
+                  text-white
+                  text-sm
+                  sm:text-base
+                "
+              >
+                {activeCategory.name}
+              </span>
+            )}
+
+            <span className="ml-2">
+              Trusted across the country
+            </span>
+
           </p>
 
-          {/* Render Subheading dynamically from backend */}
+
+          {/* SUBHEADING */}
           {activeCategory?.subheading && (
-            <h3 className="text-lg font-semibold mt-2 text-purple-700">
+            <h3
+              className="
+                text-lg
+                sm:text-xl
+                font-semibold
+                mt-3
+                text-purple-700
+              "
+            >
               {activeCategory.subheading}
             </h3>
           )}
 
-          {/* Render Description from backend */}
+
+          {/* DESCRIPTION */}
           {activeCategory ? (
-            <div key={activeCategory.id} className="mt-4 pt-4 pb-4 ">
-              <p className="text-gray-700">
+            <div className="mt-4 py-2">
+
+              <p
+                className="
+                  text-gray-700
+                  text-sm
+                  sm:text-base
+                  leading-relaxed
+                "
+              >
                 {activeCategory.description ||
                   `High quality ${activeCategory.name} products and services.`}
               </p>
+
             </div>
           ) : (
-            <p className="text-gray-400">Loading details...</p>
+            <p className="text-gray-400">
+              Loading details...
+            </p>
           )}
 
-          {/* Call to Action Buttons */}
-          <div className="flex gap-[5%] mt-6">
-            <button className="pl-2 pb-1 pr-2 pt-1 items-center text-[10px] bg-purple-600 hover:bg-[white] hover:text-[purple] cursor-pointer text-white rounded-md">
+
+          {/* BUTTONS */}
+          <div
+            className="
+              flex
+              flex-col
+              sm:flex-row
+              gap-3
+              mt-6
+            "
+          >
+
+            <button
+              className="
+                px-4
+                py-2
+                text-sm
+                bg-purple-600
+                hover:bg-purple-700
+                text-white
+                rounded-md
+                w-full
+                sm:w-auto
+              "
+            >
               Shop for Products
             </button>
-            <button className="pl-2 pb-1 pr-2 pt-1 items-center hover:bg-[purple] hover:text-[black] cursor-pointer text-[10px] border border-gray-400 rounded-md">
+
+            <button
+              className="
+                px-4
+                py-2
+                text-sm
+                border
+                border-gray-400
+                hover:bg-purple-600
+                hover:text-white
+                rounded-md
+                w-full
+                sm:w-auto
+              "
+            >
               Get a Quote
             </button>
+
           </div>
-          <div className="flex mt-5 gap-4 text-[11px]">
+
+
+          {/* FEATURES */}
+          <div
+            className="
+              flex
+              flex-col
+              sm:flex-row
+              flex-wrap
+              gap-4
+              mt-6
+              text-xs
+              sm:text-sm
+            "
+          >
+
+            {/* Expert Designers */}
             <div>
-              <ul className="flex items-center">
+              <ul className="flex items-center gap-1">
                 <li>
                   <Image
                     src="/images/thunder.png"
-                    alt="Hero Image"
+                    alt="Expert Designers"
                     width={25}
                     height={25}
                   />
                 </li>
-                <li>Expert Designers</li>
+
+                <li>
+                  Expert Designers
+                </li>
               </ul>
             </div>
+
+
+            {/* Unlimited Revisions */}
             <div>
-              <ul className="flex items-center">
+              <ul className="flex items-center gap-1">
                 <li>
                   <Image
                     src="/images/shield.png"
-                    alt="Hero Image"
+                    alt="Unlimited Revisions"
                     width={25}
                     height={25}
                   />
                 </li>
-                <li>Unlimited Revisions</li>
+
+                <li>
+                  Unlimited Revisions
+                </li>
               </ul>
             </div>
+
+
+            {/* Fast Turnaround */}
             <div>
-              <ul className="flex items-center">
+              <ul className="flex items-center gap-1">
                 <li>
                   <Image
                     src="/images/delivery.png"
-                    alt="Hero Image"
+                    alt="Fast Turnaround"
                     width={25}
                     height={25}
                   />
                 </li>
-                <li>Fast Turnaround</li>
+
+                <li>
+                  Fast Turnaround
+                </li>
               </ul>
             </div>
+
           </div>
+
         </div>
-        <div className="flex">
-          <div>
-          {/* Render Image from backend if available */}
+
+
+        {/* RIGHT / IMAGE */}
+        <div
+          className="
+            w-full
+            lg:w-1/2
+            flex
+            justify-center
+            items-center
+          "
+        >
+
           {activeCategory?.image && (
             <img
               src={activeCategory.image}
               alt={activeCategory.name}
-              className="my-4 max-h-48 object-cover rounded-lg"
-            />
-          )}
-          </div>
-          <div>
-            {/* Render Image from backend if available */}
-          {activeCategory?.image && (
-            <img
-              src={activeCategory.image}
-              alt={activeCategory.name}
-              className="my-4 max-h-48 object-cover rounded-lg"
+              className="
+                w-full
+                max-w-md
+                h-48
+                sm:h-56
+                lg:h-64
+                object-cover
+                rounded-lg
+              "
             />
           )}
 
-          {/* Render Image from backend if available */}
-          {activeCategory?.image && (
-            <img
-              src={activeCategory.image}
-              alt={activeCategory.name}
-              className="my-4 max-h-48 object-cover rounded-lg"
-            />
-          )}
-          </div>
         </div>
+
       </div>
+
     </div>
   );
 }
