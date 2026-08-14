@@ -138,7 +138,7 @@ export default function ProductsPage() {
           <p className="text-[12px] mt-2 mb-2">
             Filter according to what interests you
           </p>
-          <Search />
+          <SearchWrapper />
           <div>
             {categories.map((category) => (
               <div key={category.id} className="flex">
