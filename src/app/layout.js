@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono,Rancho,Londrina_Solid } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/context/CartContext";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +34,11 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover min-h-full flex flex-col"><CartProvider>
-          {children}
-        </CartProvider></body>
+      <body className="bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover min-h-full flex flex-col">
+  <Providers>
+    {children}
+  </Providers>
+</body>
     </html>
   );
 }
