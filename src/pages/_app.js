@@ -1,9 +1,12 @@
 // src/pages/_app.js
-import "@/app/globals.css"; // Make sure this path points to your globals.css!
+
+import "@/app/globals.css";
+import { CartProvider } from "@/context/CartContext";
 
 export default function App({ Component, pageProps }) {
-  return 
-   <CartProvider>
+  return (
+    <CartProvider>
       <Component {...pageProps} />
     </CartProvider>
+  );
 }
