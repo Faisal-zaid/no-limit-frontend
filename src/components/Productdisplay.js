@@ -6,27 +6,19 @@ import { useCart } from "@/context/CartContext";
 export default function Productdisplay({
   selectedCategory,
 }) {
-   const { addToCart } = useCart();
+  const { addToCart } = useCart();
+
   const [products, setProducts] = useState([]);
-  const [productFields, setProductFields] =
-    useState([]);
-  const [productFieldOptions, setProductFieldOptions] =
-    useState([]);
+  const [productFields, setProductFields] = useState([]);
+  const [productFieldOptions, setProductFieldOptions] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [selectedProduct, setSelectedProduct] =
-    useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showCustomizer, setShowCustomizer] = useState(false);
 
-  const [showCustomizer, setShowCustomizer] =
-    useState(false);
-
-  const [customValues, setCustomValues] =
-    useState({});
-
-  const [quantity, setQuantity] =
-    useState(1);
+  const [customValues, setCustomValues] = useState({});
+  const [quantity, setQuantity] = useState(1);
 
   // ==========================================
   // LOAD EVERYTHING
@@ -42,66 +34,34 @@ export default function Productdisplay({
           fieldsResponse,
           optionsResponse,
         ] = await Promise.all([
-          fetch(
-            "http://127.0.0.1:8001/product"
-          ),
-
-          fetch(
-            "http://127.0.0.1:8001/productfield"
-          ),
-
-          fetch(
-            "http://127.0.0.1:8001/productfieldoption"
-          ),
+          fetch("http://127.0.0.1:8001/product"),
+          fetch("http://127.0.0.1:8001/productfield"),
+          fetch("http://127.0.0.1:8001/productfieldoption"),
         ]);
 
         if (!productsResponse.ok) {
-          throw new Error(
-            "Failed to load products"
-          );
+          throw new Error("Failed to load products");
         }
 
         if (!fieldsResponse.ok) {
-          throw new Error(
-            "Failed to load product fields"
-          );
+          throw new Error("Failed to load product fields");
         }
 
         if (!optionsResponse.ok) {
-          throw new Error(
-            "Failed to load product options"
-          );
+          throw new Error("Failed to load product options");
         }
 
-        const productsData =
-          await productsResponse.json();
+        const productsData = await productsResponse.json();
+        const fieldsData = await fieldsResponse.json();
+        const optionsData = await optionsResponse.json();
 
-        const fieldsData =
-          await fieldsResponse.json();
-
-        const optionsData =
-          await optionsResponse.json();
-
-        console.log(
-          "PRODUCTS:",
-          productsData
-        );
-
-        console.log(
-          "PRODUCT FIELDS:",
-          fieldsData
-        );
-
-        console.log(
-          "PRODUCT FIELD OPTIONS:",
-          optionsData
-        );
+        console.log("PRODUCTS:", productsData);
+        console.log("PRODUCT FIELDS:", fieldsData);
+        console.log("PRODUCT FIELD OPTIONS:", optionsData);
 
         setProducts(productsData);
         setProductFields(fieldsData);
-        setProductFieldOptions(
-          optionsData
-        );
+        setProductFieldOptions(optionsData);
 
       } catch (error) {
         console.error(
@@ -120,54 +80,36 @@ export default function Productdisplay({
   // FILTER PRODUCTS
   // ==========================================
 
-  const filteredProducts =
-    selectedCategory
-      ? products.filter(
-          (product) =>
-            Number(product.category_id) ===
-            Number(selectedCategory.id)
-        )
-      : products;
+  const filteredProducts = selectedCategory
+    ? products.filter(
+        (product) =>
+          Number(product.category_id) ===
+          Number(selectedCategory.id)
+      )
+    : products;
 
   // ==========================================
   // OPEN CUSTOMIZER
   // ==========================================
 
   function openCustomizer(product) {
-    console.log(
-      "================================"
-    );
+    console.log("================================");
+    console.log("SELECTED PRODUCT:", product);
+    console.log("PRODUCT ID:", product.id);
+    console.log("ALL PRODUCT FIELDS:", productFields);
 
-    console.log(
-      "SELECTED PRODUCT:",
-      product
+    const fieldsForProduct = productFields.filter(
+      (field) =>
+        Number(field.product_id) ===
+        Number(product.id)
     );
-
-    console.log(
-      "PRODUCT ID:",
-      product.id
-    );
-
-    console.log(
-      "ALL PRODUCT FIELDS:",
-      productFields
-    );
-
-    const fieldsForProduct =
-      productFields.filter(
-        (field) =>
-          Number(field.product_id) ===
-          Number(product.id)
-      );
 
     console.log(
       "FIELDS FOR THIS PRODUCT:",
       fieldsForProduct
     );
 
-    console.log(
-      "================================"
-    );
+    console.log("================================");
 
     setSelectedProduct(product);
     setCustomValues({});
@@ -190,30 +132,24 @@ export default function Productdisplay({
   // FIELD CHANGE
   // ==========================================
 
-  function handleFieldChange(
-    fieldId,
-    value
-  ) {
-    setCustomValues(
-      (previous) => ({
-        ...previous,
-        [fieldId]: value,
-      })
-    );
+  function handleFieldChange(fieldId, value) {
+    setCustomValues((previous) => ({
+      ...previous,
+      [fieldId]: value,
+    }));
   }
 
   // ==========================================
   // GET FIELDS FOR SELECTED PRODUCT
   // ==========================================
 
-  const selectedProductFields =
-    selectedProduct
-      ? productFields.filter(
-          (field) =>
-            Number(field.product_id) ===
-            Number(selectedProduct.id)
-        )
-      : [];
+  const selectedProductFields = selectedProduct
+    ? productFields.filter(
+        (field) =>
+          Number(field.product_id) ===
+          Number(selectedProduct.id)
+      )
+    : [];
 
   // ==========================================
   // GET OPTIONS
@@ -231,42 +167,44 @@ export default function Productdisplay({
   // ADD TO CART
   // ==========================================
 
- function handleAddToCart() {
-  if (!selectedProduct) {
-    return;
-  }
-
-  // Check required fields
-  for (const field of selectedProductFields) {
-    const value = customValues[field.id];
-
-    if (
-      field.required &&
-      (!value || String(value).trim() === "")
-    ) {
-      alert(`${field.label} is required.`);
+  function handleAddToCart() {
+    if (!selectedProduct) {
       return;
     }
+
+    // Check required fields
+    for (const field of selectedProductFields) {
+      const value = customValues[field.id];
+
+      if (
+        field.required &&
+        (!value || String(value).trim() === "")
+      ) {
+        alert(`${field.label} is required.`);
+        return;
+      }
+    }
+
+    const cartItem = {
+      product_id: selectedProduct.id,
+      name: selectedProduct.name,
+      description: selectedProduct.description,
+      base_price: Number(
+        selectedProduct.base_price
+      ),
+      image: selectedProduct.image,
+      quantity: quantity,
+
+      // Save customer's customization
+      custom_values: customValues,
+    };
+
+    console.log("ADDING TO CART:", cartItem);
+
+    addToCart(cartItem);
+
+    closeCustomizer();
   }
-
-  const cartItem = {
-    product_id: selectedProduct.id,
-    name: selectedProduct.name,
-    description: selectedProduct.description,
-    base_price: Number(selectedProduct.base_price),
-    image: selectedProduct.image,
-    quantity: quantity,
-
-    // Save the customer's customization
-    custom_values: customValues,
-  };
-
-  console.log("ADDING TO CART:", cartItem);
-
-  addToCart(cartItem);
-
-  closeCustomizer();
-}
 
   // ==========================================
   // LOADING
@@ -274,7 +212,7 @@ export default function Productdisplay({
 
   if (loading) {
     return (
-      <div className="p-6 text-gray-500">
+      <div className="p-4 sm:p-6 text-gray-500">
         Loading products...
       </div>
     );
@@ -284,11 +222,9 @@ export default function Productdisplay({
   // NO PRODUCTS
   // ==========================================
 
-  if (
-    filteredProducts.length === 0
-  ) {
+  if (filteredProducts.length === 0) {
     return (
-      <div className="p-6 text-gray-500">
+      <div className="p-4 sm:p-6 text-gray-500">
         No products found for{" "}
         {selectedCategory?.name ||
           "this category"}.
@@ -302,112 +238,133 @@ export default function Productdisplay({
 
   return (
     <>
-      {/* PRODUCTS */}
+      {/* =========================================
+          PRODUCTS
+      ========================================= */}
 
-      <div className="p-6 bg-white rounded-xl">
+      <div className="p-4 sm:p-6 bg-white rounded-xl">
 
-        <h2 className="text-xl font-bold mb-6 text-gray-800">
+        <h2 className="text-lg sm:text-xl font-bold mb-6 text-gray-800">
           {selectedCategory
             ? `${selectedCategory.name} Products`
             : "All Products"}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* RESPONSIVE PRODUCT GRID */}
 
-          {filteredProducts.map(
-            (product) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 
-              <div
-                key={product.id}
-                className="
-                  border
-                  border-gray-200
-                  rounded-xl
-                  p-4
-                  flex
-                  flex-col
-                  justify-between
-                  hover:shadow-md
-                  transition
-                  bg-white
-                "
-              >
+          {filteredProducts.map((product) => (
 
-                <div>
+            <div
+              key={product.id}
+              className="
+                border
+                border-gray-200
+                rounded-xl
+                p-4
+                flex
+                flex-col
+                justify-between
+                hover:shadow-md
+                transition
+                bg-white
+              "
+            >
 
-                  {product.image && (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="
-                        w-full
-                        h-40
-                        object-cover
-                        rounded-lg
-                        mb-3
-                      "
-                    />
-                  )}
+              <div>
 
-                  <h3 className="
-                    text-lg
+                {/* PRODUCT IMAGE */}
+
+                {product.image && (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="
+                      w-full
+                      h-40
+                      sm:h-48
+                      object-cover
+                      rounded-lg
+                      mb-3
+                    "
+                  />
+                )}
+
+                {/* PRODUCT NAME */}
+
+                <h3
+                  className="
+                    text-base
+                    sm:text-lg
                     font-semibold
                     text-gray-900
                     mb-2
-                  ">
-                    {product.name}
-                  </h3>
+                  "
+                >
+                  {product.name}
+                </h3>
 
-                  <p className="
+                {/* DESCRIPTION */}
+
+                <p
+                  className="
                     text-sm
                     text-gray-600
                     line-clamp-2
                     mb-4
-                  ">
-                    {product.description ||
-                      "No description available."}
-                  </p>
+                  "
+                >
+                  {product.description ||
+                    "No description available."}
+                </p>
 
-                  <p className="
+                {/* PRICE */}
+
+                <p
+                  className="
                     font-bold
                     text-purple-600
                     mb-4
-                  ">
-                    KSh{" "}
-                    {product.base_price}
-                  </p>
-
-                </div>
-
-                <button
-                  onClick={() =>
-                    openCustomizer(product)
-                  }
-                  className="
-                    w-full
-                    bg-purple-600
-                    hover:bg-purple-700
-                    text-white
-                    py-2
-                    rounded-lg
-                    transition
                   "
                 >
-                  View
-                </button>
+                  KSh{" "}
+                  {product.base_price}
+                </p>
 
               </div>
 
-            )
-          )}
+              {/* VIEW BUTTON */}
+
+              <button
+                onClick={() =>
+                  openCustomizer(product)
+                }
+                className="
+                  w-full
+                  bg-purple-600
+                  hover:bg-purple-700
+                  text-white
+                  py-2
+                  rounded-lg
+                  transition
+                "
+              >
+                View
+              </button>
+
+            </div>
+
+          ))}
 
         </div>
 
       </div>
 
-      {/* ========================================= */}
-      {/* CUSTOMIZATION MODAL */}
-      {/* ========================================= */}
+
+      {/* =========================================
+          CUSTOMIZATION MODAL
+      ========================================= */}
 
       {showCustomizer &&
         selectedProduct && (
@@ -425,6 +382,8 @@ export default function Productdisplay({
             "
           >
 
+            {/* MODAL */}
+
             <div
               className="
                 bg-white
@@ -437,7 +396,9 @@ export default function Productdisplay({
               "
             >
 
-              {/* HEADER */}
+              {/* =================================
+                  HEADER
+              ================================= */}
 
               <div
                 className="
@@ -445,23 +406,29 @@ export default function Productdisplay({
                   justify-between
                   items-center
                   border-b
-                  p-5
+                  p-4
+                  sm:p-5
                 "
               >
 
                 <div>
 
-                  <h2 className="
-                    text-xl
-                    font-bold
-                  ">
+                  <h2
+                    className="
+                      text-lg
+                      sm:text-xl
+                      font-bold
+                    "
+                  >
                     {selectedProduct.name}
                   </h2>
 
-                  <p className="
-                    text-purple-600
-                    font-semibold
-                  ">
+                  <p
+                    className="
+                      text-purple-600
+                      font-semibold
+                    "
+                  >
                     KSh{" "}
                     {
                       selectedProduct.base_price
@@ -470,14 +437,16 @@ export default function Productdisplay({
 
                 </div>
 
+                {/* CLOSE BUTTON */}
+
                 <button
-                  onClick={
-                    closeCustomizer
-                  }
+                  onClick={closeCustomizer}
                   className="
                     text-gray-500
                     hover:text-black
                     text-3xl
+                    leading-none
+                    px-2
                   "
                 >
                   ×
@@ -485,77 +454,83 @@ export default function Productdisplay({
 
               </div>
 
-              {/* IMAGE */}
+
+              {/* =================================
+                  IMAGE
+              ================================= */}
 
               {selectedProduct.image && (
+
                 <img
-                  src={
-                    selectedProduct.image
-                  }
-                  alt={
-                    selectedProduct.name
-                  }
+                  src={selectedProduct.image}
+                  alt={selectedProduct.name}
                   className="
                     w-full
-                    h-56
+                    h-48
+                    sm:h-56
                     object-cover
                   "
                 />
+
               )}
 
-              {/* CONTENT */}
 
-              <div className="p-5">
+              {/* =================================
+                  CONTENT
+              ================================= */}
 
-                <h3 className="
-                  font-bold
-                  text-lg
-                  mb-5
-                ">
+              <div className="p-4 sm:p-5">
+
+                <h3
+                  className="
+                    font-bold
+                    text-lg
+                    mb-5
+                  "
+                >
                   Customize your product
                 </h3>
 
-                {/* ================================= */}
-                {/* NO FIELDS */}
-                {/* ================================= */}
+
+                {/* =================================
+                    NO FIELDS
+                ================================= */}
 
                 {selectedProductFields.length ===
-                  0 ? (
+                0 ? (
 
-                  <div className="
-                    bg-gray-50
-                    rounded-lg
-                    p-4
-                    mb-5
-                  ">
+                  <div
+                    className="
+                      bg-gray-50
+                      rounded-lg
+                      p-4
+                      mb-5
+                    "
+                  >
 
-                    <p className="
-                      text-gray-600
-                    ">
+                    <p className="text-gray-600">
                       This product has no customization
                       options.
                     </p>
 
-                    {/* Useful debugging information */}
-
-                    <p className="
-                      text-xs
-                      text-gray-400
-                      mt-2
-                    ">
+                    <p
+                      className="
+                        text-xs
+                        text-gray-400
+                        mt-2
+                      "
+                    >
                       Product ID:{" "}
-                      {
-                        selectedProduct.id
-                      }
+                      {selectedProduct.id}
                     </p>
 
                   </div>
 
                 ) : (
 
-                  /* ================================= */
-                  /* FIELDS */
-                  /* ================================= */
+                  /* =================================
+                     FIELDS
+                  ================================= */
 
                   <div className="space-y-5">
 
@@ -568,35 +543,43 @@ export default function Productdisplay({
                           );
 
                         return (
+
                           <div
-                            key={
-                              field.id
-                            }
+                            key={field.id}
                           >
 
-                            <label className="
-                              block
-                              font-medium
-                              mb-2
-                              text-gray-800
-                            ">
+                            {/* LABEL */}
 
-                              {
-                                field.label
-                              }
+                            <label
+                              className="
+                                block
+                                font-medium
+                                mb-2
+                                text-gray-800
+                              "
+                            >
+
+                              {field.label}
 
                               {field.required && (
-                                <span className="
-                                  text-red-500
-                                  ml-1
-                                ">
+
+                                <span
+                                  className="
+                                    text-red-500
+                                    ml-1
+                                  "
+                                >
                                   *
                                 </span>
+
                               )}
 
                             </label>
 
-                            {/* DROPDOWN */}
+
+                            {/* =====================
+                                DROPDOWN
+                            ===================== */}
 
                             {field.field_type ===
                               "dropdown" && (
@@ -651,7 +634,10 @@ export default function Productdisplay({
 
                             )}
 
-                            {/* TEXT */}
+
+                            {/* =====================
+                                TEXT
+                            ===================== */}
 
                             {field.field_type ===
                               "text" && (
@@ -684,7 +670,10 @@ export default function Productdisplay({
 
                             )}
 
-                            {/* NUMBER */}
+
+                            {/* =====================
+                                NUMBER
+                            ===================== */}
 
                             {field.field_type ===
                               "number" && (
@@ -717,7 +706,10 @@ export default function Productdisplay({
 
                             )}
 
-                            {/* TEXTAREA */}
+
+                            {/* =====================
+                                TEXTAREA
+                            ===================== */}
 
                             {field.field_type ===
                               "textarea" && (
@@ -750,18 +742,23 @@ export default function Productdisplay({
 
                             )}
 
-                            {/* NO DROPDOWN OPTIONS */}
+
+                            {/* =====================
+                                NO OPTIONS
+                            ===================== */}
 
                             {field.field_type ===
                               "dropdown" &&
                               fieldOptions.length ===
                                 0 && (
 
-                                <p className="
-                                  text-sm
-                                  text-red-500
-                                  mt-2
-                                ">
+                                <p
+                                  className="
+                                    text-sm
+                                    text-red-500
+                                    mt-2
+                                  "
+                                >
                                   No options have been
                                   configured for this field.
                                 </p>
@@ -769,6 +766,7 @@ export default function Productdisplay({
                               )}
 
                           </div>
+
                         );
                       }
                     )}
@@ -777,23 +775,30 @@ export default function Productdisplay({
 
                 )}
 
-                {/* QUANTITY */}
+
+                {/* =================================
+                    QUANTITY
+                ================================= */}
 
                 <div className="mt-7">
 
-                  <label className="
-                    block
-                    font-medium
-                    mb-2
-                  ">
+                  <label
+                    className="
+                      block
+                      font-medium
+                      mb-2
+                    "
+                  >
                     Quantity
                   </label>
 
-                  <div className="
-                    flex
-                    items-center
-                    gap-4
-                  ">
+                  <div
+                    className="
+                      flex
+                      items-center
+                      gap-4
+                    "
+                  >
 
                     <button
                       onClick={() =>
@@ -809,15 +814,18 @@ export default function Productdisplay({
                         h-10
                         border
                         rounded-lg
+                        hover:bg-gray-100
                       "
                     >
                       −
                     </button>
 
-                    <span className="
-                      font-bold
-                      text-lg
-                    ">
+                    <span
+                      className="
+                        font-bold
+                        text-lg
+                      "
+                    >
                       {quantity}
                     </span>
 
@@ -832,6 +840,7 @@ export default function Productdisplay({
                         h-10
                         border
                         rounded-lg
+                        hover:bg-gray-100
                       "
                     >
                       +
@@ -841,7 +850,10 @@ export default function Productdisplay({
 
                 </div>
 
-                {/* ADD TO CART */}
+
+                {/* =================================
+                    ADD TO CART
+                ================================= */}
 
                 <button
                   onClick={handleAddToCart}
