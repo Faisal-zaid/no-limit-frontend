@@ -1,6 +1,5 @@
 import Image from "next/image"; //this line imports image itself
-import { rancho } from "../app/layout"; // or from "@/app/fonts"
-import { londrina } from "../app/layout"; // or from "@/app/fonts"
+import { rancho, londrina } from "../app/fonts";
 
 export default function Hero() {
   return (
