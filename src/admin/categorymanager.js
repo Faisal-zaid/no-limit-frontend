@@ -80,7 +80,7 @@ export default function CategoryManager() {
       formData.append("image", image);
 
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/category",
+        `${process.env.NEXT_PUBLIC_API_URL}/category`,
         {
           method: "POST",
           body: formData,
