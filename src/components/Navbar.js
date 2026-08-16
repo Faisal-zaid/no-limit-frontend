@@ -9,7 +9,7 @@ export default function Navbar({ onSelectCategory }) {
     async function loadCategories() {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8001/category"
+          "${process.env.NEXT_PUBLIC_API_URL}/category"
         );
 
         const data = await response.json();
