@@ -11,7 +11,7 @@ export default function Categorydisplay({ onSelectCategory }) {
     async function loadCategories() {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8001/category"
+          "${process.env.NEXT_PUBLIC_API_URL}/category"
         );
 
         const data = await response.json();
