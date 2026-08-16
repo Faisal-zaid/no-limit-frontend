@@ -20,7 +20,7 @@ export default function ProductFieldOptionManager() {
     async function loadProductFields() {
       try {
         const response = await fetch(
-          "${process.env.NEXT_PUBLIC_API_URL}/productfield"
+          `${process.env.NEXT_PUBLIC_API_URL}/productfield`
         );
 
         if (!response.ok) {
@@ -45,7 +45,7 @@ export default function ProductFieldOptionManager() {
   async function loadOptions() {
     try {
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/productfieldoption"
+        `${process.env.NEXT_PUBLIC_API_URL}/productfieldoption`
       );
 
       if (!response.ok) {
@@ -83,7 +83,7 @@ export default function ProductFieldOptionManager() {
 
     try {
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/productfieldoption",
+        `${process.env.NEXT_PUBLIC_API_URL}/productfieldoption`,
         {
           method: "POST",
           body: formData,

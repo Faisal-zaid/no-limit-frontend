@@ -23,7 +23,7 @@ export default function ProductManager() {
   async function loadCategories() {
     try {
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/category"
+        `${process.env.NEXT_PUBLIC_API_URL}/category`
       );
 
       if (!response.ok) {
@@ -44,7 +44,7 @@ export default function ProductManager() {
   async function loadProducts() {
     try {
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/product"
+        `${process.env.NEXT_PUBLIC_API_URL}/product`
       );
 
       if (!response.ok) {
@@ -243,7 +243,7 @@ export default function ProductManager() {
       }
 
       const productResponse = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/product",
+        `${process.env.NEXT_PUBLIC_API_URL}/product`,
         {
           method: "POST",
           body: productForm,
@@ -274,7 +274,7 @@ export default function ProductManager() {
       // ==================================
 
       const productsResponse = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/product"
+        `${process.env.NEXT_PUBLIC_API_URL}/product`
       );
 
       const allProducts =
@@ -333,7 +333,7 @@ export default function ProductManager() {
 
         const fieldResponse =
           await fetch(
-            "${process.env.NEXT_PUBLIC_API_URL}/productfield",
+            `${process.env.NEXT_PUBLIC_API_URL}/productfield`,
             {
               method: "POST",
 
@@ -385,7 +385,7 @@ export default function ProductManager() {
 
         const fieldsResponse =
           await fetch(
-            "${process.env.NEXT_PUBLIC_API_URL}/productfield"
+            `${process.env.NEXT_PUBLIC_API_URL}/productfield`
           );
 
         const allFields =
@@ -444,7 +444,7 @@ export default function ProductManager() {
 
             const optionResponse =
               await fetch(
-                "${process.env.NEXT_PUBLIC_API_URL}/productfieldoption",
+                `${process.env.NEXT_PUBLIC_API_URL}/productfieldoption`,
                 {
                   method: "POST",
 

@@ -27,7 +27,7 @@ export default function ProductFieldManager() {
   async function loadProducts() {
     try {
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/product"
+        `${process.env.NEXT_PUBLIC_API_URL}/product`
       );
 
       if (!response.ok) {
@@ -54,7 +54,7 @@ export default function ProductFieldManager() {
       setLoading(true);
 
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/productfield"
+        `${process.env.NEXT_PUBLIC_API_URL}/productfield`
       );
 
       if (!response.ok) {
@@ -110,7 +110,7 @@ export default function ProductFieldManager() {
 
 
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/productfield",
+        `${process.env.NEXT_PUBLIC_API_URL}/productfield`,
         {
           method: "POST",
           body: formData,
