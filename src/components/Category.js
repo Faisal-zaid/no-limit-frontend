@@ -101,7 +101,7 @@ export default function Categories({ onSelectCategory }) {
               lg:hidden
             "
           >
-            →
+           View products →
           </span>
 
         </div>
