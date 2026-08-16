@@ -212,110 +212,229 @@ export default function Services() {
 
 
       {/* ================= SERVICES CONTENT ================= */}
+      {/* ================= SERVICES CONTENT ================= */}
+
+<div className="
+  mx-[3%]
+  mt-6
+  lg:mt-[3%]
+">
+
+  {/* =====================================================
+      MOBILE VERSION
+      ===================================================== */}
+
+  <div className="lg:hidden">
+
+    {/* SHOW CATEGORIES WHEN NOTHING IS SELECTED */}
+
+    {!selectedCategory && (
       <div className="
-        flex
-        flex-col
-        lg:flex-row
         border
-        rounded-[20px]
-        mx-[3%]
-        mt-6
-        lg:mt-[3%]
-        gap-6
-        p-4
-        lg:p-0
+        rounded-[15px]
+        w-full
+        bg-white
       ">
 
-        {/* ================= CATEGORIES ================= */}
-        <div className="
-          border
-          rounded-[15px]
-          w-full
-          lg:w-auto
-          lg:min-w-[280px]
-          lg:ml-7
-          lg:mr-7
-          lg:mt-[3%]
+        <h2 className="
+          border-b
+          px-6
+          py-3
+          font-semibold
+          text-lg
         ">
+          Categories
+        </h2>
 
-          <h2 className="
-            border-b
-            px-6
-            lg:px-15
-            py-3
-            font-semibold
-            text-lg
+        <div className="py-4">
+
+          <div className="
+            flex
+            justify-center
           ">
-            Categories
-          </h2>
+            <Categories
+              onSelectCategory={setSelectedCategory}
+            />
+          </div>
 
-
-          <div>
-
-            <div className="
-              flex
-              justify-center
-              lg:pl-[25%]
-              py-4
-            ">
-              <Categories
-                onSelectCategory={setSelectedCategory}
-              />
-            </div>
-
-
-            <div className="
-              flex
-              justify-center
-              mb-3
-            ">
-
-              <Link
-                href="/categoriespage"
-                className="
-                  mt-3
-                  px-3
-                  py-1
-                  bg-purple-600
-                  text-white
-                  rounded-[6px]
-                  hover:bg-white
-                  hover:text-purple-600
-                  cursor-pointer
-                  border
-                  border-purple-600
-                "
-              >
-                View all Categories
-              </Link>
-
-            </div>
-
+          <div className="
+            flex
+            justify-center
+            mb-3
+          ">
+            <Link
+              href="/categoriespage"
+              className="
+                mt-3
+                px-3
+                py-1
+                bg-purple-600
+                text-white
+                rounded-[6px]
+                hover:bg-white
+                hover:text-purple-600
+                cursor-pointer
+                border
+                border-purple-600
+              "
+            >
+              View all Categories
+            </Link>
           </div>
 
         </div>
 
+      </div>
+    )}
 
-        {/* ================= CATEGORY DESCRIPTION ================= */}
+
+    {/* SHOW DESCRIPTION ONLY AFTER CATEGORY IS SELECTED */}
+
+    {selectedCategory && (
+      <div className="
+        w-full
+        border
+        border-gray-200
+        rounded-xl
+        shadow-sm
+        overflow-hidden
+        bg-white
+      ">
+
+        {/* BACK BUTTON */}
+
+        <div className="p-4 border-b">
+
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className="
+              text-purple-600
+              hover:text-purple-800
+              font-medium
+            "
+          >
+            ← Back to Categories
+          </button>
+
+        </div>
+
+
+        {/* CATEGORY DESCRIPTION */}
+
+        <Categorydescription
+          selectedCategory={selectedCategory}
+        />
+
+      </div>
+    )}
+
+  </div>
+
+
+
+  {/* =====================================================
+      DESKTOP VERSION
+      ===================================================== */}
+
+  <div className="
+    hidden
+    lg:flex
+    border
+    rounded-[20px]
+    gap-6
+  ">
+
+    {/* ================= CATEGORIES ================= */}
+
+    <div className="
+      border
+      rounded-[15px]
+      lg:min-w-[280px]
+      lg:ml-7
+      lg:mr-7
+      lg:mt-[3%]
+    ">
+
+      <h2 className="
+        border-b
+        px-15
+        py-3
+        font-semibold
+        text-lg
+      ">
+        Categories
+      </h2>
+
+
+      <div>
+
         <div className="
-          w-full
-          lg:flex-1
-          border
-          border-gray-200
-          rounded-xl
-          shadow-sm
-          overflow-hidden
-          lg:mr-7
-          lg:mt-[3%]
+          flex
+          justify-center
+          pl-[25%]
+          py-4
+        ">
+          <Categories
+            onSelectCategory={setSelectedCategory}
+          />
+        </div>
+
+
+        <div className="
+          flex
+          justify-center
+          mb-3
         ">
 
-          <Categorydescription
-            selectedCategory={selectedCategory}
-          />
+          <Link
+            href="/categoriespage"
+            className="
+              mt-3
+              px-3
+              py-1
+              bg-purple-600
+              text-white
+              rounded-[6px]
+              hover:bg-white
+              hover:text-purple-600
+              cursor-pointer
+              border
+              border-purple-600
+            "
+          >
+            View all Categories
+          </Link>
 
         </div>
 
       </div>
+
+    </div>
+
+
+
+    {/* ================= CATEGORY DESCRIPTION ================= */}
+
+    <div className="
+      flex-1
+      border
+      border-gray-200
+      rounded-xl
+      shadow-sm
+      overflow-hidden
+      mr-7
+      mt-[3%]
+    ">
+
+      <Categorydescription
+        selectedCategory={selectedCategory}
+      />
+
+    </div>
+
+  </div>
+
+</div>
 
     </section>
   );
