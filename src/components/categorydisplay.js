@@ -128,7 +128,7 @@ export default function Categorydisplay({ onSelectCategory }) {
             </div>
 
             <Link
-              href={`/categoriespage/${category.id}`}
+              href={`/productspage?category_id=${category.id}`}
               className="
                 mt-auto
                 text-center
