@@ -34,9 +34,9 @@ export default function Productdisplay({
           fieldsResponse,
           optionsResponse,
         ] = await Promise.all([
-          fetch("${process.env.NEXT_PUBLIC_API_URL}/product"),
-          fetch("${process.env.NEXT_PUBLIC_API_URL}/productfield"),
-          fetch("${process.env.NEXT_PUBLIC_API_URL}/productfieldoption"),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfield`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfieldoption`),
         ]);
 
         if (!productsResponse.ok) {
