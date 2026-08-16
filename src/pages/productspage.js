@@ -316,137 +316,124 @@ export default function ProductsPage() {
           SIDEBAR + PRODUCTS
       ====================================================== */}
 
-      <div className="
-        w-full
-        flex
-        flex-col
-        lg:flex-row
-        gap-6
-        p-4
-        sm:p-6
-      ">
+      {/* ================= SHOP CONTENT ================= */}
+<div className="w-full gap-6 flex flex-col lg:flex-row p-4 lg:p-6 shadow-sm">
 
-        {/* =================================================
-            LEFT SIDEBAR
-        ================================================== */}
+  {/* ================= LEFT SIDEBAR ================= */}
+  <div
+    className={`
+      border
+      w-full
+      lg:w-[20%]
+      border-gray-200
+      rounded-xl
+      p-4
+      bg-white
 
-        <div className="
-          border
-          border-gray-200
-          rounded-xl
-          p-4
-          bg-white
-          w-full
-          lg:w-[25%]
-          lg:min-w-[250px]
-        ">
+      ${selectedCategory ? "hidden lg:block" : "block"}
+    `}
+  >
 
-          <p className="font-bold text-[15px]">
-            Browse by Category
-          </p>
+    <p className="font-bold text-[15px]">
+      Browse by Category
+    </p>
 
-          <p className="
-            text-[12px]
-            mt-2
-            mb-3
-            text-gray-600
-          ">
-            Filter according to what interests you
-          </p>
+    <p className="text-[12px] mt-2 mb-2">
+      Filter according to what interests you
+    </p>
 
+    <SearchWrapper />
 
-          {/* SEARCH */}
+    <div className="mt-4">
 
-          <div className="w-full mb-5">
-            <SearchWrapper />
-          </div>
+      {categories.map((category) => (
 
+        <div
+          key={category.id}
+          className="flex items-center gap-3 mb-4"
+        >
 
-          {/* CATEGORIES */}
+          {/* CATEGORY IMAGE */}
+          {category.image && (
+            <img
+              src={category.image}
+              alt={category.name}
+              className="
+                w-12
+                h-12
+                object-cover
+                rounded-lg
+              "
+            />
+          )}
 
-          <div className="space-y-4">
-
-            {categories.map((category) => (
-
-              <div
-                key={category.id}
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  cursor-pointer
-                  rounded-lg
-                  p-2
-                  hover:bg-purple-50
-                  transition-colors
-                "
-                onClick={() =>
-                  setSelectedCategory(category)
-                }
-              >
-
-                {/* CATEGORY IMAGE */}
-
-                {category.image && (
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="
-                      w-14
-                      h-14
-                      sm:w-16
-                      sm:h-16
-                      object-cover
-                      rounded-lg
-                      shrink-0
-                    "
-                  />
-                )}
-
-
-                {/* CATEGORY NAME */}
-
-                <h3 className="
-                  text-sm
-                  sm:text-base
-                  font-medium
-                  text-gray-800
-                  hover:text-purple-600
-                ">
-                  {category.name}
-                </h3>
-
-              </div>
-
-            ))}
-
-          </div>
+          {/* CATEGORY NAME */}
+          <h3
+            onClick={() => setSelectedCategory(category)}
+            className="
+              cursor-pointer
+              rounded-[5px]
+              px-3
+              py-2
+              hover:bg-purple-700
+              hover:text-white
+              transition
+              flex-1
+            "
+          >
+            {category.name}
+          </h3>
 
         </div>
 
+      ))}
 
-        {/* =================================================
-            RIGHT SIDE / PRODUCTS
-        ================================================== */}
+    </div>
 
-        <div className="
-          bg-white
-          border
-          border-gray-200
-          rounded-xl
-          shadow-sm
-          overflow-hidden
-          w-full
-          lg:flex-1
-        ">
+  </div>
 
-          <Productdisplay
-            selectedCategory={selectedCategory}
-          />
 
-        </div>
+  {/* ================= PRODUCTS ================= */}
+  <div
+    className={`
+      bg-white
+      border
+      border-gray-200
+      rounded-xl
+      shadow-sm
+      overflow-hidden
+      w-full
+      lg:flex-1
+
+      ${!selectedCategory ? "hidden lg:block" : "block"}
+    `}
+  >
+
+    {/* MOBILE BACK BUTTON */}
+    {selectedCategory && (
+      <div className="lg:hidden p-4 border-b">
+
+        <button
+          onClick={() => setSelectedCategory(null)}
+          className="
+            text-purple-600
+            font-semibold
+            hover:text-purple-800
+          "
+        >
+          ← Back to Categories
+        </button>
 
       </div>
+    )}
+
+    <Productdisplay
+      selectedCategory={selectedCategory}
+    />
+
+  </div>
+
+</div>
 
     </section>
   );
