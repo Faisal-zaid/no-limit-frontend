@@ -96,15 +96,28 @@ return ( <section className="min-h-screen bg-[url('/images/nolimitbackground.png
           <span>About</span>
         </div>
 
-        <div className="flex items-center gap-1">
-          <Image
-            src="/images/Cart--Streamline-Platinum.png"
-            alt="Cart"
-            width={20}
-            height={20}
-          />
-          <span>Cart</span>
-        </div>
+        <Link
+              href="/cartpage"
+              className="
+                flex
+                items-center
+                hover:text-purple-600
+                cursor-pointer
+              "
+            >
+              <ul className="flex items-center gap-1">
+                <li>
+                  <Image
+                    src="/images/Cart--Streamline-Platinum.png"
+                    alt="Cart"
+                    width={25}
+                    height={25}
+                  />
+                </li>
+
+                <li>Cart</li>
+              </ul>
+            </Link>
 
         <button className="flex items-center gap-1 bg-purple-600 text-white px-3 py-1.5 rounded-lg">
           <Image
