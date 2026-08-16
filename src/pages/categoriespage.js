@@ -140,25 +140,39 @@ return ( <section className="min-h-screen bg-[url('/images/nolimitbackground.png
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
 
         {/* ALL PRODUCTS */}
-        <div className="w-full sm:w-auto flex items-center justify-center sm:justify-start px-4 py-2 bg-gray-100 rounded-lg">
+        <div
+            className="
+              px-3
+              py-2
+              bg-gray-100
+              rounded-[10px]
+              w-full
+              lg:w-auto
+            "
+          >
+            <ul className="
+              flex
+              items-center
+              justify-center
+              lg:justify-start
+              gap-3
+            ">
+              <li>
+                <Image
+                  src="/images/menu.png"
+                  alt="Menu"
+                  width={25}
+                  height={25}
+                />
+              </li>
 
-          <ul className="flex items-center gap-2">
-            <li>
-              <Image
-                src="/images/menu.png"
-                alt="Menu"
-                width={22}
-                height={22}
-              />
-            </li>
-
-            <li className="text-sm sm:text-base">
-              All Products
-            </li>
-          </ul>
-
-        </div>
-
+              <li>
+                <Link href="/productspage">
+                  All Products
+                </Link>
+              </li>
+            </ul>
+          </div>
 
         {/* NAVBAR */}
         <div className="w-full sm:flex-1 overflow-x-auto">
