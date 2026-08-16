@@ -34,7 +34,7 @@ export default function CategoryManager() {
       setError("");
 
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL}/category"
+        `${process.env.NEXT_PUBLIC_API_URL}/category`
       );
 
       if (!response.ok) {
