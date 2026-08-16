@@ -15,7 +15,7 @@ export default function ProductsPage() {
     async function loadCategories() {
       try {
         const response = await fetch(
-          "${process.env.NEXT_PUBLIC_API_URL}/category"
+          `${process.env.NEXT_PUBLIC_API_URL}/category`
         );
 
         const data = await response.json();
