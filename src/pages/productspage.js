@@ -344,51 +344,96 @@ export default function ProductsPage() {
 
     <SearchWrapper />
 
-    <div className="mt-4">
+    <div className="mt-4 space-y-3">
+  {categories.map((category) => (
+    <button
+      key={category.id}
+      onClick={() => setSelectedCategory(category)}
+      className="
+        w-full
+        flex
+        items-center
+        gap-4
+        p-3
+        bg-white
+        border
+        border-gray-200
+        rounded-xl
+        shadow-sm
+        text-left
+        hover:border-purple-500
+        hover:bg-purple-50
+        transition-all
+        duration-200
+        active:scale-[0.98]
+      "
+    >
 
-      {categories.map((category) => (
-
-        <div
-          key={category.id}
-          className="flex items-center gap-3 mb-4"
-        >
-
-          {/* CATEGORY IMAGE */}
-          {category.image && (
-            <img
-              src={category.image}
-              alt={category.name}
-              className="
-                w-12
-                h-12
-                object-cover
-                rounded-lg
-              "
-            />
-          )}
-
-          {/* CATEGORY NAME */}
-          <h3
-            onClick={() => setSelectedCategory(category)}
+      {/* CATEGORY IMAGE */}
+      <div className="
+        w-16
+        h-16
+        flex-shrink-0
+        overflow-hidden
+        rounded-lg
+        bg-gray-100
+      ">
+        {category.image ? (
+          <img
+            src={category.image}
+            alt={category.name}
             className="
-              cursor-pointer
-              rounded-[5px]
-              px-3
-              py-2
-              hover:bg-purple-700
-              hover:text-white
-              transition
-              flex-1
+              w-full
+              h-full
+              object-cover
             "
-          >
-            {category.name}
-          </h3>
+          />
+        ) : (
+          <div className="
+            w-full
+            h-full
+            flex
+            items-center
+            justify-center
+            text-gray-400
+            text-xs
+          ">
+            No image
+          </div>
+        )}
+      </div>
 
-        </div>
+      {/* CATEGORY NAME */}
+      <div className="flex-1">
+        <h3 className="
+          font-semibold
+          text-gray-900
+          text-base
+        ">
+          {category.name}
+        </h3>
 
-      ))}
+        <p className="
+          text-xs
+          text-gray-500
+          mt-1
+        ">
+          View products
+        </p>
+      </div>
 
-    </div>
+      {/* ARROW */}
+      <div className="
+        text-purple-600
+        text-xl
+        pr-1
+      ">
+        →
+      </div>
+
+    </button>
+  ))}
+</div>
 
   </div>
 
