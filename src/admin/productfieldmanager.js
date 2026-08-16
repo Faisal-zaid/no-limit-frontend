@@ -27,7 +27,7 @@ export default function ProductFieldManager() {
   async function loadProducts() {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8001/product"
+        "${process.env.NEXT_PUBLIC_API_URL}/product"
       );
 
       if (!response.ok) {
@@ -54,7 +54,7 @@ export default function ProductFieldManager() {
       setLoading(true);
 
       const response = await fetch(
-        "http://127.0.0.1:8001/productfield"
+        "${process.env.NEXT_PUBLIC_API_URL}/productfield"
       );
 
       if (!response.ok) {
@@ -110,7 +110,7 @@ export default function ProductFieldManager() {
 
 
       const response = await fetch(
-        "http://127.0.0.1:8001/productfield",
+        "${process.env.NEXT_PUBLIC_API_URL}/productfield",
         {
           method: "POST",
           body: formData,
@@ -165,7 +165,7 @@ export default function ProductFieldManager() {
 
 
       const response = await fetch(
-        `http://127.0.0.1:8001/productfield/${editingId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/productfield/${editingId}`,
         {
           method: "PATCH",
           body: formData,
@@ -220,7 +220,7 @@ export default function ProductFieldManager() {
       setError("");
 
       const response = await fetch(
-        `http://127.0.0.1:8001/productfield/${fieldId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/productfield/${fieldId}`,
         {
           method: "DELETE",
         }
