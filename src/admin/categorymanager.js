@@ -34,7 +34,7 @@ export default function CategoryManager() {
       setError("");
 
       const response = await fetch(
-        "http://127.0.0.1:8001/category"
+        "${process.env.NEXT_PUBLIC_API_URL}/category"
       );
 
       if (!response.ok) {
@@ -80,7 +80,7 @@ export default function CategoryManager() {
       formData.append("image", image);
 
       const response = await fetch(
-        "http://127.0.0.1:8001/category",
+        "${process.env.NEXT_PUBLIC_API_URL}/category",
         {
           method: "POST",
           body: formData,
@@ -128,7 +128,7 @@ export default function CategoryManager() {
       }
 
       const response = await fetch(
-        `http://127.0.0.1:8001/category/${editingId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/category/${editingId}`,
         {
           method: "PATCH",
           body: formData,
@@ -171,7 +171,7 @@ export default function CategoryManager() {
       setError("");
 
       const response = await fetch(
-        `http://127.0.0.1:8001/category/${categoryId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/category/${categoryId}`,
         {
           method: "DELETE",
         }
