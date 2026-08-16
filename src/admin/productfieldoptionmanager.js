@@ -20,7 +20,7 @@ export default function ProductFieldOptionManager() {
     async function loadProductFields() {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8001/productfield"
+          "${process.env.NEXT_PUBLIC_API_URL}/productfield"
         );
 
         if (!response.ok) {
@@ -45,7 +45,7 @@ export default function ProductFieldOptionManager() {
   async function loadOptions() {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8001/productfieldoption"
+        "${process.env.NEXT_PUBLIC_API_URL}/productfieldoption"
       );
 
       if (!response.ok) {
@@ -83,7 +83,7 @@ export default function ProductFieldOptionManager() {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8001/productfieldoption",
+        "${process.env.NEXT_PUBLIC_API_URL}/productfieldoption",
         {
           method: "POST",
           body: formData,
@@ -131,7 +131,7 @@ export default function ProductFieldOptionManager() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8001/productfieldoption/${optionId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/productfieldoption/${optionId}`,
         {
           method: "PATCH",
           body: formData,
@@ -171,7 +171,7 @@ export default function ProductFieldOptionManager() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8001/productfieldoption/${optionId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/productfieldoption/${optionId}`,
         {
           method: "DELETE",
         }
