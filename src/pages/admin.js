@@ -2,6 +2,7 @@
 
 import CategoryManager from "@/admin/categorymanager";
 import ProductManager from "@/admin/productmanager";
+import OrderManager from "@/admin/ordermanager";
 
 export default function Admin() {
   return (
@@ -47,6 +48,7 @@ export default function Admin() {
 
         {/* Products + Product Fields + Product Field Options */}
         <ProductManager />
+        <OrderManager />
 
       </div>
 
