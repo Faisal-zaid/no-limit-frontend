@@ -534,6 +534,66 @@ async function placeOrder() {
 
             </div>
 
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+
+  <h2 className="text-xl font-bold mb-5">
+    Customer Information
+  </h2>
+
+  <div className="space-y-4">
+
+    <div>
+      <label className="block text-sm font-medium mb-1">
+        Full Name
+      </label>
+
+      <input
+        type="text"
+        value={customerName}
+        onChange={(e) =>
+          setCustomerName(e.target.value)
+        }
+        placeholder="Enter your full name"
+        className="w-full border rounded-lg px-4 py-3"
+      />
+    </div>
+
+    <div>
+      <label className="block text-sm font-medium mb-1">
+        Email
+      </label>
+
+      <input
+        type="email"
+        value={customerEmail}
+        onChange={(e) =>
+          setCustomerEmail(e.target.value)
+        }
+        placeholder="Enter your email"
+        className="w-full border rounded-lg px-4 py-3"
+      />
+    </div>
+
+    <div>
+      <label className="block text-sm font-medium mb-1">
+        Phone Number
+      </label>
+
+      <input
+        type="tel"
+        value={customerPhone}
+        onChange={(e) =>
+          setCustomerPhone(e.target.value)
+        }
+        placeholder="07XXXXXXXX"
+        className="w-full border rounded-lg px-4 py-3"
+      />
+    </div>
+
+  </div>
+
+</div>
+
 
             {/* ============================= */}
             {/* ORDER SUMMARY */}
