@@ -666,25 +666,25 @@ async function placeOrder() {
                 {/* GIVE MONEY TO OWNER */}
 
                 <button
-                  onClick={() => {
-                    alert(
-                      "Order received. Please give the money to the owner."
-                    );
-                  }}
-                  className="
-                    w-full
-                    mt-6
-                    bg-purple-600
-                    hover:bg-purple-700
-                    text-white
-                    py-3
-                    rounded-lg
-                    font-semibold
-                    transition
-                  "
-                >
-                  Give Money to Owner
-                </button>
+  onClick={placeOrder}
+  disabled={isSubmitting}
+  className="
+    w-full
+    mt-6
+    bg-purple-600
+    hover:bg-purple-700
+    disabled:bg-gray-400
+    text-white
+    py-3
+    rounded-lg
+    font-semibold
+    transition
+  "
+>
+  {isSubmitting
+    ? "Placing Order..."
+    : "Give Money to Owner"}
+</button>
 
 
                 <p className="
