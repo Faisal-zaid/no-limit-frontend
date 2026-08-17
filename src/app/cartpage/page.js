@@ -45,7 +45,7 @@ async function placeOrder() {
     // ==========================================
 
     const orderResponse = await fetch(
-      "http://localhost:8000/order",
+      `${process.env.NEXT_PUBLIC_API_URL}/order`,
       {
         method: "POST",
 
@@ -80,7 +80,7 @@ async function placeOrder() {
 
     for (const item of cart) {
       const itemResponse = await fetch(
-        "http://localhost:8000/orderitem",
+        `${process.env.NEXT_PUBLIC_API_URL}/orderitem`,
         {
           method: "POST",
 
@@ -133,7 +133,7 @@ async function placeOrder() {
         }
 
         const fieldResponse = await fetch(
-          "http://localhost:8000/orderitemfieldvalue",
+          `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue`,
           {
             method: "POST",
 
