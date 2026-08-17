@@ -21,6 +21,172 @@ const [customerPhone, setCustomerPhone] = useState("");
 
 const [isSubmitting, setIsSubmitting] = useState(false);
 
+async function placeOrder() {
+  if (cart.length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
+
+  if (
+    !customerName ||
+    !customerEmail ||
+    !customerPhone
+  ) {
+    alert("Please enter your name, email and phone number.");
+    return;
+  }
+
+  try {
+    setIsSubmitting(true);
+
+    // ==========================================
+    // STEP 1
+    // CREATE THE MAIN ORDER
+    // ==========================================
+
+    const orderResponse = await fetch(
+      "http://localhost:8000/order",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          customer_name: customerName,
+          customer_email: customerEmail,
+          customer_phone: customerPhone,
+          status: "Pending",
+          total_price: cartTotal,
+        }),
+      }
+    );
+
+    if (!orderResponse.ok) {
+      throw new Error("Failed to create order");
+    }
+
+    const orderData = await orderResponse.json();
+
+    const orderId = orderData.order_id;
+
+    console.log("Created order:", orderId);
+
+    // ==========================================
+    // STEP 2
+    // CREATE ORDER ITEMS
+    // ==========================================
+
+    for (const item of cart) {
+      const itemResponse = await fetch(
+        "http://localhost:8000/orderitem",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            order_id: orderId,
+            product_id: item.product_id,
+            quantity: item.quantity,
+          }),
+        }
+      );
+
+      if (!itemResponse.ok) {
+        throw new Error(
+          `Failed to create order item for ${item.name}`
+        );
+      }
+
+      const itemData = await itemResponse.json();
+
+      const orderItemId =
+        itemData.order_item_id;
+
+      console.log(
+        "Created order item:",
+        orderItemId
+      );
+
+      // ==========================================
+      // STEP 3
+      // SAVE CUSTOM VALUES
+      // ==========================================
+
+      const customValues =
+        item.custom_values || {};
+
+      for (const [fieldId, value] of Object.entries(
+        customValues
+      )) {
+        // Don't create empty values
+        if (
+          value === null ||
+          value === undefined ||
+          value === ""
+        ) {
+          continue;
+        }
+
+        const fieldResponse = await fetch(
+          "http://localhost:8000/orderitemfieldvalue",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json",
+            },
+
+            body: JSON.stringify({
+              order_item_id: orderItemId,
+
+              product_field_id:
+                Number(fieldId),
+
+              value: String(value),
+            }),
+          }
+        );
+
+        if (!fieldResponse.ok) {
+          throw new Error(
+            `Failed to save customization for ${item.name}`
+          );
+        }
+      }
+    }
+
+    // ==========================================
+    // STEP 4
+    // ORDER SUCCESS
+    // ==========================================
+
+    alert(
+      "Order received successfully! Please give the money to the owner."
+    );
+
+    clearCart();
+
+    setCustomerName("");
+    setCustomerEmail("");
+    setCustomerPhone("");
+
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Something went wrong while placing your order."
+    );
+
+  } finally {
+    setIsSubmitting(false);
+  }
+}
+
   return (
     <section className="min-h-screen bg-gray-50">
 
