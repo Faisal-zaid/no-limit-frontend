@@ -16,7 +16,7 @@ export default function OrderManager() {
     try {
 
       const response = await fetch(
-        "http://localhost:8000/order"
+        `${process.env.NEXT_PUBLIC_API_URL}/order`
       );
 
       if (!response.ok) {
