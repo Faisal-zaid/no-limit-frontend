@@ -15,6 +15,12 @@ export default function CartPage() {
     cartTotal,
   } = useCart();
 
+  const [customerName, setCustomerName] = useState("");
+const [customerEmail, setCustomerEmail] = useState("");
+const [customerPhone, setCustomerPhone] = useState("");
+
+const [isSubmitting, setIsSubmitting] = useState(false);
+
   return (
     <section className="min-h-screen bg-gray-50">
 
