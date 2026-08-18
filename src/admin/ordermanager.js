@@ -62,11 +62,11 @@ export default function OrderManager() {
         `${process.env.NEXT_PUBLIC_API_URL}/orderitem/order/${order.id}`
       );
 
-      if (!response.ok) {
-        throw new Error(
-          "Failed to fetch order items"
-        );
-      }
+      // if (!response.ok) {
+      //   throw new Error(
+      //     "Failed to fetch order items"
+      //   );
+      // }
 
       const items = await response.json();
 
