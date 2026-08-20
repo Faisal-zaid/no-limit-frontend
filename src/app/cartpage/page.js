@@ -83,19 +83,16 @@ const orderId = orderData.order_id;
   });
 
 
-        const itemResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/orderitem`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              order_id: orderId,
-              product_id: item.product_id,
-              quantity: item.quantity,
-            }),
-          }
-        );
-
+         const itemResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/orderitem`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderItemData),
+    }
+  );
         if (!itemResponse.ok) {
           throw new Error(`Failed to create order item for ${item.name}`);
         }
