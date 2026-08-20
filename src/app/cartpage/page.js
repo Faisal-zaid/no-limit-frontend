@@ -16,188 +16,114 @@ export default function CartPage() {
   } = useCart();
 
   const [customerName, setCustomerName] = useState("");
-const [customerEmail, setCustomerEmail] = useState("");
-const [customerPhone, setCustomerPhone] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-const [isSubmitting, setIsSubmitting] = useState(false);
+  async function placeOrder(e) {
+    e?.preventDefault();
 
-async function placeOrder() {
-  if (cart.length === 0) {
-    alert("Your cart is empty.");
-    return;
-  }
-
-  if (
-    !customerName ||
-    !customerEmail ||
-    !customerPhone
-  ) {
-    alert("Please enter your name, email and phone number.");
-    return;
-  }
-
-  try {
-    setIsSubmitting(true);
-
-    // ==========================================
-    // STEP 1
-    // CREATE THE MAIN ORDER
-    // ==========================================
-
-    const orderResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/order`,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          customer_name: customerName,
-          customer_email: customerEmail,
-          customer_phone: customerPhone,
-          status: "Pending",
-          total_price: cartTotal,
-        }),
-      }
-    );
-
-    if (!orderResponse.ok) {
-      throw new Error("Failed to create order");
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
     }
 
-    const orderData = await orderResponse.json();
+    if (!customerName || !customerEmail || !customerPhone) {
+      alert("Please fill in all customer details.");
+      return;
+    }
 
-    const orderId = orderData.order_id;
+    try {
+      setIsSubmitting(true);
 
-    console.log("Created order:", orderId);
-
-    // ==========================================
-    // STEP 2
-    // CREATE ORDER ITEMS
-    // ==========================================
-
-    for (const item of cart) {
-      const itemResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/orderitem`,
+      // STEP 1: CREATE MAIN ORDER
+      const orderResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/order`,
         {
           method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            order_id: orderId,
-            product_id: item.product_id,
-            quantity: item.quantity,
+            customer_name: customerName,
+            customer_email: customerEmail,
+            customer_phone: customerPhone,
+            status: "Pending",
+            total_price: cartTotal,
           }),
         }
       );
 
-      if (!itemResponse.ok) {
-        throw new Error(
-          `Failed to create order item for ${item.name}`
-        );
+      if (!orderResponse.ok) {
+        throw new Error("Failed to create order");
       }
 
-      const itemData = await itemResponse.json();
+      const orderData = await orderResponse.json();
+      const orderId = orderData.order_id || orderData.id;
 
-      const orderItemId =
-        itemData.order_item_id;
-
-      console.log(
-        "Created order item:",
-        orderItemId
-      );
-
-      // ==========================================
-      // STEP 3
-      // SAVE CUSTOM VALUES
-      // ==========================================
-
-      const customValues =
-        item.custom_values || {};
-
-      for (const [fieldId, value] of Object.entries(
-        customValues
-      )) {
-        // Don't create empty values
-        if (
-          value === null ||
-          value === undefined ||
-          value === ""
-        ) {
-          continue;
-        }
-
-        const fieldResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue`,
+      // STEP 2 & 3: CREATE ORDER ITEMS & CUSTOM VALUES
+      for (const item of cart) {
+        const itemResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/orderitem`,
           {
             method: "POST",
-
-            headers: {
-              "Content-Type": "application/json",
-            },
-
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              order_item_id: orderItemId,
-
-              product_field_id:
-                Number(fieldId),
-
-              value: String(value),
+              order_id: orderId,
+              product_id: item.product_id,
+              quantity: item.quantity,
             }),
           }
         );
 
-        if (!fieldResponse.ok) {
-          throw new Error(
-            `Failed to save customization for ${item.name}`
+        if (!itemResponse.ok) {
+          throw new Error(`Failed to create order item for ${item.name}`);
+        }
+
+        const itemData = await itemResponse.json();
+        const orderItemId = itemData.order_item_id || itemData.id;
+
+        // Save Customization Values
+        const customValues = item.custom_values || {};
+        for (const [fieldId, value] of Object.entries(customValues)) {
+          if (value === null || value === undefined || value === "") continue;
+
+          const fieldResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                order_item_id: orderItemId,
+                product_field_id: Number(fieldId),
+                value: String(value),
+              }),
+            }
           );
+
+          if (!fieldResponse.ok) {
+            throw new Error(`Failed to save customization for ${item.name}`);
+          }
         }
       }
+
+      // STEP 4: SUCCESS & RESET
+      alert("Order placed successfully! We will contact you soon.");
+      clearCart();
+      setCustomerName("");
+      setCustomerEmail("");
+      setCustomerPhone("");
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong while placing your order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // ==========================================
-    // STEP 4
-    // ORDER SUCCESS
-    // ==========================================
-
-    alert(
-      "Order received successfully! Please give the money to the owner."
-    );
-
-    clearCart();
-
-    setCustomerName("");
-    setCustomerEmail("");
-    setCustomerPhone("");
-
-  } catch (error) {
-    console.error(error);
-
-    alert(
-      "Something went wrong while placing your order."
-    );
-
-  } finally {
-    setIsSubmitting(false);
   }
-}
 
   return (
-    <section className="min-h-screen bg-gray-50">
-
-      {/* ================================= */}
+    <section className="min-h-screen bg-gray-50 pb-12">
       {/* HEADER */}
-      {/* ================================= */}
-
-      <div className="bg-white shadow-md">
-
-        <div className="flex items-center justify-between px-[3%] py-4">
-
+      <div className="bg-white shadow-sm border-b">
+        <div className="flex items-center justify-between px-[5%] py-4 max-w-7xl mx-auto">
           <Link href="/productspage">
             <Image
               src="/images/nolimit-logo.png"
@@ -206,48 +132,21 @@ async function placeOrder() {
               height={75}
             />
           </Link>
-
-          <h1 className="text-2xl font-bold text-gray-800">
-            Your Cart
-          </h1>
-
+          <h1 className="text-2xl font-bold text-gray-800">Your Cart</h1>
           <Link
             href="/productspage"
-            className="
-              bg-purple-600
-              hover:bg-purple-700
-              text-white
-              px-4
-              py-2
-              rounded-lg
-            "
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
           >
             Continue Shopping
           </Link>
-
         </div>
-
       </div>
 
-
-      {/* ================================= */}
-      {/* CART CONTENT */}
-      {/* ================================= */}
-
-      <div className="max-w-6xl mx-auto p-6">
-
+      {/* CONTENT */}
+      <div className="max-w-7xl mx-auto p-6 mt-6">
         {cart.length === 0 ? (
-
-          /* EMPTY CART */
-
-          <div className="
-            bg-white
-            rounded-xl
-            shadow-sm
-            p-10
-            text-center
-          ">
-
+          /* EMPTY CART STATE */
+          <div className="bg-white rounded-xl shadow-sm border p-12 text-center max-w-md mx-auto">
             <div className="flex justify-center mb-5">
               <Image
                 src="/images/Cart--Streamline-Platinum.png"
@@ -256,457 +155,204 @@ async function placeOrder() {
                 height={70}
               />
             </div>
-
-            <h2 className="
-              text-2xl
-              font-bold
-              text-gray-800
-              mb-3
-            ">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
               Your cart is empty
             </h2>
-
-            <p className="
-              text-gray-500
-              mb-6
-            ">
-              You haven't added anything to your cart yet.
+            <p className="text-gray-500 mb-6">
+              You haven't added any custom items to your cart yet.
             </p>
-
             <Link
               href="/productspage"
-              className="
-                inline-block
-                bg-purple-600
-                hover:bg-purple-700
-                text-white
-                px-6
-                py-3
-                rounded-lg
-                font-semibold
-              "
+              className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition"
             >
               Start Shopping
             </Link>
-
           </div>
-
         ) : (
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-            {/* ============================= */}
-            {/* CART ITEMS */}
-            {/* ============================= */}
-
-            <div className="
-              lg:col-span-2
-              space-y-4
-            ">
+          /* ACTIVE CART & CHECKOUT */
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* CART ITEMS LIST */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="flex justify-between items-center mb-2">
+                <h2 className="text-xl font-bold text-gray-800">
+                  Items ({cart.length})
+                </h2>
+                <button
+                  onClick={clearCart}
+                  className="text-sm text-red-500 hover:text-red-700 font-medium"
+                >
+                  Clear Cart
+                </button>
+              </div>
 
               {cart.map((item) => (
-
                 <div
                   key={item.cart_id}
-                  className="
-                    bg-white
-                    rounded-xl
-                    shadow-sm
-                    border
-                    border-gray-200
-                    p-5
-                  "
+                  className="bg-white rounded-xl shadow-sm border border-gray-200 p-5"
                 >
-
-                  <div className="
-                    flex
-                    gap-5
-                  ">
-
-                    {/* IMAGE */}
-
+                  <div className="flex gap-5">
+                    {/* Item Image */}
                     {item.image && (
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="
-                          w-28
-                          h-28
-                          object-cover
-                          rounded-lg
-                        "
+                        className="w-24 h-24 object-cover rounded-lg border flex-shrink-0"
                       />
                     )}
 
-
-                    {/* PRODUCT DETAILS */}
-
+                    {/* Details */}
                     <div className="flex-1">
-
-                      <div className="
-                        flex
-                        justify-between
-                        gap-4
-                      ">
-
+                      <div className="flex justify-between items-start gap-4">
                         <div>
-
-                          <h2 className="
-                            text-lg
-                            font-bold
-                            text-gray-900
-                          ">
+                          <h3 className="text-lg font-bold text-gray-900">
                             {item.name}
-                          </h2>
-
-                          <p className="
-                            text-purple-600
-                            font-semibold
-                            mt-1
-                          ">
+                          </h3>
+                          <p className="text-purple-600 font-semibold mt-1">
                             KSh {item.base_price}
                           </p>
-
                         </div>
-
                         <button
-                          onClick={() =>
-                            removeFromCart(item.cart_id)
-                          }
-                          className="
-                            text-red-500
-                            hover:text-red-700
-                            text-sm
-                          "
+                          onClick={() => removeFromCart(item.cart_id)}
+                          className="text-red-500 hover:text-red-700 text-sm font-medium"
                         >
                           Remove
                         </button>
-
                       </div>
 
-
-                      {/* CUSTOMIZATION */}
-
+                      {/* Customizations */}
                       {item.custom_values &&
                         Object.keys(item.custom_values).length > 0 && (
-
-                        <div className="
-                          mt-4
-                          bg-gray-50
-                          rounded-lg
-                          p-3
-                        ">
-
-                          <p className="
-                            font-semibold
-                            text-sm
-                            text-gray-700
-                            mb-2
-                          ">
-                            Customization
-                          </p>
-
-                          <div className="space-y-1">
-
-                            {Object.entries(
-                              item.custom_values
-                            ).map(
-                              ([fieldId, value]) => (
-
-                                <p
-                                  key={fieldId}
-                                  className="
-                                    text-sm
-                                    text-gray-600
-                                  "
-                                >
-                                  Field {fieldId}:{" "}
-                                  <span className="font-medium">
-                                    {value}
-                                  </span>
-                                </p>
-
-                              )
-                            )}
-
+                          <div className="mt-3 bg-gray-50 rounded-lg p-3">
+                            <p className="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-1">
+                              Customizations
+                            </p>
+                            <div className="space-y-1">
+                              {Object.entries(item.custom_values).map(
+                                ([fieldId, value]) => (
+                                  <p
+                                    key={fieldId}
+                                    className="text-sm text-gray-600"
+                                  >
+                                    Field #{fieldId}:{" "}
+                                    <span className="font-medium text-gray-800">
+                                      {typeof value === "string" &&
+                                      value.startsWith("http") ? (
+                                        <a
+                                          href={value}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="text-purple-600 underline"
+                                        >
+                                          View Upload
+                                        </a>
+                                      ) : (
+                                        value
+                                      )}
+                                    </span>
+                                  </p>
+                                )
+                              )}
+                            </div>
                           </div>
+                        )}
 
-                        </div>
-
-                      )}
-
-
-                      {/* QUANTITY */}
-
-                      <div className="
-                        flex
-                        items-center
-                        gap-4
-                        mt-4
-                      ">
-
-                        <span className="
-                          text-sm
-                          font-medium
-                        ">
+                      {/* Quantity Controls */}
+                      <div className="flex items-center gap-3 mt-4">
+                        <span className="text-sm font-medium text-gray-700">
                           Quantity:
                         </span>
-
-                        <button
-                          onClick={() =>
-                            decreaseQuantity(
-                              item.cart_id
-                            )
-                          }
-                          className="
-                            w-8
-                            h-8
-                            border
-                            rounded-lg
-                            hover:bg-gray-100
-                          "
-                        >
-                          −
-                        </button>
-
-                        <span className="
-                          font-bold
-                          min-w-[20px]
-                          text-center
-                        ">
-                          {item.quantity}
-                        </span>
-
-                        <button
-                          onClick={() =>
-                            increaseQuantity(
-                              item.cart_id
-                            )
-                          }
-                          className="
-                            w-8
-                            h-8
-                            border
-                            rounded-lg
-                            hover:bg-gray-100
-                          "
-                        >
-                          +
-                        </button>
-
+                        <div className="flex items-center border rounded-lg overflow-hidden bg-gray-50">
+                          <button
+                            onClick={() => decreaseQuantity(item.cart_id)}
+                            className="px-3 py-1 hover:bg-gray-200 text-gray-600 font-bold"
+                          >
+                            -
+                          </button>
+                          <span className="px-4 py-1 text-sm font-semibold text-gray-800">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => increaseQuantity(item.cart_id)}
+                            className="px-3 py-1 hover:bg-gray-200 text-gray-600 font-bold"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
-
-
-                      {/* ITEM TOTAL */}
-
-                      <p className="
-                        mt-4
-                        text-right
-                        font-bold
-                        text-gray-900
-                      ">
-                        KSh{" "}
-                        {Number(item.base_price) *
-                          item.quantity}
-                      </p>
-
                     </div>
-
                   </div>
-
                 </div>
-
               ))}
-
-
-              {/* CLEAR CART */}
-
-              <button
-                onClick={clearCart}
-                className="
-                  text-red-500
-                  hover:text-red-700
-                  text-sm
-                "
-              >
-                Clear Cart
-              </button>
-
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            {/* CHECKOUT FORM & SUMMARY */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-fit sticky top-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                Order Summary
+              </h2>
 
-  <h2 className="text-xl font-bold mb-5">
-    Customer Information
-  </h2>
-
-  <div className="space-y-4">
-
-    <div>
-      <label className="block text-sm font-medium mb-1">
-        Full Name
-      </label>
-
-      <input
-        type="text"
-        value={customerName}
-        onChange={(e) =>
-          setCustomerName(e.target.value)
-        }
-        placeholder="Enter your full name"
-        className="w-full border rounded-lg px-4 py-3"
-      />
-    </div>
-
-    <div>
-      <label className="block text-sm font-medium mb-1">
-        Email
-      </label>
-
-      <input
-        type="email"
-        value={customerEmail}
-        onChange={(e) =>
-          setCustomerEmail(e.target.value)
-        }
-        placeholder="Enter your email"
-        className="w-full border rounded-lg px-4 py-3"
-      />
-    </div>
-
-    <div>
-      <label className="block text-sm font-medium mb-1">
-        Phone Number
-      </label>
-
-      <input
-        type="tel"
-        value={customerPhone}
-        onChange={(e) =>
-          setCustomerPhone(e.target.value)
-        }
-        placeholder="07XXXXXXXX"
-        className="w-full border rounded-lg px-4 py-3"
-      />
-    </div>
-
-  </div>
-
-</div>
-
-
-            {/* ============================= */}
-            {/* ORDER SUMMARY */}
-            {/* ============================= */}
-
-            <div>
-
-              <div className="
-                bg-white
-                rounded-xl
-                shadow-sm
-                border
-                border-gray-200
-                p-6
-                sticky
-                top-6
-              ">
-
-                <h2 className="
-                  text-xl
-                  font-bold
-                  mb-6
-                ">
-                  Order Summary
-                </h2>
-
-
-                <div className="
-                  flex
-                  justify-between
-                  text-gray-600
-                  mb-3
-                ">
-
-                  <span>
-                    Items
-                  </span>
-
-                  <span>
-                    {cart.reduce(
-                      (total, item) =>
-                        total + item.quantity,
-                      0
-                    )}
-                  </span>
-
+              <form onSubmit={placeOrder} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="John Doe"
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
                 </div>
 
-
-                <div className="
-                  border-t
-                  pt-4
-                  flex
-                  justify-between
-                  text-lg
-                  font-bold
-                ">
-
-                  <span>
-                    Total
-                  </span>
-
-                  <span className="text-purple-600">
-                    KSh {cartTotal}
-                  </span>
-
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    placeholder="john@example.com"
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    placeholder="0712345678"
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                </div>
 
-                {/* GIVE MONEY TO OWNER */}
+                <div className="border-t pt-4 mt-4 space-y-2">
+                  <div className="flex justify-between text-base font-bold text-gray-900">
+                    <span>Total Amount</span>
+                    <span className="text-purple-600">KSh {cartTotal}</span>
+                  </div>
+                </div>
 
                 <button
-  onClick={placeOrder}
-  disabled={isSubmitting}
-  className="
-    w-full
-    mt-6
-    bg-purple-600
-    hover:bg-purple-700
-    disabled:bg-gray-400
-    text-white
-    py-3
-    rounded-lg
-    font-semibold
-    transition
-  "
->
-  {isSubmitting
-    ? "Placing Order..."
-    : "Give Money to Owner"}
-</button>
-
-
-                <p className="
-                  text-xs
-                  text-gray-500
-                  text-center
-                  mt-3
-                ">
-                  Payment will be made directly to the
-                  owner.
-                </p>
-
-              </div>
-
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full mt-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-semibold py-3 rounded-lg transition"
+                >
+                  {isSubmitting ? "Placing Order..." : "Place Order"}
+                </button>
+              </form>
             </div>
-
           </div>
-
         )}
-
       </div>
-
     </section>
   );
 }
