@@ -67,6 +67,15 @@ const orderId = orderData.order_id;
       // STEP 2 & 3: CREATE ORDER ITEMS & CUSTOM VALUES
       for (const item of cart) {
 
+        const orderItemData = {
+    order_id: orderId,
+    product_id: item.product_id,
+    quantity: item.quantity,
+  };
+
+  console.log("SENDING ORDER ITEM:", orderItemData);
+
+
  console.log("SENDING ORDER ITEM:", {
     order_id: orderId,
     product_id: item.product_id,
