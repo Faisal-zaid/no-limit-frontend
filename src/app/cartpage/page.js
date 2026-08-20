@@ -149,6 +149,7 @@ const orderId = orderData.order_id;
               alt="No Limit"
               width={77}
               height={75}
+              className="h-auto w-auto" // Added to fix the console warning
             />
           </Link>
           <h1 className="text-2xl font-bold text-gray-800">Your Cart</h1>
