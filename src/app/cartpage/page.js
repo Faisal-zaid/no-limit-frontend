@@ -61,6 +61,14 @@ export default function CartPage() {
 
       // STEP 2 & 3: CREATE ORDER ITEMS & CUSTOM VALUES
       for (const item of cart) {
+
+ console.log("SENDING ORDER ITEM:", {
+    order_id: orderId,
+    product_id: item.product_id,
+    quantity: item.quantity,
+  });
+
+
         const itemResponse = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/orderitem`,
           {
