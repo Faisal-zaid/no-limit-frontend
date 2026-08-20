@@ -234,7 +234,7 @@ export default function OrderManager() {
                     <div className="flex justify-between">
                       <div>
                         <h4 className="font-bold text-lg">
-                          Product ID: {item.product_id}
+                          Product Name: {item.product_name}
                         </h4>
                         <p className="text-gray-600">
                           Quantity: {item.quantity}
