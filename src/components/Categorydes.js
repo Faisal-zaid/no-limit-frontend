@@ -147,7 +147,7 @@ export default function Categorydescription({ selectedCategory }) {
             "
           >
 
-            <button
+            <link
               className="
                 px-4
                 py-2
@@ -161,7 +161,7 @@ export default function Categorydescription({ selectedCategory }) {
               "
             >
               Shop for Products
-            </button>
+            </link>
 
             <button
               className="
