@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Categorydescription({ selectedCategory }) {
   const [categories, setCategories] = useState([]);
@@ -147,7 +148,8 @@ export default function Categorydescription({ selectedCategory }) {
             "
           >
 
-            <link
+            <Link
+              href="/productspage"
               className="
                 px-4
                 py-2
@@ -161,7 +163,7 @@ export default function Categorydescription({ selectedCategory }) {
               "
             >
               Shop for Products
-            </link>
+            </Link>
 
             <button
               className="
