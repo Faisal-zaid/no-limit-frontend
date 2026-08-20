@@ -38,26 +38,31 @@ export default function CartPage() {
 
       // STEP 1: CREATE MAIN ORDER
       const orderResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/order`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            customer_name: customerName,
-            customer_email: customerEmail,
-            customer_phone: customerPhone,
-            status: "Pending",
-            total_price: cartTotal,
-          }),
-        }
-      );
+  `${process.env.NEXT_PUBLIC_API_URL}/order`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      customer_name: customerName,
+      customer_email: customerEmail,
+      customer_phone: customerPhone,
+      status: "Pending",
+      total_price: cartTotal,
+    }),
+  }
+);
 
-      if (!orderResponse.ok) {
-        throw new Error("Failed to create order");
-      }
+if (!orderResponse.ok) {
+  throw new Error("Failed to create order");
+}
 
-      const orderData = await orderResponse.json();
-      const orderId = orderData.order_id || orderData.id;
+const orderData = await orderResponse.json();
+
+console.log("ORDER CREATED:", orderData);
+
+const orderId = orderData.order_id;
 
       // STEP 2 & 3: CREATE ORDER ITEMS & CUSTOM VALUES
       for (const item of cart) {
