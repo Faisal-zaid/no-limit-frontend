@@ -1,45 +1,91 @@
-'use client';
+"use client";
 
 import {
   useSearchParams,
   usePathname,
   useRouter
-} from 'next/navigation';
+} from "next/navigation";
+
+import { useState } from "react";
 
 export default function SearchBar() {
+
   const searchParams = useSearchParams();
+
   const pathname = usePathname();
-  const { replace } = useRouter();
 
-  function handleSearch(term) {
-    const params = new URLSearchParams(searchParams);
+  const router = useRouter();
 
-    if (term) {
-      params.set('q', term);
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("q") || ""
+  );
+
+
+  function handleSearch() {
+
+    const params = new URLSearchParams(
+      searchParams.toString()
+    );
+
+    if (searchTerm.trim()) {
+
+      params.set(
+        "q",
+        searchTerm.trim()
+      );
+
     } else {
-      params.delete('q');
+
+      params.delete("q");
+
     }
 
-    replace(`${pathname}?${params.toString()}`);
+    router.replace(
+      `${pathname}?${params.toString()}`
+    );
+
   }
 
+
+  function handleKeyDown(e) {
+
+    if (e.key === "Enter") {
+
+      handleSearch();
+
+    }
+
+  }
+
+
   return (
-    <div className="
-      relative
-      w-full
-      max-w-md
-      flex
-      border-2
-      border-black
-      rounded-lg
-      overflow-hidden
-    ">
+
+    <div
+      className="
+        relative
+        w-full
+        max-w-md
+        flex
+        border-2
+        border-black
+        rounded-lg
+        overflow-hidden
+      "
+    >
 
       <input
         type="text"
+
         placeholder="Search product..."
-        defaultValue={searchParams.get('q')?.toString()}
-        onChange={(e) => handleSearch(e.target.value)}
+
+        value={searchTerm}
+
+        onChange={(e) =>
+          setSearchTerm(e.target.value)
+        }
+
+        onKeyDown={handleKeyDown}
+
         className="
           w-full
           min-w-0
@@ -54,7 +100,10 @@ export default function SearchBar() {
         "
       />
 
+
       <button
+        onClick={handleSearch}
+
         className="
           shrink-0
           px-3
@@ -71,9 +120,13 @@ export default function SearchBar() {
           transition-colors
         "
       >
+
         Search
+
       </button>
 
     </div>
+
   );
+
 }
