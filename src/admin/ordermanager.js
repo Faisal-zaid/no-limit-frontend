@@ -233,6 +233,14 @@ export default function OrderManager() {
                   <div key={item.id} className="border rounded-xl p-5">
                     <div className="flex justify-between">
                       <div>
+
+                        {item.product_image && (
+    <img
+      src={item.product_image}
+      alt={item.product_name}
+      className="w-20 h-20 object-cover rounded-lg border"
+    />
+  )}
                         <h4 className="font-bold text-lg">
                           Product Name: {item.product_name}
                         </h4>
@@ -260,8 +268,8 @@ export default function OrderManager() {
                               className="border-b pb-3 last:border-b-0"
                             >
                               <p className="text-sm text-gray-500">
-                                Product Field ID: {value.product_field_id}
-                              </p>
+  {value.field_label}
+</p>
 
                               {typeof value.value === "string" &&
                               value.value.includes("cloudinary") ? (
