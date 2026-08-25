@@ -473,6 +473,8 @@ export default function ProductFieldManager() {
               Dropdown
             </option>
 
+            <option value="image">Image Upload</option>
+
             <option value="textarea">
               Textarea
             </option>
