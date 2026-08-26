@@ -45,6 +45,21 @@ export default function ProductFieldManager() {
   }
 
 
+
+  useEffect(() => {
+  async function loadProductFields() {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/productfield/product/${productId}`
+    );
+
+    const data = await response.json();
+
+    setProductFields(data);
+  }
+
+  loadProductFields();
+}, [productId]);
+
   // =====================================================
   // GET PRODUCT FIELDS
   // =====================================================
