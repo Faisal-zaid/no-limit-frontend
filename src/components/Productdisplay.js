@@ -742,6 +742,70 @@ export default function Productdisplay({
 
                             )}
 
+                            {/* =====================
+    IMAGE
+===================== */}
+
+{field.field_type === "image" && (
+
+  <div>
+
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => {
+
+        const file = e.target.files?.[0];
+
+        if (file) {
+          handleFieldChange(
+            field.id,
+            file
+          );
+        }
+
+      }}
+      className="
+        w-full
+        border
+        border-gray-300
+        rounded-lg
+        p-3
+        bg-white
+      "
+    />
+
+    {customValues[field.id] instanceof File && (
+
+      <div className="mt-2">
+
+        <p className="text-sm text-green-600">
+          Selected: {customValues[field.id].name}
+        </p>
+
+        <img
+          src={URL.createObjectURL(
+            customValues[field.id]
+          )}
+          alt="Preview"
+          className="
+            mt-3
+            w-32
+            h-32
+            object-cover
+            rounded-lg
+            border
+          "
+        />
+
+      </div>
+
+    )}
+
+  </div>
+
+)}
+
 
                             {/* =====================
                                 NO OPTIONS
