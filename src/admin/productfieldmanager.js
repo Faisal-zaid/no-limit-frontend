@@ -61,8 +61,11 @@ async function loadProductFields(selectedProductId = "") {
 
 useEffect(() => {
   loadProducts();
-  loadProductFields();
 }, []);
+
+   useEffect(() => {
+  loadProductFields(productId);
+}, [productId]);    # load fields when products change
   // =====================================================
   // GET PRODUCT FIELDS
   // =====================================================
