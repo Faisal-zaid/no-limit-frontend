@@ -124,55 +124,52 @@ for (const [fieldId, value] of Object.entries(customValues)) {
 
   if (value instanceof File) {
 
-    const imageFormData = new FormData();
+  const imageFormData = new FormData();
 
-    imageFormData.append(
-      "order_item_id",
-      orderItemId
-    );
+  imageFormData.append(
+    "order_item_id",
+    String(orderItemId)
+  );
 
-    imageFormData.append(
-      "product_field_id",
-      fieldId
-    );
+  imageFormData.append(
+    "product_field_id",
+    String(fieldId)
+  );
 
-    imageFormData.append(
-      "image",
-      value
-    );
+  imageFormData.append(
+    "image",
+    value
+  );
 
-
-    const imageResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue/image`,
-      {
-        method: "POST",
-        body: imageFormData,
-      }
-    );
-
-
-    const imageData =
-      await imageResponse.json();
-
-
-    if (!imageResponse.ok) {
-
-      console.error(
-        "IMAGE UPLOAD FAILED:",
-        imageData
-      );
-
-      throw new Error(
-        `Failed to upload image for ${item.name}`
-      );
-
+  const imageResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue/image`,
+    {
+      method: "POST",
+      body: imageFormData,
     }
+  );
 
+  const imageData =
+    await imageResponse.json();
 
-    console.log(
-      "IMAGE UPLOADED:",
+  if (!imageResponse.ok) {
+
+    console.error(
+      "IMAGE UPLOAD FAILED:",
       imageData
     );
+
+    throw new Error(
+      `Failed to upload image for ${item.name}`
+    );
+
+  }
+
+  console.log(
+    "IMAGE UPLOADED:",
+    imageData
+  );
+
 
 
   } else {
