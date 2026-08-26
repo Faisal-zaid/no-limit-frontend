@@ -58,6 +58,11 @@ async function loadProductFields(selectedProductId = "") {
 
   }
 }
+
+useEffect(() => {
+  loadProducts();
+  loadProductFields();
+}, []);
   // =====================================================
   // GET PRODUCT FIELDS
   // =====================================================
