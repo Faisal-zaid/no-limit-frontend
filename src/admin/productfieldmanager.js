@@ -210,6 +210,9 @@ export default function ProductFieldManager() {
   return (
     <section className="p-6">
       <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-red-500">
+  Product Fields (Live File Test)
+</h2>
         <h2 className="text-2xl font-bold">Product Fields</h2>
         <span>{productFields.length} fields</span>
       </div>
