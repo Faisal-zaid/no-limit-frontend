@@ -359,19 +359,23 @@ for (const [fieldId, value] of Object.entries(customValues)) {
                                   >
                                     Field #{fieldId}:{" "}
                                     <span className="font-medium text-gray-800">
-                                      {typeof value === "string" &&
-                                      value.startsWith("http") ? (
-                                        <a
-                                          href={value}
-                                          target="_blank"
-                                          rel="noreferrer"
-                                          className="text-purple-600 underline"
-                                        >
-                                          View Upload
-                                        </a>
-                                      ) : (
-                                        value
-                                      )}
+{value instanceof File ? (
+  <span className="text-purple-600">
+    📎 {value.name}
+  </span>
+) : typeof value === "string" &&
+  value.startsWith("http") ? (
+  <a
+    href={value}
+    target="_blank"
+    rel="noreferrer"
+    className="text-purple-600 underline"
+  >
+    View Upload
+  </a>
+) : (
+  value
+)}
                                     </span>
                                   </p>
                                 )
