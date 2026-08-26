@@ -735,16 +735,28 @@ export default function ProductManager() {
                     >
 
                       <option value="text">
-                        Text
-                      </option>
+  Text
+</option>
 
-                      <option value="number">
-                        Number
-                      </option>
+<option value="number">
+  Number
+</option>
 
-                      <option value="dropdown">
-                        Dropdown
-                      </option>
+<option value="dropdown">
+  Dropdown
+</option>
+
+<option value="image">
+  Image Upload
+</option>
+
+<option value="textarea">
+  Textarea
+</option>
+
+<option value="date">
+  Date
+</option>
 
                     </select>
 
