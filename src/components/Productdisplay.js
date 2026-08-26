@@ -149,30 +149,28 @@ export default function Productdisplay({ selectedCategory }) {
   // ==========================================
 
   function handleAddToCart() {
-    if (!selectedProduct) {
-      return;
+  if (!selectedProduct) {
+    return;
+  }
+
+  // Check required fields
+  for (const field of selectedProductFields) {
+    const value = customValues[field.id];
+
+    if (!field.required) {
+      continue;
     }
 
-    // Check required fields
-    for (const field of selectedProductFields) {
-      const value = customValues[field.id];
-
-      // Check required fields
-for (const field of selectedProductFields) {
-
-  const value = customValues[field.id];
-
-  if (field.required) {
-
+    // IMAGE FIELD
     if (field.field_type === "image") {
-
       if (!(value instanceof File)) {
         alert(`${field.label} is required.`);
         return;
       }
+    }
 
-    } else {
-
+    // OTHER FIELDS
+    else {
       if (
         value === undefined ||
         value === null ||
@@ -181,35 +179,27 @@ for (const field of selectedProductFields) {
         alert(`${field.label} is required.`);
         return;
       }
-
     }
-
   }
 
-} {
-        alert(`${field.label} is required.`);
-        return;
-      }
-    }
+  const cartItem = {
+    product_id: selectedProduct.id,
+    name: selectedProduct.name,
+    description: selectedProduct.description,
+    base_price: Number(selectedProduct.base_price),
+    image: selectedProduct.image,
+    quantity: quantity,
 
-    const cartItem = {
-      product_id: selectedProduct.id,
-      name: selectedProduct.name,
-      description: selectedProduct.description,
-      base_price: Number(selectedProduct.base_price),
-      image: selectedProduct.image,
-      quantity: quantity,
+    // Includes text, dropdown, number AND File
+    custom_values: customValues,
+  };
 
-      // Save customer's customization
-      custom_values: customValues,
-    };
+  console.log("ADDING TO CART:", cartItem);
 
-    console.log("ADDING TO CART:", cartItem);
+  addToCart(cartItem);
 
-    addToCart(cartItem);
-
-    closeCustomizer();
-  }
+  closeCustomizer();
+}
 
   // ==========================================
   // LOADING
