@@ -157,7 +157,36 @@ export default function Productdisplay({ selectedCategory }) {
     for (const field of selectedProductFields) {
       const value = customValues[field.id];
 
-      if (field.required && (!value || String(value).trim() === "")) {
+      // Check required fields
+for (const field of selectedProductFields) {
+
+  const value = customValues[field.id];
+
+  if (field.required) {
+
+    if (field.field_type === "image") {
+
+      if (!(value instanceof File)) {
+        alert(`${field.label} is required.`);
+        return;
+      }
+
+    } else {
+
+      if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+      ) {
+        alert(`${field.label} is required.`);
+        return;
+      }
+
+    }
+
+  }
+
+} {
         alert(`${field.label} is required.`);
         return;
       }
