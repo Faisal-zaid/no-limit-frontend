@@ -224,6 +224,7 @@ for (const [fieldId, value] of Object.entries(customValues)) {
   }
 
 }
+      }
 
       // STEP 4: SUCCESS & RESET
       alert("Order placed successfully! We will contact you soon.");
