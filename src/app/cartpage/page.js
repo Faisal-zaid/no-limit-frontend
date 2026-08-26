@@ -361,8 +361,7 @@ for (const [fieldId, value] of Object.entries(customValues)) {
   <span className="text-purple-600">
     📎 {value.name}
   </span>
-) : typeof value === "string" &&
-  value.startsWith("http") ? (
+) : typeof value === "string" && value.startsWith("http") ? (
   <a
     href={value}
     target="_blank"
@@ -371,8 +370,12 @@ for (const [fieldId, value] of Object.entries(customValues)) {
   >
     View Upload
   </a>
+) : typeof value === "object" && value !== null ? (
+  <span className="text-gray-500">
+    Image uploaded
+  </span>
 ) : (
-  value
+  String(value)
 )}
                                     </span>
                                   </p>
