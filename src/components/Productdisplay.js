@@ -3,9 +3,7 @@
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 
-export default function Productdisplay({
-  selectedCategory,
-}) {
+export default function Productdisplay({ selectedCategory }) {
   const { addToCart } = useCart();
 
   const [products, setProducts] = useState([]);
@@ -29,15 +27,12 @@ export default function Productdisplay({
       try {
         setLoading(true);
 
-        const [
-          productsResponse,
-          fieldsResponse,
-          optionsResponse,
-        ] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfield`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfieldoption`),
-        ]);
+        const [productsResponse, fieldsResponse, optionsResponse] =
+          await Promise.all([
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`),
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfield`),
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfieldoption`),
+          ]);
 
         if (!productsResponse.ok) {
           throw new Error("Failed to load products");
@@ -62,12 +57,8 @@ export default function Productdisplay({
         setProducts(productsData);
         setProductFields(fieldsData);
         setProductFieldOptions(optionsData);
-
       } catch (error) {
-        console.error(
-          "Failed to load product data:",
-          error
-        );
+        console.error("Failed to load product data:", error);
       } finally {
         setLoading(false);
       }
@@ -83,8 +74,7 @@ export default function Productdisplay({
   const filteredProducts = selectedCategory
     ? products.filter(
         (product) =>
-          Number(product.category_id) ===
-          Number(selectedCategory.id)
+          Number(product.category_id) === Number(selectedCategory.id),
       )
     : products;
 
@@ -99,15 +89,10 @@ export default function Productdisplay({
     console.log("ALL PRODUCT FIELDS:", productFields);
 
     const fieldsForProduct = productFields.filter(
-      (field) =>
-        Number(field.product_id) ===
-        Number(product.id)
+      (field) => Number(field.product_id) === Number(product.id),
     );
 
-    console.log(
-      "FIELDS FOR THIS PRODUCT:",
-      fieldsForProduct
-    );
+    console.log("FIELDS FOR THIS PRODUCT:", fieldsForProduct);
 
     console.log("================================");
 
@@ -145,9 +130,7 @@ export default function Productdisplay({
 
   const selectedProductFields = selectedProduct
     ? productFields.filter(
-        (field) =>
-          Number(field.product_id) ===
-          Number(selectedProduct.id)
+        (field) => Number(field.product_id) === Number(selectedProduct.id),
       )
     : [];
 
@@ -157,9 +140,7 @@ export default function Productdisplay({
 
   function getFieldOptions(fieldId) {
     return productFieldOptions.filter(
-      (option) =>
-        Number(option.field_id) ===
-        Number(fieldId)
+      (option) => Number(option.field_id) === Number(fieldId),
     );
   }
 
@@ -176,10 +157,7 @@ export default function Productdisplay({
     for (const field of selectedProductFields) {
       const value = customValues[field.id];
 
-      if (
-        field.required &&
-        (!value || String(value).trim() === "")
-      ) {
+      if (field.required && (!value || String(value).trim() === "")) {
         alert(`${field.label} is required.`);
         return;
       }
@@ -189,9 +167,7 @@ export default function Productdisplay({
       product_id: selectedProduct.id,
       name: selectedProduct.name,
       description: selectedProduct.description,
-      base_price: Number(
-        selectedProduct.base_price
-      ),
+      base_price: Number(selectedProduct.base_price),
       image: selectedProduct.image,
       quantity: quantity,
 
@@ -211,11 +187,7 @@ export default function Productdisplay({
   // ==========================================
 
   if (loading) {
-    return (
-      <div className="p-4 sm:p-6 text-gray-500">
-        Loading products...
-      </div>
-    );
+    return <div className="p-4 sm:p-6 text-gray-500">Loading products...</div>;
   }
 
   // ==========================================
@@ -225,9 +197,7 @@ export default function Productdisplay({
   if (filteredProducts.length === 0) {
     return (
       <div className="p-4 sm:p-6 text-gray-500">
-        No products found for{" "}
-        {selectedCategory?.name ||
-          "this category"}.
+        No products found for {selectedCategory?.name || "this category"}.
       </div>
     );
   }
@@ -243,7 +213,6 @@ export default function Productdisplay({
       ========================================= */}
 
       <div className="p-4 sm:p-6 bg-white rounded-xl">
-
         <h2 className="text-lg sm:text-xl font-bold mb-6 text-gray-800">
           {selectedCategory
             ? `${selectedCategory.name} Products`
@@ -253,9 +222,7 @@ export default function Productdisplay({
         {/* RESPONSIVE PRODUCT GRID */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-
           {filteredProducts.map((product) => (
-
             <div
               key={product.id}
               className="
@@ -271,9 +238,7 @@ export default function Productdisplay({
                 bg-white
               "
             >
-
               <div>
-
                 {/* PRODUCT IMAGE */}
 
                 {product.image && (
@@ -315,8 +280,7 @@ export default function Productdisplay({
                     mb-4
                   "
                 >
-                  {product.description ||
-                    "No description available."}
+                  {product.description || "No description available."}
                 </p>
 
                 {/* PRICE */}
@@ -328,18 +292,14 @@ export default function Productdisplay({
                     mb-4
                   "
                 >
-                  KSh{" "}
-                  {product.base_price}
+                  KSh {product.base_price}
                 </p>
-
               </div>
 
               {/* VIEW BUTTON */}
 
               <button
-                onClick={() =>
-                  openCustomizer(product)
-                }
+                onClick={() => openCustomizer(product)}
                 className="
                   w-full
                   bg-purple-600
@@ -352,25 +312,18 @@ export default function Productdisplay({
               >
                 View
               </button>
-
             </div>
-
           ))}
-
         </div>
-
       </div>
-
 
       {/* =========================================
           CUSTOMIZATION MODAL
       ========================================= */}
 
-      {showCustomizer &&
-        selectedProduct && (
-
-          <div
-            className="
+      {showCustomizer && selectedProduct && (
+        <div
+          className="
               fixed
               inset-0
               z-50
@@ -380,12 +333,11 @@ export default function Productdisplay({
               bg-black/50
               p-4
             "
-          >
+        >
+          {/* MODAL */}
 
-            {/* MODAL */}
-
-            <div
-              className="
+          <div
+            className="
                 bg-white
                 rounded-2xl
                 w-full
@@ -394,14 +346,13 @@ export default function Productdisplay({
                 overflow-y-auto
                 shadow-2xl
               "
-            >
-
-              {/* =================================
+          >
+            {/* =================================
                   HEADER
               ================================= */}
 
-              <div
-                className="
+            <div
+              className="
                   flex
                   justify-between
                   items-center
@@ -409,194 +360,149 @@ export default function Productdisplay({
                   p-4
                   sm:p-5
                 "
-              >
-
-                <div>
-
-                  <h2
-                    className="
+            >
+              <div>
+                <h2
+                  className="
                       text-lg
                       sm:text-xl
                       font-bold
                     "
-                  >
-                    {selectedProduct.name}
-                  </h2>
+                >
+                  {selectedProduct.name}
+                </h2>
 
-                  <p
-                    className="
+                <p
+                  className="
                       text-purple-600
                       font-semibold
                     "
-                  >
-                    KSh{" "}
-                    {
-                      selectedProduct.base_price
-                    }
-                  </p>
+                >
+                  KSh {selectedProduct.base_price}
+                </p>
+              </div>
 
-                </div>
+              {/* CLOSE BUTTON */}
 
-                {/* CLOSE BUTTON */}
-
-                <button
-                  onClick={closeCustomizer}
-                  className="
+              <button
+                onClick={closeCustomizer}
+                className="
                     text-gray-500
                     hover:text-black
                     text-3xl
                     leading-none
                     px-2
                   "
-                >
-                  ×
-                </button>
+              >
+                ×
+              </button>
+            </div>
 
-              </div>
-
-
-              {/* =================================
+            {/* =================================
                   IMAGE
               ================================= */}
 
-              {selectedProduct.image && (
-
-                <img
-                  src={selectedProduct.image}
-                  alt={selectedProduct.name}
-                  className="
+            {selectedProduct.image && (
+              <img
+                src={selectedProduct.image}
+                alt={selectedProduct.name}
+                className="
                     w-full
                     h-48
                     sm:h-56
                     object-cover
                   "
-                />
+              />
+            )}
 
-              )}
-
-
-              {/* =================================
+            {/* =================================
                   CONTENT
               ================================= */}
 
-              <div className="p-4 sm:p-5">
-
-                <h3
-                  className="
+            <div className="p-4 sm:p-5">
+              <h3
+                className="
                     font-bold
                     text-lg
                     mb-5
                   "
-                >
-                  Customize your product
-                </h3>
+              >
+                Customize your product
+              </h3>
 
-
-                {/* =================================
+              {/* =================================
                     NO FIELDS
                 ================================= */}
 
-                {selectedProductFields.length ===
-                0 ? (
-
-                  <div
-                    className="
+              {selectedProductFields.length === 0 ? (
+                <div
+                  className="
                       bg-gray-50
                       rounded-lg
                       p-4
                       mb-5
                     "
-                  >
+                >
+                  <p className="text-gray-600">
+                    This product has no customization options.
+                  </p>
 
-                    <p className="text-gray-600">
-                      This product has no customization
-                      options.
-                    </p>
-
-                    <p
-                      className="
+                  <p
+                    className="
                         text-xs
                         text-gray-400
                         mt-2
                       "
-                    >
-                      Product ID:{" "}
-                      {selectedProduct.id}
-                    </p>
-
-                  </div>
-
-                ) : (
-
-                  /* =================================
+                  >
+                    Product ID: {selectedProduct.id}
+                  </p>
+                </div>
+              ) : (
+                /* =================================
                      FIELDS
                   ================================= */
 
-                  <div className="space-y-5">
+                <div className="space-y-5">
+                  {selectedProductFields.map((field) => {
+                    const fieldOptions = getFieldOptions(field.id);
 
-                    {selectedProductFields.map(
-                      (field) => {
+                    return (
+                      <div key={field.id}>
+                        {/* LABEL */}
 
-                        const fieldOptions =
-                          getFieldOptions(
-                            field.id
-                          );
-
-                        return (
-
-                          <div
-                            key={field.id}
-                          >
-
-                            {/* LABEL */}
-
-                            <label
-                              className="
+                        <label
+                          className="
                                 block
                                 font-medium
                                 mb-2
                                 text-gray-800
                               "
-                            >
+                        >
+                          {field.label}
 
-                              {field.label}
-
-                              {field.required && (
-
-                                <span
-                                  className="
+                          {field.required && (
+                            <span
+                              className="
                                     text-red-500
                                     ml-1
                                   "
-                                >
-                                  *
-                                </span>
+                            >
+                              *
+                            </span>
+                          )}
+                        </label>
 
-                              )}
-
-                            </label>
-
-
-                            {/* =====================
+                        {/* =====================
                                 DROPDOWN
                             ===================== */}
 
-                            {field.field_type ===
-                              "dropdown" && (
-
-                              <select
-                                value={
-                                  customValues[
-                                    field.id
-                                  ] || ""
-                                }
-                                onChange={(e) =>
-                                  handleFieldChange(
-                                    field.id,
-                                    e.target.value
-                                  )
-                                }
-                                className="
+                        {field.field_type === "dropdown" && (
+                          <select
+                            value={customValues[field.id] || ""}
+                            onChange={(e) =>
+                              handleFieldChange(field.id, e.target.value)
+                            }
+                            className="
                                   w-full
                                   border
                                   border-gray-300
@@ -604,133 +510,75 @@ export default function Productdisplay({
                                   p-3
                                   bg-white
                                 "
-                              >
+                          >
+                            <option value="">
+                              {field.placeholder || `Select ${field.label}`}
+                            </option>
 
-                                <option value="">
-                                  {field.placeholder ||
-                                    `Select ${field.label}`}
-                                </option>
+                            {fieldOptions.map((option) => (
+                              <option key={option.id} value={option.value}>
+                                {option.value}
+                              </option>
+                            ))}
+                          </select>
+                        )}
 
-                                {fieldOptions.map(
-                                  (option) => (
-
-                                    <option
-                                      key={
-                                        option.id
-                                      }
-                                      value={
-                                        option.value
-                                      }
-                                    >
-                                      {
-                                        option.value
-                                      }
-                                    </option>
-
-                                  )
-                                )}
-
-                              </select>
-
-                            )}
-
-
-                            {/* =====================
+                        {/* =====================
                                 TEXT
                             ===================== */}
 
-                            {field.field_type ===
-                              "text" && (
-
-                              <input
-                                type="text"
-                                value={
-                                  customValues[
-                                    field.id
-                                  ] || ""
-                                }
-                                placeholder={
-                                  field.placeholder ||
-                                  ""
-                                }
-                                onChange={(e) =>
-                                  handleFieldChange(
-                                    field.id,
-                                    e.target.value
-                                  )
-                                }
-                                className="
+                        {field.field_type === "text" && (
+                          <input
+                            type="text"
+                            value={customValues[field.id] || ""}
+                            placeholder={field.placeholder || ""}
+                            onChange={(e) =>
+                              handleFieldChange(field.id, e.target.value)
+                            }
+                            className="
                                   w-full
                                   border
                                   border-gray-300
                                   rounded-lg
                                   p-3
                                 "
-                              />
+                          />
+                        )}
 
-                            )}
-
-
-                            {/* =====================
+                        {/* =====================
                                 NUMBER
                             ===================== */}
 
-                            {field.field_type ===
-                              "number" && (
-
-                              <input
-                                type="number"
-                                value={
-                                  customValues[
-                                    field.id
-                                  ] || ""
-                                }
-                                placeholder={
-                                  field.placeholder ||
-                                  ""
-                                }
-                                onChange={(e) =>
-                                  handleFieldChange(
-                                    field.id,
-                                    e.target.value
-                                  )
-                                }
-                                className="
+                        {field.field_type === "number" && (
+                          <input
+                            type="number"
+                            value={customValues[field.id] || ""}
+                            placeholder={field.placeholder || ""}
+                            onChange={(e) =>
+                              handleFieldChange(field.id, e.target.value)
+                            }
+                            className="
                                   w-full
                                   border
                                   border-gray-300
                                   rounded-lg
                                   p-3
                                 "
-                              />
+                          />
+                        )}
 
-                            )}
-
-
-                            {/* =====================
+                        {/* =====================
                                 TEXTAREA
                             ===================== */}
 
-                            {field.field_type ===
-                              "textarea" && (
-
-                              <textarea
-                                value={
-                                  customValues[
-                                    field.id
-                                  ] || ""
-                                }
-                                placeholder={
-                                  field.placeholder ||
-                                  ""
-                                }
-                                onChange={(e) =>
-                                  handleFieldChange(
-                                    field.id,
-                                    e.target.value
-                                  )
-                                }
-                                className="
+                        {field.field_type === "textarea" && (
+                          <textarea
+                            value={customValues[field.id] || ""}
+                            placeholder={field.placeholder || ""}
+                            onChange={(e) =>
+                              handleFieldChange(field.id, e.target.value)
+                            }
+                            className="
                                   w-full
                                   border
                                   border-gray-300
@@ -738,34 +586,26 @@ export default function Productdisplay({
                                   p-3
                                   min-h-[100px]
                                 "
-                              />
+                          />
+                        )}
 
-                            )}
-
-                            {/* =====================
+                        {/* =====================
     IMAGE
 ===================== */}
 
-{field.field_type === "image" && (
+                        {field.field_type === "image" && (
+                          <div>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
 
-  <div>
-
-    <input
-      type="file"
-      accept="image/*"
-      onChange={(e) => {
-
-        const file = e.target.files?.[0];
-
-        if (file) {
-          handleFieldChange(
-            field.id,
-            file
-          );
-        }
-
-      }}
-      className="
+                                if (file) {
+                                  handleFieldChange(field.id, file);
+                                }
+                              }}
+                              className="
         w-full
         border
         border-gray-300
@@ -773,22 +613,20 @@ export default function Productdisplay({
         p-3
         bg-white
       "
-    />
+                            />
 
-    {customValues[field.id] instanceof File && (
+                            {customValues[field.id] instanceof File && (
+                              <div className="mt-2">
+                                <p className="text-sm text-green-600">
+                                  Selected: {customValues[field.id].name}
+                                </p>
 
-      <div className="mt-2">
-
-        <p className="text-sm text-green-600">
-          Selected: {customValues[field.id].name}
-        </p>
-
-        <img
-          src={URL.createObjectURL(
-            customValues[field.id]
-          )}
-          alt="Preview"
-          className="
+                                <img
+                                  src={URL.createObjectURL(
+                                    customValues[field.id],
+                                  )}
+                                  alt="Preview"
+                                  className="
             mt-3
             w-32
             h-32
@@ -796,132 +634,100 @@ export default function Productdisplay({
             rounded-lg
             border
           "
-        />
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
 
-      </div>
-
-    )}
-
-  </div>
-
-)}
-
-
-                            {/* =====================
+                        {/* =====================
                                 NO OPTIONS
                             ===================== */}
 
-                            {field.field_type ===
-                              "dropdown" &&
-                              fieldOptions.length ===
-                                0 && (
-
-                                <p
-                                  className="
+                        {field.field_type === "dropdown" &&
+                          fieldOptions.length === 0 && (
+                            <p
+                              className="
                                     text-sm
                                     text-red-500
                                     mt-2
                                   "
-                                >
-                                  No options have been
-                                  configured for this field.
-                                </p>
+                            >
+                              No options have been configured for this field.
+                            </p>
+                          )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
-                              )}
-
-                          </div>
-
-                        );
-                      }
-                    )}
-
-                  </div>
-
-                )}
-
-
-                {/* =================================
+              {/* =================================
                     QUANTITY
                 ================================= */}
 
-                <div className="mt-7">
-
-                  <label
-                    className="
+              <div className="mt-7">
+                <label
+                  className="
                       block
                       font-medium
                       mb-2
                     "
-                  >
-                    Quantity
-                  </label>
+                >
+                  Quantity
+                </label>
 
-                  <div
-                    className="
+                <div
+                  className="
                       flex
                       items-center
                       gap-4
                     "
-                  >
-
-                    <button
-                      onClick={() =>
-                        setQuantity(
-                          Math.max(
-                            1,
-                            quantity - 1
-                          )
-                        )
-                      }
-                      className="
+                >
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="
                         w-10
                         h-10
                         border
                         rounded-lg
                         hover:bg-gray-100
                       "
-                    >
-                      −
-                    </button>
+                  >
+                    −
+                  </button>
 
-                    <span
-                      className="
+                  <span
+                    className="
                         font-bold
                         text-lg
                       "
-                    >
-                      {quantity}
-                    </span>
+                  >
+                    {quantity}
+                  </span>
 
-                    <button
-                      onClick={() =>
-                        setQuantity(
-                          quantity + 1
-                        )
-                      }
-                      className="
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="
                         w-10
                         h-10
                         border
                         rounded-lg
                         hover:bg-gray-100
                       "
-                    >
-                      +
-                    </button>
-
-                  </div>
-
+                  >
+                    +
+                  </button>
                 </div>
+              </div>
 
-
-                {/* =================================
+              {/* =================================
                     ADD TO CART
                 ================================= */}
 
-                <button
-                  onClick={handleAddToCart}
-                  className="
+              <button
+                onClick={handleAddToCart}
+                className="
                     w-full
                     mt-7
                     bg-purple-600
@@ -931,18 +737,13 @@ export default function Productdisplay({
                     rounded-lg
                     font-semibold
                   "
-                >
-                  Add to Cart
-                </button>
-
-              </div>
-
+              >
+                Add to Cart
+              </button>
             </div>
-
           </div>
-
-        )}
-
+        </div>
+      )}
     </>
   );
 }
