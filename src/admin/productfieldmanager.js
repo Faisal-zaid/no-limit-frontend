@@ -20,46 +20,44 @@ export default function ProductFieldManager() {
   const [error, setError] = useState("");
 
 
-  // =====================================================
-  // GET PRODUCTS
-  // =====================================================
+ // =====================================================
+// GET PRODUCT FIELDS
+// =====================================================
 
-  async function loadProducts() {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/product`
-      );
+async function loadProductFields(selectedProductId = "") {
+  try {
+    setLoading(true);
+    setError("");
 
-      if (!response.ok) {
-        throw new Error("Failed to load products");
-      }
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/productfield`;
 
-      const data = await response.json();
-
-      setProducts(data);
-
-    } catch (error) {
-      console.error(error);
-      setError("Could not load products.");
+    // If a product is selected, only get fields for that product
+    if (selectedProductId) {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/productfield/product/${selectedProductId}`;
     }
-  }
 
+    const response = await fetch(url);
 
-
-  useEffect(() => {
-  async function loadProductFields() {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/productfield/product/${productId}`
-    );
+    if (!response.ok) {
+      throw new Error("Failed to load product fields");
+    }
 
     const data = await response.json();
 
     setProductFields(data);
+
+  } catch (error) {
+
+    console.error(error);
+
+    setError("Could not load product fields.");
+
+  } finally {
+
+    setLoading(false);
+
   }
-
-  loadProductFields();
-}, [productId]);
-
+}
   // =====================================================
   // GET PRODUCT FIELDS
   // =====================================================
