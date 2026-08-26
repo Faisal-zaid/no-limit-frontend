@@ -101,28 +101,132 @@ const orderId = orderData.order_id;
         const orderItemId = itemData.order_item_id || itemData.id;
 
         // Save Customization Values
-        const customValues = item.custom_values || {};
-        for (const [fieldId, value] of Object.entries(customValues)) {
-          if (value === null || value === undefined || value === "") continue;
+        // ==========================================
+// SAVE CUSTOMIZATION VALUES
+// ==========================================
 
-          const fieldResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                order_item_id: orderItemId,
-                product_field_id: Number(fieldId),
-                value: String(value),
-              }),
-            }
-          );
+const customValues = item.custom_values || {};
 
-          if (!fieldResponse.ok) {
-            throw new Error(`Failed to save customization for ${item.name}`);
-          }
-        }
+for (const [fieldId, value] of Object.entries(customValues)) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    continue;
+  }
+
+
+  // ========================================
+  // IMAGE FIELD
+  // ========================================
+
+  if (value instanceof File) {
+
+    const imageFormData = new FormData();
+
+    imageFormData.append(
+      "order_item_id",
+      orderItemId
+    );
+
+    imageFormData.append(
+      "product_field_id",
+      fieldId
+    );
+
+    imageFormData.append(
+      "image",
+      value
+    );
+
+
+    const imageResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue/image`,
+      {
+        method: "POST",
+        body: imageFormData,
       }
+    );
+
+
+    const imageData =
+      await imageResponse.json();
+
+
+    if (!imageResponse.ok) {
+
+      console.error(
+        "IMAGE UPLOAD FAILED:",
+        imageData
+      );
+
+      throw new Error(
+        `Failed to upload image for ${item.name}`
+      );
+
+    }
+
+
+    console.log(
+      "IMAGE UPLOADED:",
+      imageData
+    );
+
+
+  } else {
+
+    // ========================================
+    // NORMAL TEXT / NUMBER / DROPDOWN FIELD
+    // ========================================
+
+    const fieldResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+
+          order_item_id:
+            orderItemId,
+
+          product_field_id:
+            Number(fieldId),
+
+          value:
+            String(value),
+
+        }),
+      }
+    );
+
+
+    const fieldData =
+      await fieldResponse.json();
+
+
+    if (!fieldResponse.ok) {
+
+      console.error(
+        "CUSTOMIZATION FAILED:",
+        fieldData
+      );
+
+      throw new Error(
+        `Failed to save customization for ${item.name}`
+      );
+
+    }
+
+  }
+
+}
 
       // STEP 4: SUCCESS & RESET
       alert("Order placed successfully! We will contact you soon.");
