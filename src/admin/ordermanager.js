@@ -493,64 +493,107 @@ export default function OrderManager() {
         </div>
 
         {/* =================================================
-            SEARCH
-        ================================================= */}
+    SEARCH
+================================================= */}
 
-        <div className="mb-6">
+<div className="mb-6">
 
-          <div className="relative">
+  <div className="flex flex-col sm:flex-row gap-3">
 
-            {/* SEARCH ICON */}
+    {/* SEARCH INPUT */}
 
-            <div
-              className="
-                absolute
-                left-4
-                top-1/2
-                -translate-y-1/2
-                text-gray-400
-              "
-            >
-              🔍
-            </div>
+    <div className="relative flex-1">
 
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(event) =>
-                setSearchTerm(event.target.value)
-              }
-              placeholder="Search by customer name or phone number..."
-              className="
-                w-full
-                border
-                border-gray-300
-                rounded-xl
-                pl-11
-                pr-4
-                py-3
-                focus:outline-none
-                focus:ring-2
-                focus:ring-purple-500
-                focus:border-purple-500
-              "
-            />
+      <div
+        className="
+          absolute
+          left-4
+          top-1/2
+          -translate-y-1/2
+          text-gray-400
+        "
+      >
+        🔍
+      </div>
 
-          </div>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(event) =>
+          setSearchTerm(event.target.value)
+        }
+        placeholder="Enter customer name or phone number..."
+        className="
+          w-full
+          border
+          border-gray-300
+          rounded-lg
+          pl-11
+          pr-4
+          py-3
+          focus:outline-none
+          focus:ring-2
+          focus:ring-purple-500
+          focus:border-purple-500
+        "
+      />
 
-          {/* SEARCH RESULT COUNT */}
+    </div>
 
-          {searchTerm.trim() && (
-            <p className="text-sm text-gray-500 mt-2">
-              Showing {filteredOrders.length}{" "}
-              {filteredOrders.length === 1
-                ? "order"
-                : "orders"}{" "}
-              matching "{searchTerm}"
-            </p>
-          )}
+    {/* SEARCH BUTTON */}
 
-        </div>
+    <button
+      onClick={() => setSearchTerm(searchTerm.trim())}
+      className="
+        bg-purple-600
+        hover:bg-purple-700
+        text-white
+        px-6
+        py-3
+        rounded-lg
+        font-semibold
+        transition
+      "
+    >
+      Search
+    </button>
+
+    {/* CLEAR BUTTON */}
+
+    {searchTerm && (
+      <button
+        onClick={() => setSearchTerm("")}
+        className="
+          bg-gray-200
+          hover:bg-gray-300
+          text-gray-700
+          px-5
+          py-3
+          rounded-lg
+          font-semibold
+          transition
+        "
+      >
+        Clear
+      </button>
+    )}
+
+  </div>
+
+  {/* SEARCH RESULT COUNT */}
+
+  {searchTerm.trim() && (
+    <p className="text-sm text-gray-500 mt-2">
+      Showing {filteredOrders.length}{" "}
+      {filteredOrders.length === 1
+        ? "order"
+        : "orders"}{" "}
+      matching "{searchTerm}"
+    </p>
+  )}
+
+</div>
+          
 
         {/* =================================================
             NO ORDERS / NO SEARCH RESULTS
