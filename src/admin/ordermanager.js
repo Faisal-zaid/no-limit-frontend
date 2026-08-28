@@ -19,6 +19,12 @@ export default function OrderManager() {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   // =====================================================
+  // SEARCH
+  // =====================================================
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // =====================================================
   // FETCH ORDERS WHEN COMPONENT LOADS
   // =====================================================
 
@@ -260,7 +266,9 @@ export default function OrderManager() {
         error
       );
 
-      alert("Something went wrong while updating the order.");
+      alert(
+        "Something went wrong while updating the order."
+      );
     } finally {
       setUpdatingStatus(false);
     }
@@ -345,6 +353,41 @@ export default function OrderManager() {
       : historyOrders;
 
   // =====================================================
+  // SEARCH ORDERS
+  //
+  // Searches by:
+  // 1. Customer name
+  // 2. Customer phone number
+  // =====================================================
+
+  const filteredOrders = displayedOrders.filter(
+    (order) => {
+      const search = searchTerm
+        .trim()
+        .toLowerCase();
+
+      // If search box is empty,
+      // show all orders.
+      if (!search) {
+        return true;
+      }
+
+      const customerName =
+        String(order.customer_name || "")
+          .toLowerCase();
+
+      const customerPhone =
+        String(order.customer_phone || "")
+          .toLowerCase();
+
+      return (
+        customerName.includes(search) ||
+        customerPhone.includes(search)
+      );
+    }
+  );
+
+  // =====================================================
   // LOADING SCREEN
   // =====================================================
 
@@ -404,7 +447,10 @@ export default function OrderManager() {
         <div className="flex gap-2 border-b mb-6">
 
           <button
-            onClick={() => setActiveTab("active")}
+            onClick={() => {
+              setActiveTab("active");
+              setSearchTerm("");
+            }}
             className={`
               px-5
               py-3
@@ -423,7 +469,10 @@ export default function OrderManager() {
           </button>
 
           <button
-            onClick={() => setActiveTab("history")}
+            onClick={() => {
+              setActiveTab("history");
+              setSearchTerm("");
+            }}
             className={`
               px-5
               py-3
@@ -444,18 +493,96 @@ export default function OrderManager() {
         </div>
 
         {/* =================================================
-            NO ORDERS
+            SEARCH
         ================================================= */}
 
-        {displayedOrders.length === 0 ? (
+        <div className="mb-6">
+
+          <div className="relative">
+
+            {/* SEARCH ICON */}
+
+            <div
+              className="
+                absolute
+                left-4
+                top-1/2
+                -translate-y-1/2
+                text-gray-400
+              "
+            >
+              🔍
+            </div>
+
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(event) =>
+                setSearchTerm(event.target.value)
+              }
+              placeholder="Search by customer name or phone number..."
+              className="
+                w-full
+                border
+                border-gray-300
+                rounded-xl
+                pl-11
+                pr-4
+                py-3
+                focus:outline-none
+                focus:ring-2
+                focus:ring-purple-500
+                focus:border-purple-500
+              "
+            />
+
+          </div>
+
+          {/* SEARCH RESULT COUNT */}
+
+          {searchTerm.trim() && (
+            <p className="text-sm text-gray-500 mt-2">
+              Showing {filteredOrders.length}{" "}
+              {filteredOrders.length === 1
+                ? "order"
+                : "orders"}{" "}
+              matching "{searchTerm}"
+            </p>
+          )}
+
+        </div>
+
+        {/* =================================================
+            NO ORDERS / NO SEARCH RESULTS
+        ================================================= */}
+
+        {filteredOrders.length === 0 ? (
 
           <div className="text-center py-12">
 
             <p className="text-gray-500 text-lg">
-              {activeTab === "active"
+
+              {searchTerm.trim()
+                ? "No orders found matching your search."
+                : activeTab === "active"
                 ? "No active orders."
                 : "No order history yet."}
+
             </p>
+
+            {searchTerm.trim() && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="
+                  mt-3
+                  text-purple-600
+                  hover:text-purple-800
+                  font-semibold
+                "
+              >
+                Clear search
+              </button>
+            )}
 
           </div>
 
@@ -463,7 +590,7 @@ export default function OrderManager() {
 
           <div className="space-y-4">
 
-            {displayedOrders.map((order) => (
+            {filteredOrders.map((order) => (
 
               <div
                 key={order.id}
@@ -684,18 +811,23 @@ export default function OrderManager() {
                     transition
                   "
                 >
+
                   {updatingStatus
                     ? "Updating..."
                     : "Update Status"}
+
                 </button>
 
               </div>
 
               <p className="text-sm text-gray-500 mt-3">
+
                 Current status:{" "}
+
                 <span className="font-semibold">
                   {selectedOrder.status}
                 </span>
+
               </p>
 
             </div>
