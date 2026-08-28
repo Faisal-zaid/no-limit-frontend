@@ -358,18 +358,25 @@ for (const [fieldId, value] of Object.entries(customValues)) {
                                     Field #{fieldId}:{" "}
                                     <span className="font-medium text-gray-800">
 {value instanceof File ? (
-  <span className="text-purple-600">
-    📎 {value.name}
-  </span>
+  <div className="mt-2">
+    <img
+      src={URL.createObjectURL(value)}
+      alt={value.name}
+      className="w-32 h-32 object-cover rounded-lg border"
+    />
+
+    <p className="text-purple-600 text-xs mt-1">
+      📎 {value.name}
+    </p>
+  </div>
 ) : typeof value === "string" && value.startsWith("http") ? (
-  <a
-    href={value}
-    target="_blank"
-    rel="noreferrer"
-    className="text-purple-600 underline"
-  >
-    View Upload
-  </a>
+  <div className="mt-2">
+    <img
+      src={value}
+      alt="Custom upload"
+      className="w-32 h-32 object-cover rounded-lg border"
+    />
+  </div>
 ) : typeof value === "object" && value !== null ? (
   <span className="text-gray-500">
     Image uploaded
