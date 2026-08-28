@@ -5,23 +5,32 @@ import { useEffect, useState } from "react";
 
 export default function OrderManager() {
   const [orders, setOrders] = useState([]);
+  const [historyOrders, setHistoryOrders] = useState([]);
+
+  const [activeTab, setActiveTab] = useState("active");
+
   const [loading, setLoading] = useState(true);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
 
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [orderItems, setOrderItems] = useState([]);
   const [loadingDetails, setLoadingDetails] = useState(false);
 
-  // ==========================================
+  const [selectedStatus, setSelectedStatus] = useState("");
+
+  // =====================================================
   // FETCH ORDERS WHEN COMPONENT LOADS
-  // ==========================================
+  // =====================================================
 
   useEffect(() => {
     fetchOrders();
+    fetchOrderHistory();
   }, []);
 
-  // ==========================================
-  // FETCH ALL ORDERS
-  // ==========================================
+  // =====================================================
+  // FETCH ACTIVE ORDERS
+  // Pending + Processing
+  // =====================================================
 
   async function fetchOrders() {
     try {
@@ -46,19 +55,55 @@ export default function OrderManager() {
     }
   }
 
-  // ==========================================
+  // =====================================================
+  // FETCH ORDER HISTORY
+  // Completed + Cancelled
+  // =====================================================
+
+  async function fetchOrderHistory() {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/order/history`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch order history");
+      }
+
+      const data = await response.json();
+
+      setHistoryOrders(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Failed to load order history:", error);
+      setHistoryOrders([]);
+    }
+  }
+
+  // =====================================================
+  // REFRESH BOTH ACTIVE ORDERS AND HISTORY
+  // =====================================================
+
+  async function refreshOrders() {
+    await Promise.all([
+      fetchOrders(),
+      fetchOrderHistory(),
+    ]);
+  }
+
+  // =====================================================
   // OPEN ORDER DETAILS
-  // ==========================================
+  // =====================================================
 
   async function openOrder(order) {
     try {
       setSelectedOrder(order);
+      setSelectedStatus(order.status);
       setLoadingDetails(true);
       setOrderItems([]);
 
-      // ==========================================
+      // =====================================================
       // GET ORDER ITEMS
-      // ==========================================
+      // =====================================================
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/orderitem/order/${order.id}`
@@ -85,9 +130,9 @@ export default function OrderManager() {
         return;
       }
 
-      // ==========================================
+      // =====================================================
       // GET CUSTOMIZATION VALUES FOR EACH ITEM
-      // ==========================================
+      // =====================================================
 
       const itemsWithDetails = await Promise.all(
         items.map(async (item) => {
@@ -132,20 +177,103 @@ export default function OrderManager() {
     }
   }
 
-  // ==========================================
+  // =====================================================
   // CLOSE ORDER DETAILS
-  // ==========================================
+  // =====================================================
 
   function closeOrder() {
     setSelectedOrder(null);
     setOrderItems([]);
+    setSelectedStatus("");
   }
 
-  // ==========================================
-  // DOWNLOAD CUSTOMER IMAGE
-  // ==========================================
+  // =====================================================
+  // UPDATE ORDER STATUS
+  // =====================================================
 
-  async function downloadCustomImage(imageUrl, fieldLabel) {
+  async function updateOrderStatus() {
+    if (!selectedOrder) {
+      return;
+    }
+
+    try {
+      setUpdatingStatus(true);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/order/${selectedOrder.id}`,
+        {
+          method: "PATCH",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            customer_name: selectedOrder.customer_name,
+            customer_email: selectedOrder.customer_email,
+            customer_phone: selectedOrder.customer_phone,
+            status: selectedStatus,
+            total_price: selectedOrder.total_price,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+
+        console.error(
+          "Failed to update order:",
+          errorData
+        );
+
+        alert("Failed to update order status.");
+
+        return;
+      }
+
+      // Update the selected order immediately
+      const updatedOrder = {
+        ...selectedOrder,
+        status: selectedStatus,
+      };
+
+      setSelectedOrder(updatedOrder);
+
+      // Refresh active orders and history
+      await refreshOrders();
+
+      alert(
+        `Order #${selectedOrder.id} is now ${selectedStatus}.`
+      );
+
+      // If completed or cancelled, close modal
+      // because the order has moved into history.
+      if (
+        selectedStatus === "Completed" ||
+        selectedStatus === "Cancelled"
+      ) {
+        closeOrder();
+      }
+    } catch (error) {
+      console.error(
+        "Failed to update order status:",
+        error
+      );
+
+      alert("Something went wrong while updating the order.");
+    } finally {
+      setUpdatingStatus(false);
+    }
+  }
+
+  // =====================================================
+  // DOWNLOAD CUSTOMER IMAGE
+  // =====================================================
+
+  async function downloadCustomImage(
+    imageUrl,
+    fieldLabel
+  ) {
     try {
       const response = await fetch(imageUrl);
 
@@ -155,13 +283,15 @@ export default function OrderManager() {
 
       const blob = await response.blob();
 
-      const blobUrl = window.URL.createObjectURL(blob);
+      const blobUrl =
+        window.URL.createObjectURL(blob);
 
       const link = document.createElement("a");
 
       link.href = blobUrl;
 
-      link.download = `${fieldLabel || "customer-customization"}.jpg`;
+      link.download =
+        `${fieldLabel || "customer-customization"}.jpg`;
 
       document.body.appendChild(link);
 
@@ -171,18 +301,52 @@ export default function OrderManager() {
 
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      console.error("Failed to download image:", error);
+      console.error(
+        "Failed to download image:",
+        error
+      );
 
-      // Fallback:
-      // If Cloudinary blocks the browser download because of CORS,
-      // open the image in a new tab instead.
+      // Fallback if Cloudinary blocks browser download
       window.open(imageUrl, "_blank");
     }
   }
 
-  // ==========================================
+  // =====================================================
+  // STATUS COLOR
+  // =====================================================
+
+  function getStatusClass(status) {
+    if (status === "Pending") {
+      return "bg-yellow-100 text-yellow-700";
+    }
+
+    if (status === "Processing") {
+      return "bg-blue-100 text-blue-700";
+    }
+
+    if (status === "Completed") {
+      return "bg-green-100 text-green-700";
+    }
+
+    if (status === "Cancelled") {
+      return "bg-red-100 text-red-700";
+    }
+
+    return "bg-gray-100 text-gray-700";
+  }
+
+  // =====================================================
+  // CURRENT ORDERS TO DISPLAY
+  // =====================================================
+
+  const displayedOrders =
+    activeTab === "active"
+      ? orders
+      : historyOrders;
+
+  // =====================================================
   // LOADING SCREEN
-  // ==========================================
+  // =====================================================
 
   if (loading) {
     return (
@@ -192,26 +356,32 @@ export default function OrderManager() {
     );
   }
 
-  // ==========================================
+  // =====================================================
   // MAIN UI
-  // ==========================================
+  // =====================================================
 
   return (
     <>
       <section className="bg-white rounded-xl shadow p-6">
 
-        {/* ==========================================
+        {/* =================================================
             HEADER
-        ========================================== */}
+        ================================================= */}
 
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
 
-          <h2 className="text-2xl font-bold">
-            Orders
-          </h2>
+          <div>
+            <h2 className="text-2xl font-bold">
+              Orders
+            </h2>
+
+            <p className="text-gray-500 mt-1">
+              Manage customer orders and track their progress.
+            </p>
+          </div>
 
           <button
-            onClick={fetchOrders}
+            onClick={refreshOrders}
             className="
               bg-purple-600
               hover:bg-purple-700
@@ -227,21 +397,73 @@ export default function OrderManager() {
 
         </div>
 
-        {/* ==========================================
+        {/* =================================================
+            TABS
+        ================================================= */}
+
+        <div className="flex gap-2 border-b mb-6">
+
+          <button
+            onClick={() => setActiveTab("active")}
+            className={`
+              px-5
+              py-3
+              font-semibold
+              border-b-2
+              transition
+
+              ${
+                activeTab === "active"
+                  ? "border-purple-600 text-purple-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }
+            `}
+          >
+            Active Orders ({orders.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab("history")}
+            className={`
+              px-5
+              py-3
+              font-semibold
+              border-b-2
+              transition
+
+              ${
+                activeTab === "history"
+                  ? "border-purple-600 text-purple-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }
+            `}
+          >
+            Order History ({historyOrders.length})
+          </button>
+
+        </div>
+
+        {/* =================================================
             NO ORDERS
-        ========================================== */}
+        ================================================= */}
 
-        {orders.length === 0 ? (
+        {displayedOrders.length === 0 ? (
 
-          <p className="text-gray-500">
-            No orders yet.
-          </p>
+          <div className="text-center py-12">
+
+            <p className="text-gray-500 text-lg">
+              {activeTab === "active"
+                ? "No active orders."
+                : "No order history yet."}
+            </p>
+
+          </div>
 
         ) : (
 
           <div className="space-y-4">
 
-            {orders.map((order) => (
+            {displayedOrders.map((order) => (
 
               <div
                 key={order.id}
@@ -294,12 +516,7 @@ export default function OrderManager() {
                         rounded-full
                         text-sm
                         font-semibold
-
-                        ${
-                          order.status === "Completed"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
-                        }
+                        ${getStatusClass(order.status)}
                       `}
                     >
                       {order.status}
@@ -355,9 +572,9 @@ export default function OrderManager() {
             "
           >
 
-            {/* ==========================================
+            {/* =================================================
                 MODAL HEADER
-            ========================================== */}
+            ================================================= */}
 
             <div className="flex justify-between items-start mb-6">
 
@@ -387,9 +604,105 @@ export default function OrderManager() {
 
             </div>
 
-            {/* ==========================================
+            {/* =================================================
+                ORDER STATUS
+            ================================================= */}
+
+            <div
+              className="
+                bg-purple-50
+                border
+                border-purple-100
+                rounded-xl
+                p-4
+                mb-6
+              "
+            >
+
+              <h3 className="font-bold mb-3">
+                Order Status
+              </h3>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+
+                <select
+                  value={selectedStatus}
+                  onChange={(event) =>
+                    setSelectedStatus(
+                      event.target.value
+                    )
+                  }
+                  className="
+                    border
+                    border-gray-300
+                    rounded-lg
+                    px-4
+                    py-2
+                    bg-white
+                    flex-1
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-purple-500
+                  "
+                >
+
+                  <option value="Pending">
+                    Pending
+                  </option>
+
+                  <option value="Processing">
+                    Processing
+                  </option>
+
+                  <option value="Completed">
+                    Completed
+                  </option>
+
+                  <option value="Cancelled">
+                    Cancelled
+                  </option>
+
+                </select>
+
+                <button
+                  onClick={updateOrderStatus}
+                  disabled={
+                    updatingStatus ||
+                    selectedStatus ===
+                      selectedOrder.status
+                  }
+                  className="
+                    bg-purple-600
+                    hover:bg-purple-700
+                    disabled:bg-gray-400
+                    disabled:cursor-not-allowed
+                    text-white
+                    px-5
+                    py-2
+                    rounded-lg
+                    font-semibold
+                    transition
+                  "
+                >
+                  {updatingStatus
+                    ? "Updating..."
+                    : "Update Status"}
+                </button>
+
+              </div>
+
+              <p className="text-sm text-gray-500 mt-3">
+                Current status:{" "}
+                <span className="font-semibold">
+                  {selectedOrder.status}
+                </span>
+              </p>
+
+            </div>
+
+            {/* =================================================
                 CUSTOMER DETAILS
-            ========================================== */}
+            ================================================= */}
 
             <div
               className="
@@ -427,9 +740,9 @@ export default function OrderManager() {
 
             </div>
 
-            {/* ==========================================
+            {/* =================================================
                 ORDER ITEMS
-            ========================================== */}
+            ================================================= */}
 
             <h3 className="text-xl font-bold mb-4">
               Products Ordered
@@ -462,9 +775,9 @@ export default function OrderManager() {
                     "
                   >
 
-                    {/* ==========================================
+                    {/* =================================================
                         PRODUCT INFORMATION
-                    ========================================== */}
+                    ================================================= */}
 
                     <div
                       className="
@@ -533,9 +846,9 @@ export default function OrderManager() {
 
                     </div>
 
-                    {/* ==========================================
+                    {/* =================================================
                         CUSTOMER CUSTOMIZATION
-                    ========================================== */}
+                    ================================================= */}
 
                     {item.customValues &&
                       item.customValues.length > 0 && (
@@ -555,132 +868,132 @@ export default function OrderManager() {
 
                           <div className="space-y-4">
 
-                            {item.customValues.map((value) => {
+                            {item.customValues.map(
+                              (value) => {
 
-                              const isImage =
-                                value.field_type === "image" ||
-                                (
-                                  typeof value.value === "string" &&
+                                const isImage =
+                                  value.field_type ===
+                                    "image" ||
                                   (
-                                    value.value.includes(
-                                      "cloudinary.com"
-                                    ) ||
-                                    value.value.includes(
-                                      "res.cloudinary.com"
+                                    typeof value.value ===
+                                      "string" &&
+                                    (
+                                      value.value.includes(
+                                        "cloudinary.com"
+                                      ) ||
+                                      value.value.includes(
+                                        "res.cloudinary.app"
+                                      ) ||
+                                      value.value.includes(
+                                        "res.cloudinary.com"
+                                      )
                                     )
-                                  )
-                                );
+                                  );
 
-                              return (
+                                return (
 
-                                <div
-                                  key={value.id}
-                                  className="
-                                    border-b
-                                    pb-4
-                                    last:border-b-0
-                                  "
-                                >
+                                  <div
+                                    key={value.id}
+                                    className="
+                                      border-b
+                                      pb-4
+                                      last:border-b-0
+                                    "
+                                  >
 
-                                  {/* FIELD NAME */}
+                                    {/* FIELD NAME */}
 
-                                  <p className="text-sm text-gray-500 mb-1">
-                                    {value.field_label}
-                                  </p>
+                                    <p className="text-sm text-gray-500 mb-1">
+                                      {value.field_label}
+                                    </p>
 
-                                  {/* ==================================
-                                      IMAGE CUSTOMIZATION
-                                  ================================== */}
+                                    {/* IMAGE CUSTOMIZATION */}
 
-                                  {isImage ? (
+                                    {isImage ? (
 
-                                    <div className="mt-3">
+                                      <div className="mt-3">
 
-                                      <p className="font-semibold mb-3">
-                                        Customer Image
-                                      </p>
+                                        <p className="font-semibold mb-3">
+                                          Customer Image
+                                        </p>
 
-                                      {/* IMAGE */}
+                                        <div className="flex flex-col sm:flex-row gap-4 items-start">
 
-                                      <div className="flex flex-col sm:flex-row gap-4 items-start">
-
-                                        <img
-                                          src={value.value}
-                                          alt="Customer customization"
-                                          className="
-                                            w-48
-                                            h-48
-                                            object-cover
-                                            rounded-lg
-                                            border
-                                            shadow-sm
-                                          "
-                                        />
-
-                                        <div className="flex flex-col gap-2">
-
-                                          {/* DOWNLOAD */}
-
-                                          <button
-                                            onClick={() =>
-                                              downloadCustomImage(
-                                                value.value,
-                                                value.field_label
-                                              )
-                                            }
+                                          <img
+                                            src={value.value}
+                                            alt="Customer customization"
                                             className="
-                                              bg-purple-600
-                                              hover:bg-purple-700
-                                              text-white
-                                              px-4
-                                              py-2
+                                              w-48
+                                              h-48
+                                              object-cover
                                               rounded-lg
-                                              font-semibold
-                                              transition
+                                              border
+                                              shadow-sm
                                             "
-                                          >
-                                            Download Image
-                                          </button>
+                                          />
 
-                                          {/* OPEN */}
+                                          <div className="flex flex-col gap-2">
 
-                                          <a
-                                            href={value.value}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="
-                                              text-purple-600
-                                              hover:text-purple-800
-                                              text-sm
-                                              font-medium
-                                            "
-                                          >
-                                            Open Full Image →
-                                          </a>
+                                            {/* DOWNLOAD */}
+
+                                            <button
+                                              onClick={() =>
+                                                downloadCustomImage(
+                                                  value.value,
+                                                  value.field_label
+                                                )
+                                              }
+                                              className="
+                                                bg-purple-600
+                                                hover:bg-purple-700
+                                                text-white
+                                                px-4
+                                                py-2
+                                                rounded-lg
+                                                font-semibold
+                                                transition
+                                              "
+                                            >
+                                              Download Image
+                                            </button>
+
+                                            {/* OPEN */}
+
+                                            <a
+                                              href={value.value}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="
+                                                text-purple-600
+                                                hover:text-purple-800
+                                                text-sm
+                                                font-medium
+                                              "
+                                            >
+                                              Open Full Image →
+                                            </a>
+
+                                          </div>
 
                                         </div>
 
                                       </div>
 
-                                    </div>
+                                    ) : (
 
-                                  ) : (
+                                      /* NORMAL CUSTOMIZATION VALUE */
 
-                                    /* ==================================
-                                       NORMAL CUSTOMIZATION VALUE
-                                    ================================== */
+                                      <p className="font-semibold">
+                                        {value.value}
+                                      </p>
 
-                                    <p className="font-semibold">
-                                      {value.value}
-                                    </p>
+                                    )}
 
-                                  )}
+                                  </div>
 
-                                </div>
-
-                              );
-
-                            })}
+                                );
+                              }
+                            )}
 
                           </div>
 
@@ -696,9 +1009,9 @@ export default function OrderManager() {
 
             )}
 
-            {/* ==========================================
+            {/* =================================================
                 ORDER TOTAL
-            ========================================== */}
+            ================================================= */}
 
             <div
               className="
