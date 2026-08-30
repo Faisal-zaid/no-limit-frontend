@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,9 +19,13 @@ export default function ProductsPage() {
           `${process.env.NEXT_PUBLIC_API_URL}/category`
         );
 
+        if (!response.ok) {
+          throw new Error("Failed to load categories");
+        }
+
         const data = await response.json();
 
-        setCategories(data);
+        setCategories(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Failed to load categories:", error);
       }
@@ -30,223 +35,293 @@ export default function ProductsPage() {
   }, []);
 
   return (
-    <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
+    <section
+      className="
+        min-h-screen
+        bg-[url('/images/nolimitbackground.png')]
+        bg-no-repeat
+        bg-cover
+        bg-fixed
+      "
+    >
 
       {/* =====================================================
           HEADER
       ====================================================== */}
 
-      <div className="bg-white border-b border-gray-700 shadow-xl text-gray-700 pb-3">
+      <div className="
+        bg-white
+        border-b
+        border-gray-700
+        shadow-xl
+        text-gray-700
+        pb-4
+      ">
 
-        {/* TOP NAVIGATION */}
+        {/* =====================================================
+            TOP HEADER
+        ====================================================== */}
 
         <div className="
-          flex
-          flex-col
-          lg:flex-row
-          lg:items-center
-          lg:justify-between
-          gap-4
-          mx-[3%]
-          pt-3
+          px-[4%]
+          pt-4
         ">
-
-          {/* LOGO + SEARCH */}
 
           <div className="
             flex
-            flex-col
-            sm:flex-row
             items-center
+            justify-between
             gap-4
-            sm:gap-8
-            w-full
-            lg:w-auto
           ">
 
-            <Image
-              src="/images/nolimit-logo.png"
-              alt="No Limit Brands logo"
-              width={77}
-              height={75}
-            />
+            {/* =================================================
+                LOGO
+            ================================================= */}
 
-            <div className="w-full sm:w-auto">
+            <Link
+              href="/"
+              className="flex-shrink-0"
+            >
+              <Image
+                src="/images/nolimit-logo.png"
+                alt="No Limit Brands logo"
+                width={77}
+                height={75}
+                className="
+                  w-[65px]
+                  h-auto
+                  sm:w-[77px]
+                "
+              />
+            </Link>
+
+
+            {/* =================================================
+                DESKTOP SEARCH
+            ================================================= */}
+
+            <div className="
+              hidden
+              lg:flex
+              flex-1
+              max-w-2xl
+              mx-8
+            ">
               <SearchWrapper />
             </div>
 
+
+            {/* =================================================
+                RIGHT SIDE
+            ================================================= */}
+
+            <div className="
+              flex
+              items-center
+              gap-3
+              sm:gap-5
+              flex-shrink-0
+            ">
+
+              {/* ================= ABOUT ================= */}
+
+              <button
+                className="
+                  hidden
+                  lg:flex
+                  items-center
+                  gap-1
+                  hover:text-purple-600
+                  transition
+                "
+              >
+
+                <Image
+                  src="/images/info.png"
+                  alt="About"
+                  width={25}
+                  height={25}
+                />
+
+                <span>
+                  About
+                </span>
+
+              </button>
+
+
+              {/* ================= CART ================= */}
+
+              <Link
+                href="/cartpage"
+                className="
+                  flex
+                  items-center
+                  gap-1
+                  hover:text-purple-600
+                  transition
+                "
+              >
+
+                <Image
+                  src="/images/Cart--Streamline-Platinum.png"
+                  alt="Cart"
+                  width={25}
+                  height={25}
+                />
+
+                {/* Hide text on very small screens */}
+                <span className="hidden sm:inline">
+                  Cart
+                </span>
+
+              </Link>
+
+
+              {/* ================= SIGN IN ================= */}
+
+              <button
+                className="
+                  flex
+                  items-center
+                  gap-1
+                  bg-purple-600
+                  hover:bg-purple-700
+                  text-white
+                  font-medium
+                  px-3
+                  sm:px-4
+                  py-2
+                  rounded-lg
+                  transition-colors
+                "
+              >
+
+                <Image
+                  src="/images/login.png"
+                  alt="Sign in"
+                  width={22}
+                  height={22}
+                />
+
+                {/* Hide text on very small screens */}
+                <span className="hidden sm:inline">
+                  Sign In
+                </span>
+
+              </button>
+
+            </div>
+
           </div>
 
 
-          {/* ABOUT / CART / SIGN IN */}
+          {/* =====================================================
+              MOBILE SEARCH
+          ===================================================== */}
+
+          <div className="
+            lg:hidden
+            mt-4
+            w-full
+          ">
+
+            <SearchWrapper />
+
+          </div>
+
+
+          {/* =====================================================
+              SECOND NAVIGATION
+          ===================================================== */}
 
           <div className="
             flex
             items-center
-            justify-center
-            sm:justify-end
-            gap-4
-            sm:gap-6
-            text-sm
-            sm:text-base
-            w-full
-            lg:w-auto
+            gap-3
+            mt-5
+            overflow-hidden
           ">
 
-            {/* ABOUT */}
+            {/* =================================================
+                ALL PRODUCTS
+            ================================================= */}
 
-            <div>
-              <ul className="flex items-center gap-1">
-                <li>
-                  <Image
-                    src="/images/info.png"
-                    alt="About"
-                    width={25}
-                    height={25}
-                  />
-                </li>
+            <Link
+              href="/productspage"
+              className="
+                flex
+                items-center
+                gap-2
+                bg-gray-100
+                hover:bg-gray-200
+                rounded-[10px]
+                px-3
+                py-2
+                whitespace-nowrap
+                flex-shrink-0
+                transition
+              "
+            >
 
-                <li>About</li>
-              </ul>
+              <Image
+                src="/images/menu.png"
+                alt="Menu"
+                width={22}
+                height={22}
+              />
+
+              <span className="
+                text-sm
+                sm:text-base
+              ">
+                All Products
+              </span>
+
+            </Link>
+
+
+            {/* =================================================
+                CATEGORY NAVBAR
+            ================================================= */}
+
+            <div className="
+              flex-1
+              overflow-x-auto
+              scrollbar-hide
+              min-w-0
+            ">
+
+              <div className="
+                min-w-max
+                flex
+                justify-center
+              ">
+                <Navbar />
+              </div>
+
             </div>
 
 
-            {/* CART */}
+            {/* =================================================
+                SHOP ALL
+            ================================================= */}
 
             <Link
-              href="/cartpage"
+              href="/categoriespage"
               className="
-                flex
-                items-center
-                hover:text-purple-600
-                cursor-pointer
-              "
-            >
-              <ul className="flex items-center gap-1">
-                <li>
-                  <Image
-                    src="/images/Cart--Streamline-Platinum.png"
-                    alt="Cart"
-                    width={25}
-                    height={25}
-                  />
-                </li>
-
-                <li>Cart</li>
-              </ul>
-            </Link>
-
-
-            {/* SIGN IN */}
-
-            <button
-              className="
-                flex
-                items-center
-                gap-1
-                bg-purple-600
-                hover:bg-purple-700
-                text-white
+                text-purple-600
+                hover:text-purple-800
                 font-medium
-                px-3
-                sm:px-4
-                py-1.5
-                rounded-lg
-                transition-colors
+                whitespace-nowrap
+                text-sm
+                sm:text-base
+                flex-shrink-0
               "
             >
-              <Image
-                src="/images/login.png"
-                alt="Sign in"
-                width={25}
-                height={25}
-              />
-
-              <span>SignIn</span>
-            </button>
-
-          </div>
-
-        </div>
-
-
-        {/* SECOND NAVIGATION */}
-
-        <div className="
-          flex
-          flex-col
-          lg:flex-row
-          lg:items-center
-          gap-4
-          lg:gap-0
-          mx-[3%]
-          mt-5
-        ">
-
-          {/* ALL PRODUCTS */}
-
-          <div
-            className="
-              px-3
-              py-2
-              bg-gray-100
-              rounded-[10px]
-              w-full
-              lg:w-auto
-            "
-          >
-            <ul className="
-              flex
-              items-center
-              justify-center
-              lg:justify-start
-              gap-3
-            ">
-              <li>
-                <Image
-                  src="/images/menu.png"
-                  alt="Menu"
-                  width={25}
-                  height={25}
-                />
-              </li>
-
-              <li>
-                <Link href="/productspage">
-                  All Products
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-
-          {/* CATEGORY NAVBAR */}
-
-          <div className="
-            flex-1
-            flex
-            justify-center
-            mx-0
-            lg:mx-4
-            overflow-x-auto
-            w-full
-          ">
-            <Navbar />
-          </div>
-
-
-          {/* SHOP ALL */}
-
-          <div className="
-            text-purple-600
-            text-center
-            lg:text-right
-            w-full
-            lg:w-auto
-          ">
-            <Link href="/categoriespage">
               Shop All
             </Link>
+
           </div>
 
         </div>
@@ -265,31 +340,43 @@ export default function ProductsPage() {
         text-center
       ">
 
+        {/* PRODUCTS BADGE */}
+
         <button
           className="
             border
             py-2
-            px-3
+            px-4
             rounded-[30px]
             border-purple-700
             bg-purple-600
             text-white
           "
         >
-          <ul className="flex items-center gap-2">
-            <li>
-              <Image
-                src="/images/star.png"
-                alt="Products"
-                width={25}
-                height={25}
-              />
-            </li>
 
-            <li>Products</li>
-          </ul>
+          <span className="
+            flex
+            items-center
+            gap-2
+          ">
+
+            <Image
+              src="/images/star.png"
+              alt="Products"
+              width={25}
+              height={25}
+            />
+
+            <span>
+              Products
+            </span>
+
+          </span>
+
         </button>
 
+
+        {/* TITLE */}
 
         <h2 className="
           font-bold
@@ -301,10 +388,15 @@ export default function ProductsPage() {
         </h2>
 
 
+        {/* DESCRIPTION */}
+
         <p className="
           text-sm
           sm:text-base
           mt-2
+          max-w-2xl
+          mx-auto
+          px-2
         ">
           Check our Products by Category to find what you would like
         </p>
@@ -313,173 +405,270 @@ export default function ProductsPage() {
 
 
       {/* =====================================================
-          SIDEBAR + PRODUCTS
+          SHOP CONTENT
       ====================================================== */}
 
-      {/* ================= SHOP CONTENT ================= */}
-<div className="w-full gap-6 flex flex-col lg:flex-row p-4 lg:p-6 shadow-sm">
-
-  {/* ================= LEFT SIDEBAR ================= */}
-  <div
-    className={`
-      border
-      w-full
-      lg:w-[20%]
-      border-gray-200
-      rounded-xl
-      p-4
-      bg-white
-
-      ${selectedCategory ? "hidden lg:block" : "block"}
-    `}
-  >
-
-    <p className="font-bold text-[15px]">
-      Browse by Category
-    </p>
-
-    <p className="text-[12px] mt-2 mb-2">
-      Filter according to what interests you
-    </p>
-
-    <SearchWrapper />
-
-    <div className="mt-4 space-y-3">
-  {categories.map((category) => (
-    <button
-      key={category.id}
-      onClick={() => setSelectedCategory(category)}
-      className="
+      <div className="
         w-full
+        gap-6
         flex
-        items-center
-        gap-4
-        p-3
-        bg-white
-        border
-        border-gray-200
-        rounded-xl
+        flex-col
+        lg:flex-row
+        p-4
+        lg:p-6
         shadow-sm
-        text-left
-        hover:border-purple-500
-        hover:bg-purple-50
-        transition-all
-        duration-200
-        active:scale-[0.98]
-      "
-    >
-
-      {/* CATEGORY IMAGE */}
-      <div className="
-        w-16
-        h-16
-        flex-shrink-0
-        overflow-hidden
-        rounded-lg
-        bg-gray-100
       ">
-        {category.image ? (
-          <img
-            src={category.image}
-            alt={category.name}
-            className="
-              w-full
-              h-full
-              object-cover
-            "
-          />
-        ) : (
-          <div className="
+
+
+        {/* =====================================================
+            LEFT SIDEBAR
+        ====================================================== */}
+
+        <div
+          className={`
+            border
             w-full
-            h-full
-            flex
-            items-center
-            justify-center
-            text-gray-400
-            text-xs
-          ">
-            No image
-          </div>
-        )}
-      </div>
+            lg:w-[20%]
+            border-gray-200
+            rounded-xl
+            p-4
+            bg-white
 
-      {/* CATEGORY NAME */}
-      <div className="flex-1">
-        <h3 className="
-          font-semibold
-          text-gray-900
-          text-base
-        ">
-          {category.name}
-        </h3>
-
-        <p className="
-          text-xs
-          text-gray-500
-          mt-1
-        ">
-          View products
-        </p>
-      </div>
-
-      {/* ARROW */}
-      <div className="
-        text-purple-600
-        text-xl
-        pr-1
-      ">
-        →
-      </div>
-
-    </button>
-  ))}
-</div>
-
-  </div>
-
-
-  {/* ================= PRODUCTS ================= */}
-  <div
-    className={`
-      bg-white
-      border
-      border-gray-200
-      rounded-xl
-      shadow-sm
-      overflow-hidden
-      w-full
-      lg:flex-1
-
-      ${!selectedCategory ? "hidden lg:block" : "block"}
-    `}
-  >
-
-    {/* MOBILE BACK BUTTON */}
-    {selectedCategory && (
-      <div className="lg:hidden p-4 border-b">
-
-        <button
-          onClick={() => setSelectedCategory(null)}
-          className="
-            text-purple-600
-            font-semibold
-            hover:text-purple-800
-          "
+            ${selectedCategory ? "hidden lg:block" : "block"}
+          `}
         >
-          ← Back to Categories
-        </button>
+
+          {/* SIDEBAR TITLE */}
+
+          <p className="
+            font-bold
+            text-[15px]
+          ">
+            Browse by Category
+          </p>
+
+          <p className="
+            text-[12px]
+            mt-2
+            mb-4
+            text-gray-500
+          ">
+            Filter according to what interests you
+          </p>
+
+
+          {/* =================================================
+              CATEGORY LIST
+          ================================================= */}
+
+          <div className="
+            mt-2
+            space-y-3
+          ">
+
+            {categories.length === 0 ? (
+
+              <p className="
+                text-sm
+                text-gray-500
+                text-center
+                py-6
+              ">
+                No categories available.
+              </p>
+
+            ) : (
+
+              categories.map((category) => (
+
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category)}
+                  className="
+                    w-full
+                    flex
+                    items-center
+                    gap-3
+                    sm:gap-4
+                    p-3
+                    bg-white
+                    border
+                    border-gray-200
+                    rounded-xl
+                    shadow-sm
+                    text-left
+                    hover:border-purple-500
+                    hover:bg-purple-50
+                    transition-all
+                    duration-200
+                    active:scale-[0.98]
+                  "
+                >
+
+                  {/* =========================================
+                      CATEGORY IMAGE
+                  ========================================= */}
+
+                  <div className="
+                    w-14
+                    h-14
+                    sm:w-16
+                    sm:h-16
+                    flex-shrink-0
+                    overflow-hidden
+                    rounded-lg
+                    bg-gray-100
+                  ">
+
+                    {category.image ? (
+
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        className="
+                          w-full
+                          h-full
+                          object-cover
+                        "
+                      />
+
+                    ) : (
+
+                      <div className="
+                        w-full
+                        h-full
+                        flex
+                        items-center
+                        justify-center
+                        text-gray-400
+                        text-xs
+                      ">
+                        No image
+                      </div>
+
+                    )}
+
+                  </div>
+
+
+                  {/* =========================================
+                      CATEGORY NAME
+                  ========================================= */}
+
+                  <div className="
+                    flex-1
+                    min-w-0
+                  ">
+
+                    <h3 className="
+                      font-semibold
+                      text-gray-900
+                      text-sm
+                      sm:text-base
+                      truncate
+                    ">
+                      {category.name}
+                    </h3>
+
+                    <p className="
+                      text-xs
+                      text-gray-500
+                      mt-1
+                    ">
+                      View products
+                    </p>
+
+                  </div>
+
+
+                  {/* =========================================
+                      ARROW
+                  ========================================= */}
+
+                  <div className="
+                    text-purple-600
+                    text-xl
+                    pr-1
+                    flex-shrink-0
+                  ">
+                    →
+                  </div>
+
+                </button>
+
+              ))
+
+            )}
+
+          </div>
+
+        </div>
+
+
+        {/* =====================================================
+            PRODUCTS
+        ====================================================== */}
+
+        <div
+          className={`
+            bg-white
+            border
+            border-gray-200
+            rounded-xl
+            shadow-sm
+            overflow-hidden
+            w-full
+            lg:flex-1
+
+            ${!selectedCategory ? "hidden lg:block" : "block"}
+          `}
+        >
+
+          {/* =================================================
+              MOBILE BACK BUTTON
+          ================================================= */}
+
+          {selectedCategory && (
+
+            <div className="
+              lg:hidden
+              p-4
+              border-b
+              bg-gray-50
+            ">
+
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="
+                  text-purple-600
+                  font-semibold
+                  hover:text-purple-800
+                  flex
+                  items-center
+                  gap-1
+                "
+              >
+                ← Back to Categories
+              </button>
+
+            </div>
+
+          )}
+
+
+          {/* =================================================
+              PRODUCT DISPLAY
+          ================================================= */}
+
+          <Productdisplay
+            selectedCategory={selectedCategory}
+          />
+
+        </div>
 
       </div>
-    )}
-
-    <Productdisplay
-      selectedCategory={selectedCategory}
-    />
-
-  </div>
-
-</div>
 
     </section>
   );
 }
+
