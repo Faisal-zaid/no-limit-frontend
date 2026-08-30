@@ -15,200 +15,228 @@ export default function Services() {
     <section className="min-h-screen">
 
       {/* ================= HEADER ================= */}
-      <div className="bg-white shadow-xl text-gray-700 pb-3">
+      
+{/* ================= HEADER ================= */}
+<div className="bg-white shadow-xl text-gray-700 pb-4">
 
-        {/* TOP ROW */}
-        <div className="
-          flex
-          flex-col
-          lg:flex-row
-          lg:items-center
-          lg:justify-between
-          gap-4
-          lg:gap-0
-          px-[3%]
-          pt-4
+  {/* =====================================================
+      TOP HEADER
+      ===================================================== */}
+  <div className="
+    px-[4%]
+    pt-4
+  ">
+
+    <div className="
+      flex
+      items-center
+      justify-between
+      gap-4
+    ">
+
+      {/* LOGO */}
+      <Link href="/">
+        <Image
+          src="/images/nolimit-logo.png"
+          alt="No Limit Brands logo"
+          width={77}
+          height={75}
+          className="w-[65px] h-auto sm:w-[77px]"
+        />
+      </Link>
+
+
+      {/* DESKTOP SEARCH */}
+      <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
+        <SearchWrapper />
+      </div>
+
+
+      {/* RIGHT SIDE */}
+      <div className="
+        flex
+        items-center
+        gap-3
+        sm:gap-5
+      ">
+
+        {/* ABOUT - DESKTOP ONLY */}
+        <button className="
+          hidden
+          lg:flex
+          items-center
+          gap-1
+          hover:text-purple-600
+          transition
         ">
 
-          {/* LOGO + SEARCH */}
-          <div className="
+          <Image
+            src="/images/info.png"
+            alt="About"
+            width={25}
+            height={25}
+          />
+
+          <span>About</span>
+
+        </button>
+
+
+        {/* CART */}
+        <Link
+          href="/cartpage"
+          className="
             flex
-            flex-col
-            sm:flex-row
             items-center
-            gap-4
-            sm:gap-8
-          ">
+            gap-1
+            hover:text-purple-600
+            transition
+          "
+        >
 
-            <Image
-              src="/images/nolimit-logo.png"
-              alt="No Limit Brands logo"
-              width={77}
-              height={75}
-            />
+          <Image
+            src="/images/Cart--Streamline-Platinum.png"
+            alt="Cart"
+            width={25}
+            height={25}
+          />
 
-            <SearchWrapper />
+          <span className="hidden sm:inline">
+            Cart
+          </span>
 
-          </div>
-
-
-          {/* RIGHT SIDE */}
-          <div className="
-            flex
-            justify-center
-            sm:justify-end
-            items-center
-            gap-4
-            text-sm
-          ">
-
-            {/* ABOUT */}
-            <div>
-              <ul className="flex items-center gap-1">
-                <li>
-                  <Image
-                    src="/images/info.png"
-                    alt="About"
-                    width={25}
-                    height={25}
-                  />
-                </li>
-
-                <li>About</li>
-              </ul>
-            </div>
+        </Link>
 
 
-            {/* CART */}
-            <Link
-              href="/cartpage"
-              className="
-                flex
-                items-center
-                hover:text-purple-600
-                cursor-pointer
-              "
-            >
-              <ul className="flex items-center gap-1">
-                <li>
-                  <Image
-                    src="/images/Cart--Streamline-Platinum.png"
-                    alt="Cart"
-                    width={25}
-                    height={25}
-                  />
-                </li>
-
-                <li>Cart</li>
-              </ul>
-            </Link>
-
-
-            {/* SIGN IN */}
-            <button className="
-              flex
-              items-center
-              gap-1
-              bg-purple-600
-              hover:bg-purple-700
-              text-white
-              font-medium
-              px-4
-              py-1.5
-              rounded-lg
-              transition-colors
-            ">
-
-              <Image
-                src="/images/login.png"
-                alt="Sign in"
-                width={25}
-                height={25}
-              />
-
-              <span>SignIn</span>
-
-            </button>
-
-          </div>
-
-        </div>
-
-
-        {/* ================= NAVIGATION ================= */}
-        <div className="
+        {/* SIGN IN */}
+        <button className="
           flex
-          flex-col
-          lg:flex-row
-          lg:items-center
-          gap-4
-          lg:gap-0
-          px-[3%]
-          mt-6
+          items-center
+          gap-1
+          bg-purple-600
+          hover:bg-purple-700
+          text-white
+          font-medium
+          px-3
+          sm:px-4
+          py-2
+          rounded-lg
+          transition-colors
         ">
 
-          {/* ALL PRODUCTS */}
-          <div className="
-            bg-gray-100
-            hover:bg-gray-200
-            rounded-[10px]
-            px-3
-            py-2
-            w-fit
-          ">
+          <Image
+            src="/images/login.png"
+            alt="Sign in"
+            width={22}
+            height={22}
+          />
 
-            <Link
-              href="/productspage"
-              className="
-                flex
-                items-center
-                gap-3
-                hover:text-purple-600
-                cursor-pointer
-              "
-            >
+          <span className="hidden sm:inline">
+            Sign In
+          </span>
 
-              <Image
-                src="/images/menu.png"
-                alt="Menu"
-                width={25}
-                height={25}
-              />
+        </button>
 
-              <span>All Products</span>
+      </div>
 
-            </Link>
-
-          </div>
+    </div>
 
 
-          {/* NAVBAR */}
-          <div className="
-            flex-1
-            flex
-            justify-center
-            overflow-hidden
-          ">
-            <Navbar />
-          </div>
+    {/* =====================================================
+        MOBILE SEARCH
+        ===================================================== */}
+    <div className="
+      lg:hidden
+      mt-4
+    ">
+
+      <SearchWrapper />
+
+    </div>
 
 
-          {/* SHOP ALL */}
-          <div className="text-purple-600 w-fit">
-            <Link
-              href="/categoriespage"
-              className="
-                hover:text-purple-800
-                cursor-pointer
-              "
-            >
-              Shop All
-            </Link>
-          </div>
+    {/* =====================================================
+        NAVIGATION ROW
+        ===================================================== */}
+    <div className="
+      flex
+      items-center
+      justify-between
+      gap-4
+      mt-5
+    ">
 
+      {/* ALL PRODUCTS */}
+      <Link
+        href="/productspage"
+        className="
+          flex
+          items-center
+          gap-2
+          bg-gray-100
+          hover:bg-gray-200
+          rounded-[10px]
+          px-3
+          py-2
+          whitespace-nowrap
+          transition
+        "
+      >
+
+        <Image
+          src="/images/menu.png"
+          alt="Menu"
+          width={22}
+          height={22}
+        />
+
+        <span className="text-sm sm:text-base">
+          All Products
+        </span>
+
+      </Link>
+
+
+      {/* NAVBAR */}
+      <div className="
+        flex-1
+        overflow-x-auto
+        scrollbar-hide
+      ">
+
+        <div className="
+          min-w-max
+          flex
+          justify-center
+        ">
+          <Navbar />
         </div>
 
       </div>
+
+
+      {/* SHOP ALL */}
+      <Link
+        href="/categoriespage"
+        className="
+          text-purple-600
+          hover:text-purple-800
+          font-medium
+          whitespace-nowrap
+          text-sm
+          sm:text-base
+        "
+      >
+        Shop All
+      </Link>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 
 
       {/* ================= SERVICES CONTENT ================= */}
