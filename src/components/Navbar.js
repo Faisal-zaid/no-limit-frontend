@@ -1,12 +1,15 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Navbar({ onSelectCategory }) {
   const [categories, setCategories] = useState([]);
   const router = useRouter();
+
+  const navRef = useRef(null);
+  const animationRef = useRef(null);
+  const isUserInteracting = useRef(false);
 
   useEffect(() => {
     async function loadCategories() {
@@ -31,27 +34,74 @@ export default function Navbar({ onSelectCategory }) {
   }, []);
 
   // =====================================================
+  // MOBILE AUTO SCROLL
+  // =====================================================
+
+  useEffect(() => {
+    // Don't run until categories have loaded
+    if (categories.length === 0) {
+      return;
+    }
+
+    // Only run auto-scroll on mobile
+    if (window.innerWidth >= 640) {
+      return;
+    }
+
+    const nav = navRef.current;
+
+    if (!nav) {
+      return;
+    }
+
+    function autoScroll() {
+      if (!isUserInteracting.current) {
+        nav.scrollLeft += 0.5;
+
+        // When we reach the end, go back to the beginning
+        if (
+          nav.scrollLeft + nav.clientWidth >=
+          nav.scrollWidth - 1
+        ) {
+          nav.scrollLeft = 0;
+        }
+      }
+
+      animationRef.current =
+        requestAnimationFrame(autoScroll);
+    }
+
+    animationRef.current =
+      requestAnimationFrame(autoScroll);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [categories]);
+
+  // =====================================================
+  // PAUSE AUTO SCROLL WHEN USER INTERACTS
+  // =====================================================
+
+  function pauseAutoScroll() {
+    isUserInteracting.current = true;
+  }
+
+  function resumeAutoScroll() {
+    isUserInteracting.current = false;
+  }
+
+  // =====================================================
   // HANDLE CATEGORY CLICK
   // =====================================================
 
   function handleCategoryClick(category) {
-    /*
-      If the parent component provided onSelectCategory,
-      use it.
-
-      This is useful on your Services page where clicking
-      a category should display its description.
-    */
-
     if (onSelectCategory) {
       onSelectCategory(category);
       return;
     }
-
-    /*
-      Otherwise, navigate to the products page for
-      this category.
-    */
 
     router.push(
       `/productspage?category=${encodeURIComponent(category.id)}`
@@ -60,6 +110,11 @@ export default function Navbar({ onSelectCategory }) {
 
   return (
     <nav
+      ref={navRef}
+      onTouchStart={pauseAutoScroll}
+      onTouchEnd={resumeAutoScroll}
+      onMouseDown={pauseAutoScroll}
+      onMouseUp={resumeAutoScroll}
       className="
         flex
         items-center
@@ -68,18 +123,25 @@ export default function Navbar({ onSelectCategory }) {
         gap-6
         sm:gap-10
         w-full
+
         overflow-x-auto
         whitespace-nowrap
+
         px-4
         py-2
+
         scrollbar-hide
+
+        scroll-smooth
       "
     >
       {categories.slice(0, 8).map((category) => (
         <button
           key={category.id}
           type="button"
-          onClick={() => handleCategoryClick(category)}
+          onClick={() =>
+            handleCategoryClick(category)
+          }
           className="
             nav
             cursor-pointer
@@ -89,6 +151,7 @@ export default function Navbar({ onSelectCategory }) {
             border-0
             p-0
             whitespace-nowrap
+            flex-shrink-0
           "
         >
           {category.name}
@@ -97,4 +160,3 @@ export default function Navbar({ onSelectCategory }) {
     </nav>
   );
 }
-
