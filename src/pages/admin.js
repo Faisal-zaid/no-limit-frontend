@@ -196,7 +196,7 @@ export default function Admin() {
   // Registration
   // --------------------------------
 
-  const handleRegister = async (e) => {
+ const handleRegister = async (e) => {
 
     e.preventDefault();
 
@@ -205,34 +205,55 @@ export default function Admin() {
 
     try {
 
-      /*
-        You haven't shown me your registration backend route yet.
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/register`,
+            {
+                method: "POST",
 
-        So for now this only demonstrates where the registration
-        request will go.
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        Once you create something like:
+                body: JSON.stringify({
+                    username: registerUsername,
+                    email: registerEmail,
+                    password: registerPassword
+                })
+            }
+        );
 
-        POST /register
+        const data = await response.json();
 
-        we can connect this form to it.
-      */
+        if (!response.ok) {
+            setError(
+                data.detail || "Registration failed."
+            );
+            return;
+        }
 
-      alert("Registration endpoint has not been connected yet.");
+        // Registration successful
+        setRegisterUsername("");
+        setRegisterEmail("");
+        setRegisterPassword("");
+
+        setShowRegister(false);
+
+        setError("");
 
     } catch (error) {
 
-      console.error("Registration error:", error);
+        console.error("Registration error:", error);
 
-      setError("Registration failed.");
+        setError(
+            "Unable to connect to the server. Please try again."
+        );
 
     } finally {
 
-      setLoading(false);
+        setLoading(false);
 
     }
-
-  };
+};
 
 
   // --------------------------------
