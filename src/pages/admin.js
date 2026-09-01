@@ -1,73 +1,294 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CategoryManager from "@/admin/categorymanager";
 import ProductManager from "@/admin/productmanager";
 import OrderManager from "@/admin/ordermanager";
 
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
 export default function Admin() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [showRegister, setShowRegister] = useState(false);
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [username, setUsername] = useState("");
+  const [registerUsername, setRegisterUsername] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // -------------------------
-  // Temporary Login
-  // -------------------------
 
-  const handleLogin = (e) => {
+  // --------------------------------
+  // Check authentication on page load
+  // --------------------------------
+
+  useEffect(() => {
+
+    const checkAuthentication = async () => {
+
+      try {
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/me`,
+          {
+            method: "GET",
+            credentials: "include"
+          }
+        );
+
+        if (response.ok) {
+
+          const user = await response.json();
+
+          // Only allow admins into the admin panel
+          if (user.role === "admin") {
+            setIsLoggedIn(true);
+          } else {
+            setIsLoggedIn(false);
+            setError("You do not have permission to access the admin panel.");
+          }
+
+        } else {
+
+          setIsLoggedIn(false);
+
+        }
+
+      } catch (error) {
+
+        console.error("Authentication check failed:", error);
+        setIsLoggedIn(false);
+
+      } finally {
+
+        setCheckingAuth(false);
+
+      }
+    };
+
+
+    checkAuthentication();
+
+  }, []);
+
+
+  // --------------------------------
+  // Login
+  // --------------------------------
+
+  const handleLogin = async (e) => {
+
     e.preventDefault();
 
-    // TEMPORARY:
-    // For now, clicking login is enough
-    // to access the admin dashboard.
+    setError("");
+    setLoading(true);
 
-    setIsLoggedIn(true);
+    try {
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/token`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+
+          credentials: "include",
+
+          body: new URLSearchParams({
+            username: username,
+            password: password
+          })
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        setError(
+          data.detail || "Login failed. Please check your credentials."
+        );
+
+        return;
+      }
+
+
+      // The backend has now created the HttpOnly cookie.
+      // We don't store the JWT anywhere in JavaScript.
+
+      const userResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/me`,
+        {
+          method: "GET",
+          credentials: "include"
+        }
+      );
+
+
+      if (!userResponse.ok) {
+
+        setError("Login succeeded, but the user could not be verified.");
+        return;
+      }
+
+
+      const user = await userResponse.json();
+
+
+      // Make sure the logged-in user is actually an admin
+
+      if (user.role !== "admin") {
+
+        // Logout immediately if a non-admin somehow logs in
+
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/logout`,
+          {
+            method: "POST",
+            credentials: "include"
+          }
+        );
+
+        setError("You do not have permission to access the admin panel.");
+
+        return;
+      }
+
+
+      setIsLoggedIn(true);
+
+      setUsername("");
+      setPassword("");
+
+
+    } catch (error) {
+
+      console.error("Login error:", error);
+
+      setError(
+        "Unable to connect to the server. Please try again."
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
   };
 
 
-  // -------------------------
-  // Temporary Registration
-  // -------------------------
+  // --------------------------------
+  // Registration
+  // --------------------------------
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
+
     e.preventDefault();
 
-    // TEMPORARY:
-    // We are not sending anything to the backend yet.
+    setError("");
+    setLoading(true);
 
-    alert("Registration successful! You can now login.");
+    try {
 
-    setShowRegister(false);
+      /*
+        You haven't shown me your registration backend route yet.
 
-    setUsername("");
-    setRegisterEmail("");
-    setRegisterPassword("");
+        So for now this only demonstrates where the registration
+        request will go.
+
+        Once you create something like:
+
+        POST /register
+
+        we can connect this form to it.
+      */
+
+      alert("Registration endpoint has not been connected yet.");
+
+    } catch (error) {
+
+      console.error("Registration error:", error);
+
+      setError("Registration failed.");
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
   };
 
 
-  // -------------------------
+  // --------------------------------
   // Logout
-  // -------------------------
+  // --------------------------------
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+
+    try {
+
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/logout`,
+        {
+          method: "POST",
+          credentials: "include"
+        }
+      );
+
+    } catch (error) {
+
+      console.error("Logout error:", error);
+
+    } finally {
+
+      setIsLoggedIn(false);
+    }
+
   };
 
 
-  // -------------------------
-  // Login / Register screen
-  // -------------------------
+  // --------------------------------
+  // Checking authentication
+  // --------------------------------
+
+  if (checkingAuth) {
+
+    return (
+      <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover bg-fixed flex items-center justify-center">
+
+        <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-xl p-8">
+
+          <p className="text-lg">
+            Checking authentication...
+          </p>
+
+        </div>
+
+      </section>
+    );
+
+  }
+
+
+  // --------------------------------
+  // Login / Registration screen
+  // --------------------------------
 
   if (!isLoggedIn) {
 
@@ -90,25 +311,40 @@ export default function Admin() {
               </p>
 
 
-              <form onSubmit={handleLogin} className="space-y-5">
+              {error && (
+
+                <div className="mb-5 p-3 rounded-lg bg-red-100 text-red-700 text-sm">
+                  {error}
+                </div>
+
+              )}
+
+
+              <form
+                onSubmit={handleLogin}
+                className="space-y-5"
+              >
 
                 <div>
+
                   <label className="block mb-2 font-medium">
-                    Email
+                    Username
                   </label>
 
                   <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter your username"
                     required
                     className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2"
                   />
+
                 </div>
 
 
                 <div>
+
                   <label className="block mb-2 font-medium">
                     Password
                   </label>
@@ -121,14 +357,18 @@ export default function Admin() {
                     required
                     className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2"
                   />
+
                 </div>
 
 
                 <button
                   type="submit"
-                  className="w-full bg-black text-white py-3 rounded-lg hover:opacity-80 transition"
+                  disabled={loading}
+                  className="w-full bg-black text-white py-3 rounded-lg hover:opacity-80 transition disabled:opacity-50"
                 >
-                  Login
+
+                  {loading ? "Logging in..." : "Login"}
+
                 </button>
 
               </form>
@@ -140,7 +380,10 @@ export default function Admin() {
 
                 <button
                   type="button"
-                  onClick={() => setShowRegister(true)}
+                  onClick={() => {
+                    setShowRegister(true);
+                    setError("");
+                  }}
                   className="font-semibold underline"
                 >
                   Register
@@ -164,25 +407,40 @@ export default function Admin() {
               </p>
 
 
-              <form onSubmit={handleRegister} className="space-y-5">
+              {error && (
+
+                <div className="mb-5 p-3 rounded-lg bg-red-100 text-red-700 text-sm">
+                  {error}
+                </div>
+
+              )}
+
+
+              <form
+                onSubmit={handleRegister}
+                className="space-y-5"
+              >
 
                 <div>
+
                   <label className="block mb-2 font-medium">
                     Username
                   </label>
 
                   <input
                     type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={registerUsername}
+                    onChange={(e) => setRegisterUsername(e.target.value)}
                     placeholder="Enter username"
                     required
                     className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2"
                   />
+
                 </div>
 
 
                 <div>
+
                   <label className="block mb-2 font-medium">
                     Email
                   </label>
@@ -195,10 +453,12 @@ export default function Admin() {
                     required
                     className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2"
                   />
+
                 </div>
 
 
                 <div>
+
                   <label className="block mb-2 font-medium">
                     Password
                   </label>
@@ -211,14 +471,18 @@ export default function Admin() {
                     required
                     className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2"
                   />
+
                 </div>
 
 
                 <button
                   type="submit"
-                  className="w-full bg-black text-white py-3 rounded-lg hover:opacity-80 transition"
+                  disabled={loading}
+                  className="w-full bg-black text-white py-3 rounded-lg hover:opacity-80 transition disabled:opacity-50"
                 >
-                  Register
+
+                  {loading ? "Registering..." : "Register"}
+
                 </button>
 
               </form>
@@ -230,7 +494,10 @@ export default function Admin() {
 
                 <button
                   type="button"
-                  onClick={() => setShowRegister(false)}
+                  onClick={() => {
+                    setShowRegister(false);
+                    setError("");
+                  }}
                   className="font-semibold underline"
                 >
                   Login
@@ -239,18 +506,20 @@ export default function Admin() {
               </p>
 
             </>
+
           )}
 
         </div>
 
       </section>
     );
+
   }
 
 
-  // -------------------------
+  // --------------------------------
   // Admin Dashboard
-  // -------------------------
+  // --------------------------------
 
   return (
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover bg-fixed">
@@ -262,9 +531,11 @@ export default function Admin() {
         <div></div>
 
         <div>
+
           <h2 className="text-[30px] font-semibold">
             Admin Panel
           </h2>
+
         </div>
 
         <div>
@@ -288,7 +559,7 @@ export default function Admin() {
 
               <path
                 fill="currentColor"
-                d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825-1.412-.587T3 5v14q0 .825.588 1.412T5 21zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l2.55-2.55L16 7l5 5z"
+                d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm9-4l-1.375-1.45l2.55-2.55H9v-2h6.175l-2.55-2.55L14 7l5 5z"
               />
 
             </svg>
