@@ -7,9 +7,7 @@ import CategoryManager from "@/admin/categorymanager";
 import ProductManager from "@/admin/productmanager";
 import OrderManager from "@/admin/ordermanager";
 
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
 
 export default function Admin() {
 
@@ -23,6 +21,16 @@ export default function Admin() {
   const [registerUsername, setRegisterUsername] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
+
+  // --------------------------------
+  // Admin management
+  // --------------------------------
+
+  const [promoteUsername, setPromoteUsername] = useState("");
+  const [promoting, setPromoting] = useState(false);
+  const [promoteMessage, setPromoteMessage] = useState("");
+  const [promoteError, setPromoteError] = useState("");
+
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,7 +47,7 @@ export default function Admin() {
       try {
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/users/me`,
+          `${API_URL}/users/me`,
           {
             method: "GET",
             credentials: "include"
@@ -52,10 +60,16 @@ export default function Admin() {
 
           // Only allow admins into the admin panel
           if (user.role === "admin") {
+
             setIsLoggedIn(true);
+
           } else {
+
             setIsLoggedIn(false);
-            setError("You do not have permission to access the admin panel.");
+            setError(
+              "You do not have permission to access the admin panel."
+            );
+
           }
 
         } else {
@@ -74,8 +88,8 @@ export default function Admin() {
         setCheckingAuth(false);
 
       }
-    };
 
+    };
 
     checkAuthentication();
 
@@ -96,7 +110,7 @@ export default function Admin() {
     try {
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/token`,
+        `${API_URL}/token`,
         {
           method: "POST",
 
@@ -113,9 +127,7 @@ export default function Admin() {
         }
       );
 
-
       const data = await response.json();
-
 
       if (!response.ok) {
 
@@ -127,11 +139,10 @@ export default function Admin() {
       }
 
 
-      // The backend has now created the HttpOnly cookie.
-      // We don't store the JWT anywhere in JavaScript.
+      // Verify the newly authenticated user
 
       const userResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/me`,
+        `${API_URL}/users/me`,
         {
           method: "GET",
           credentials: "include"
@@ -141,7 +152,10 @@ export default function Admin() {
 
       if (!userResponse.ok) {
 
-        setError("Login succeeded, but the user could not be verified.");
+        setError(
+          "Login succeeded, but the user could not be verified."
+        );
+
         return;
       }
 
@@ -149,21 +163,23 @@ export default function Admin() {
       const user = await userResponse.json();
 
 
-      // Make sure the logged-in user is actually an admin
+      // Only admins can access this panel
 
       if (user.role !== "admin") {
 
-        // Logout immediately if a non-admin somehow logs in
+        // Logout immediately if a non-admin logs in
 
         await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/logout`,
+          `${API_URL}/logout`,
           {
             method: "POST",
             credentials: "include"
           }
         );
 
-        setError("You do not have permission to access the admin panel.");
+        setError(
+          "You do not have permission to access the admin panel."
+        );
 
         return;
       }
@@ -196,7 +212,7 @@ export default function Admin() {
   // Registration
   // --------------------------------
 
- const handleRegister = async (e) => {
+  const handleRegister = async (e) => {
 
     e.preventDefault();
 
@@ -205,55 +221,132 @@ export default function Admin() {
 
     try {
 
-        const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/register`,
-            {
-                method: "POST",
+      const response = await fetch(
+        `${API_URL}/register`,
+        {
+          method: "POST",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+          headers: {
+            "Content-Type": "application/json"
+          },
 
-                body: JSON.stringify({
-                    username: registerUsername,
-                    email: registerEmail,
-                    password: registerPassword
-                })
-            }
+          body: JSON.stringify({
+            username: registerUsername,
+            email: registerEmail,
+            password: registerPassword
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+
+        setError(
+          data.detail || "Registration failed."
         );
 
-        const data = await response.json();
+        return;
+      }
 
-        if (!response.ok) {
-            setError(
-                data.detail || "Registration failed."
-            );
-            return;
-        }
 
-        // Registration successful
-        setRegisterUsername("");
-        setRegisterEmail("");
-        setRegisterPassword("");
+      // Registration successful
 
-        setShowRegister(false);
+      setRegisterUsername("");
+      setRegisterEmail("");
+      setRegisterPassword("");
 
-        setError("");
+      setShowRegister(false);
+
+      setError("");
 
     } catch (error) {
 
-        console.error("Registration error:", error);
+      console.error("Registration error:", error);
 
-        setError(
-            "Unable to connect to the server. Please try again."
-        );
+      setError(
+        "Unable to connect to the server. Please try again."
+      );
 
     } finally {
 
-        setLoading(false);
+      setLoading(false);
 
     }
-};
+
+  };
+
+
+  // --------------------------------
+  // Promote customer to admin
+  // --------------------------------
+
+  const handlePromoteUser = async (e) => {
+
+    e.preventDefault();
+
+    setPromoteMessage("");
+    setPromoteError("");
+
+    if (!promoteUsername.trim()) {
+
+      setPromoteError("Please enter a username.");
+
+      return;
+    }
+
+    setPromoting(true);
+
+    try {
+
+      const response = await fetch(
+        `${API_URL}/admin/users/${encodeURIComponent(
+          promoteUsername.trim()
+        )}/promote`,
+        {
+          method: "POST",
+          credentials: "include"
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        setPromoteError(
+          data.detail || "Failed to promote user."
+        );
+
+        return;
+      }
+
+
+      // Promotion successful
+
+      setPromoteMessage(
+        `${data.username} is now an admin.`
+      );
+
+      setPromoteUsername("");
+
+
+    } catch (error) {
+
+      console.error("Promote user error:", error);
+
+      setPromoteError(
+        "Unable to connect to the server. Please try again."
+      );
+
+    } finally {
+
+      setPromoting(false);
+
+    }
+
+  };
 
 
   // --------------------------------
@@ -265,7 +358,7 @@ export default function Admin() {
     try {
 
       await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/logout`,
+        `${API_URL}/logout`,
         {
           method: "POST",
           credentials: "include"
@@ -279,6 +372,7 @@ export default function Admin() {
     } finally {
 
       setIsLoggedIn(false);
+
     }
 
   };
@@ -291,6 +385,7 @@ export default function Admin() {
   if (checkingAuth) {
 
     return (
+
       <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover bg-fixed flex items-center justify-center">
 
         <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-xl p-8">
@@ -302,6 +397,7 @@ export default function Admin() {
         </div>
 
       </section>
+
     );
 
   }
@@ -314,6 +410,7 @@ export default function Admin() {
   if (!isLoggedIn) {
 
     return (
+
       <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover bg-fixed flex items-center justify-center px-5">
 
         <div className="w-full max-w-md bg-white/90 backdrop-blur-md rounded-xl shadow-xl p-8">
@@ -420,11 +517,11 @@ export default function Admin() {
               {/* Register */}
 
               <h2 className="text-3xl font-semibold text-center mb-2">
-                Admin Registration
+                Create Account
               </h2>
 
               <p className="text-center text-gray-600 mb-8">
-                Create your admin account
+                Create a customer account
               </p>
 
 
@@ -533,6 +630,7 @@ export default function Admin() {
         </div>
 
       </section>
+
     );
 
   }
@@ -543,6 +641,7 @@ export default function Admin() {
   // --------------------------------
 
   return (
+
     <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover bg-fixed">
 
       {/* Header */}
@@ -594,6 +693,70 @@ export default function Admin() {
       </div>
 
 
+      {/* Admin Management */}
+
+      <div className="px-7 mb-10">
+
+        <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-xl p-6">
+
+          <h2 className="text-2xl font-semibold mb-2">
+            Admin Management
+          </h2>
+
+          <p className="text-gray-600 mb-6">
+            Promote an existing customer to an admin.
+          </p>
+
+
+          <form
+            onSubmit={handlePromoteUser}
+            className="flex flex-col md:flex-row gap-4"
+          >
+
+            <input
+              type="text"
+              value={promoteUsername}
+              onChange={(e) => setPromoteUsername(e.target.value)}
+              placeholder="Enter customer's username"
+              className="flex-1 border rounded-lg px-4 py-3 outline-none focus:ring-2"
+            />
+
+
+            <button
+              type="submit"
+              disabled={promoting}
+              className="bg-black text-white px-6 py-3 rounded-lg hover:opacity-80 transition disabled:opacity-50"
+            >
+
+              {promoting ? "Promoting..." : "Make Admin"}
+
+            </button>
+
+          </form>
+
+
+          {promoteMessage && (
+
+            <div className="mt-4 p-3 rounded-lg bg-green-100 text-green-700 text-sm">
+              {promoteMessage}
+            </div>
+
+          )}
+
+
+          {promoteError && (
+
+            <div className="mt-4 p-3 rounded-lg bg-red-100 text-red-700 text-sm">
+              {promoteError}
+            </div>
+
+          )}
+
+        </div>
+
+      </div>
+
+
       {/* Admin content */}
 
       <div className="space-y-10 px-7 pb-10">
@@ -607,6 +770,8 @@ export default function Admin() {
       </div>
 
     </section>
+
   );
+
 }
 
