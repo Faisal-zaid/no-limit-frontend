@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,9 +11,9 @@ export default function ProductManager() {
   const [name, setName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [basePrice, setBasePrice] = useState("");
+  const [stock, setStock] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const [stock, setStock] = useState("");
 
   // Custom fields
   const [fields, setFields] = useState([]);
@@ -197,6 +198,15 @@ export default function ProductManager() {
 
     try {
       // ==================================
+      // VALIDATE STOCK
+      // ==================================
+
+      if (Number(stock) < 0) {
+        alert("Stock cannot be negative.");
+        return;
+      }
+
+      // ==================================
       // VALIDATE CUSTOM FIELDS
       // ==================================
 
@@ -226,18 +236,10 @@ export default function ProductManager() {
       const productForm = new FormData();
 
       productForm.append("name", name);
-      productForm.append(
-        "category_id",
-        categoryId
-      );
-      productForm.append(
-        "base_price",
-        basePrice
-      );
-      productForm.append(
-        "description",
-        description
-      );
+      productForm.append("category_id", categoryId);
+      productForm.append("base_price", basePrice);
+      productForm.append("stock", stock);
+      productForm.append("description", description);
 
       if (image) {
         productForm.append("image", image);
@@ -259,6 +261,7 @@ export default function ProductManager() {
 
         alert(
           productData.detail ||
+            productData.message ||
             "Failed to create product."
         );
 
@@ -271,47 +274,19 @@ export default function ProductManager() {
       );
 
       // ==================================
-      // STEP 2: GET CREATED PRODUCT
+      // STEP 2: GET CREATED PRODUCT ID
       // ==================================
 
-      const productsResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/product`
-      );
+      const productId =
+        productData.product_id;
 
-      const allProducts =
-        await productsResponse.json();
-
-      /*
-        Your backend currently returns only:
-
-        {
-          "message":
-          "Product created successfully"
-        }
-
-        Therefore we find the product again.
-      */
-
-      const createdProduct =
-        allProducts
-          .filter(
-            (product) =>
-              product.name === name
-          )
-          .sort(
-            (a, b) => b.id - a.id
-          )[0];
-
-      if (!createdProduct) {
+      if (!productId) {
         alert(
           "Product was created, but its ID could not be found."
         );
 
         return;
       }
-
-      const productId =
-        createdProduct.id;
 
       console.log(
         "CREATED PRODUCT ID:",
@@ -324,8 +299,6 @@ export default function ProductManager() {
 
       for (const field of fields) {
         /*
-          IMPORTANT:
-
           ProductFieldSchema on your backend
           expects JSON.
 
@@ -440,7 +413,7 @@ export default function ProductManager() {
 
             /*
               ProductFieldOptionSchema
-              also expects JSON.
+              expects JSON.
             */
 
             const optionResponse =
@@ -491,15 +464,22 @@ export default function ProductManager() {
         "Product and customization options created successfully!"
       );
 
-      // Clear form
+      // ==================================
+      // CLEAR FORM
+      // ==================================
+
       setName("");
       setCategoryId("");
       setBasePrice("");
+      setStock("");
       setDescription("");
       setImage(null);
       setFields([]);
 
-      // Refresh products
+      // ==================================
+      // REFRESH PRODUCTS
+      // ==================================
+
       await loadProducts();
 
     } catch (error) {
@@ -548,6 +528,7 @@ export default function ProductManager() {
           />
         </div>
 
+
         {/* CATEGORY */}
 
         <div>
@@ -580,6 +561,7 @@ export default function ProductManager() {
           </select>
         </div>
 
+
         {/* PRICE */}
 
         <div>
@@ -589,6 +571,7 @@ export default function ProductManager() {
 
           <input
             type="number"
+            min="0"
             value={basePrice}
             onChange={(e) =>
               setBasePrice(e.target.value)
@@ -598,24 +581,31 @@ export default function ProductManager() {
           />
         </div>
 
+
         {/* STOCK */}
 
-<div>
-  <label className="block font-semibold mb-2">
-    Stock
-  </label>
+        <div>
+          <label className="block font-semibold mb-2">
+            Stock
+          </label>
 
-  <input
-    type="number"
-    min="0"
-    value={stock}
-    onChange={(e) =>
-      setStock(e.target.value)
-    }
-    className="border p-2 rounded w-full"
-    required
-  />
-</div>
+          <input
+            type="number"
+            min="0"
+            value={stock}
+            onChange={(e) =>
+              setStock(e.target.value)
+            }
+            className="border p-2 rounded w-full"
+            placeholder="e.g. 20"
+            required
+          />
+
+          <p className="text-sm text-gray-500 mt-1">
+            Number of units currently available.
+          </p>
+        </div>
+
 
         {/* DESCRIPTION */}
 
@@ -633,6 +623,7 @@ export default function ProductManager() {
             rows="4"
           />
         </div>
+
 
         {/* IMAGE */}
 
@@ -653,6 +644,7 @@ export default function ProductManager() {
             required
           />
         </div>
+
 
         {/* ================================= */}
         {/* CUSTOMIZATION */}
@@ -675,6 +667,7 @@ export default function ProductManager() {
             </button>
 
           </div>
+
 
           {/* FIELDS */}
 
@@ -708,6 +701,7 @@ export default function ProductManager() {
 
                   </div>
 
+
                   {/* LABEL */}
 
                   <div className="mt-4">
@@ -732,6 +726,7 @@ export default function ProductManager() {
 
                   </div>
 
+
                   {/* TYPE */}
 
                   <div className="mt-4">
@@ -755,32 +750,33 @@ export default function ProductManager() {
                     >
 
                       <option value="text">
-  Text
-</option>
+                        Text
+                      </option>
 
-<option value="number">
-  Number
-</option>
+                      <option value="number">
+                        Number
+                      </option>
 
-<option value="dropdown">
-  Dropdown
-</option>
+                      <option value="dropdown">
+                        Dropdown
+                      </option>
 
-<option value="image">
-  Image Upload
-</option>
+                      <option value="image">
+                        Image Upload
+                      </option>
 
-<option value="textarea">
-  Textarea
-</option>
+                      <option value="textarea">
+                        Textarea
+                      </option>
 
-<option value="date">
-  Date
-</option>
+                      <option value="date">
+                        Date
+                      </option>
 
                     </select>
 
                   </div>
+
 
                   {/* REQUIRED */}
 
@@ -808,6 +804,7 @@ export default function ProductManager() {
 
                   </div>
 
+
                   {/* PLACEHOLDER */}
 
                   <div className="mt-4">
@@ -833,6 +830,7 @@ export default function ProductManager() {
                     />
 
                   </div>
+
 
                   {/* DROPDOWN OPTIONS */}
 
@@ -860,6 +858,7 @@ export default function ProductManager() {
                         </button>
 
                       </div>
+
 
                       <div className="space-y-2 mt-3">
 
@@ -922,6 +921,7 @@ export default function ProductManager() {
 
         </div>
 
+
         {/* SUBMIT */}
 
         <button
@@ -932,6 +932,7 @@ export default function ProductManager() {
         </button>
 
       </form>
+
 
       {/* ================================= */}
       {/* EXISTING PRODUCTS */}
@@ -961,14 +962,23 @@ export default function ProductManager() {
                   />
                 )}
 
+
                 <h3 className="font-bold">
                   {product.name}
                 </h3>
+
 
                 <p>
                   Price: KSh{" "}
                   {product.base_price}
                 </p>
+
+
+                <p>
+                  Stock:{" "}
+                  {product.stock}
+                </p>
+
 
                 <p>
                   Category ID:{" "}
@@ -987,3 +997,4 @@ export default function ProductManager() {
     </section>
   );
 }
+
