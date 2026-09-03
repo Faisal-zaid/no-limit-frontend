@@ -12,6 +12,7 @@ export default function ProductManager() {
   const [basePrice, setBasePrice] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [stock, setStock] = useState("");
 
   // Custom fields
   const [fields, setFields] = useState([]);
