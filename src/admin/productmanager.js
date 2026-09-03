@@ -598,6 +598,25 @@ export default function ProductManager() {
           />
         </div>
 
+        {/* STOCK */}
+
+<div>
+  <label className="block font-semibold mb-2">
+    Stock
+  </label>
+
+  <input
+    type="number"
+    min="0"
+    value={stock}
+    onChange={(e) =>
+      setStock(e.target.value)
+    }
+    className="border p-2 rounded w-full"
+    required
+  />
+</div>
+
         {/* DESCRIPTION */}
 
         <div>
