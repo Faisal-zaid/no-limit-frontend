@@ -221,461 +221,350 @@ export default function CartPage() {
     setIsSubmitting,
   ] = useState(false);
 
-  // ===================================================
-  // PLACE ORDER
-  // ===================================================
+  
+// =====================================================
+// PLACE ORDER
+// =====================================================
 
-  async function placeOrder(e) {
-    e.preventDefault();
+async function placeOrder(e) {
+  e.preventDefault();
+
+  if (cart.length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
+
+  if (
+    !customerName.trim() ||
+    !customerEmail.trim() ||
+    !customerPhone.trim()
+  ) {
+    alert(
+      "Please fill in all customer details."
+    );
+    return;
+  }
+
+  try {
+    setIsSubmitting(true);
 
     // =================================================
-    // CHECK EMPTY CART
+    // PREPARE CHECKOUT ITEMS
     // =================================================
 
-    if (cart.length === 0) {
-      alert("Your cart is empty.");
-      return;
-    }
+    const checkoutItems = [];
 
     // =================================================
-    // CHECK CUSTOMER DETAILS
+    // PROCESS EACH CART ITEM
     // =================================================
 
-    if (
-      !customerName.trim() ||
-      !customerEmail.trim() ||
-      !customerPhone.trim()
-    ) {
-      alert(
-        "Please fill in all customer details."
-      );
-      return;
-    }
+    for (const item of cart) {
+      const customValues =
+        item.custom_values || {};
 
-    try {
-      setIsSubmitting(true);
+      const fields = [];
 
       // =================================================
-      // PREPARE CHECKOUT ITEMS
+      // PROCESS CUSTOM VALUES
       // =================================================
 
-      const checkoutItems = cart.map(
-        (item) => {
+      for (const [
+        fieldId,
+        value
+      ] of Object.entries(
+        customValues
+      )) {
 
-          const customValues =
-            item.custom_values || {};
+        // -----------------------------------------------
+        // IGNORE EMPTY VALUES
+        // -----------------------------------------------
 
-          const fields = [];
-
-          /*
-            Normal custom values are sent directly
-            to /checkout.
-
-            Image values are skipped for now because
-            your current image endpoint requires the
-            order_item_id, which only exists after
-            checkout creates the order item.
-          */
-
-          for (const [
-            fieldId,
-            value,
-          ] of Object.entries(
-            customValues
-          )) {
-
-            // Ignore empty values
-            if (
-              value === null ||
-              value === undefined ||
-              value === ""
-            ) {
-              continue;
-            }
-
-            // -------------------------------------------
-            // IMAGE VALUES
-            // -------------------------------------------
-
-            if (
-              value &&
-              typeof value === "object" &&
-              value.type === "image" &&
-              value.dataUrl
-            ) {
-              continue;
-            }
-
-            if (
-              value instanceof File
-            ) {
-              continue;
-            }
-
-            // -------------------------------------------
-            // NORMAL VALUES
-            // -------------------------------------------
-
-            fields.push({
-              product_field_id:
-                Number(fieldId),
-
-              value:
-                String(value),
-            });
-          }
-
-          return {
-            product_id:
-              Number(item.product_id),
-
-            quantity:
-              Number(item.quantity),
-
-            fields,
-          };
+        if (
+          value === null ||
+          value === undefined ||
+          value === ""
+        ) {
+          continue;
         }
-      );
 
-      // =================================================
-      // STEP 1
-      // SEND EVERYTHING TO CHECKOUT
-      // =================================================
+        // =================================================
+        // NEW IMAGE OBJECT
+        // =================================================
 
-      const checkoutResponse =
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-          {
-            method: "POST",
+        if (
+          value &&
+          typeof value === "object" &&
+          value.type === "image" &&
+          value.dataUrl
+        ) {
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-
-            body: JSON.stringify({
-              customer_name:
-                customerName.trim(),
-
-              customer_email:
-                customerEmail.trim(),
-
-              customer_phone:
-                customerPhone.trim(),
-
-              items:
-                checkoutItems,
-            }),
-          }
-        );
-
-      const checkoutData =
-        await checkoutResponse.json();
-
-      console.log(
-        "CHECKOUT RESPONSE:",
-        checkoutData
-      );
-
-      // =================================================
-      // CHECK CHECKOUT RESULT
-      // =================================================
-
-      if (!checkoutResponse.ok) {
-
-        alert(
-          checkoutData.detail ||
-          "Checkout failed."
-        );
-
-        return;
-      }
-
-      const orderId =
-        checkoutData.order_id;
-
-      if (!orderId) {
-        throw new Error(
-          "Order ID was not returned."
-        );
-      }
-
-      console.log(
-        "ORDER CREATED:",
-        orderId
-      );
-
-      // =================================================
-      // STEP 2
-      // UPLOAD CUSTOM IMAGES
-      // =================================================
-
-      /*
-        The order and order items have now been created.
-
-        Therefore we can use the existing
-        /orderitemfieldvalue/image endpoint.
-
-        We first need to know which order_item_id
-        belongs to each cart item.
-
-        We retrieve the order items for this order.
-      */
-
-      const orderItemsResponse =
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/orderitem`
-        );
-
-      const allOrderItems =
-        await orderItemsResponse.json();
-
-      if (
-        !orderItemsResponse.ok
-      ) {
-        throw new Error(
-          "Could not retrieve order items."
-        );
-      }
-
-      // =================================================
-      // UPLOAD IMAGES FOR EACH CART ITEM
-      // =================================================
-
-      for (
-        const item of cart
-      ) {
-
-        const customValues =
-          item.custom_values || {};
-
-        // Find this item's order item
-        const orderItem =
-          allOrderItems
-            .filter(
-              (orderItem) =>
-                Number(
-                  orderItem.order_id
-                ) === Number(orderId)
-            )
-            .filter(
-              (orderItem) =>
-                Number(
-                  orderItem.product_id
-                ) ===
-                Number(
-                  item.product_id
-                )
-            )
-            .sort(
-              (a, b) =>
-                Number(b.id) -
-                Number(a.id)
-            )[0];
-
-        if (!orderItem) {
-          console.error(
-            "Could not find order item for:",
-            item
+          console.log(
+            "UPLOADING CUSTOM IMAGE:",
+            value.name
           );
+
+          // ---------------------------------------------
+          // Convert data URL → File
+          // ---------------------------------------------
+
+          const imageFile =
+            await dataURLToFile(
+              value.dataUrl,
+              value.name,
+              value.mimeType
+            );
+
+          // ---------------------------------------------
+          // FormData
+          // ---------------------------------------------
+
+          const imageFormData =
+            new FormData();
+
+          imageFormData.append(
+            "image",
+            imageFile
+          );
+
+          // ---------------------------------------------
+          // Upload to backend
+          // ---------------------------------------------
+
+          const imageResponse =
+            await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
+              {
+                method: "POST",
+                body: imageFormData
+              }
+            );
+
+          const imageData =
+            await imageResponse.json();
+
+          if (!imageResponse.ok) {
+
+            console.error(
+              "CUSTOM IMAGE UPLOAD FAILED:",
+              imageData
+            );
+
+            throw new Error(
+              imageData.detail ||
+              `Failed to upload image for ${item.name}`
+            );
+          }
+
+          console.log(
+            "CUSTOM IMAGE UPLOADED:",
+            imageData.image_url
+          );
+
+          // ---------------------------------------------
+          // Save Cloudinary URL as field value
+          // ---------------------------------------------
+
+          fields.push({
+            product_field_id:
+              Number(fieldId),
+
+            value:
+              imageData.image_url
+          });
 
           continue;
         }
 
-        const orderItemId =
-          orderItem.id;
-
         // =================================================
-        // PROCESS CUSTOM VALUES
+        // OLD FILE OBJECT
         // =================================================
 
-        for (
-          const [
-            fieldId,
-            value,
-          ] of Object.entries(
-            customValues
-          )
+        if (
+          value instanceof File
         ) {
 
-          // Ignore empty values
-          if (
-            value === null ||
-            value === undefined ||
-            value === ""
-          ) {
-            continue;
-          }
+          console.log(
+            "UPLOADING FILE:",
+            value.name
+          );
 
-          // =================================================
-          // NEW IMAGE OBJECT
-          // =================================================
+          const imageFormData =
+            new FormData();
 
-          if (
-            value &&
-            typeof value === "object" &&
-            value.type === "image" &&
-            value.dataUrl
-          ) {
+          imageFormData.append(
+            "image",
+            value
+          );
 
-            console.log(
-              "UPLOADING CUSTOM IMAGE:",
-              value.name
+          const imageResponse =
+            await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
+              {
+                method: "POST",
+                body: imageFormData
+              }
             );
 
-            const imageFile =
-              await dataURLToFile(
-                value.dataUrl,
-                value.name,
-                value.mimeType
-              );
+          const imageData =
+            await imageResponse.json();
 
-            const imageFormData =
-              new FormData();
+          if (!imageResponse.ok) {
 
-            imageFormData.append(
-              "order_item_id",
-              String(orderItemId)
-            );
-
-            imageFormData.append(
-              "product_field_id",
-              String(fieldId)
-            );
-
-            imageFormData.append(
-              "image",
-              imageFile
-            );
-
-            const imageResponse =
-              await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue/image`,
-                {
-                  method: "POST",
-                  body:
-                    imageFormData,
-                }
-              );
-
-            const imageData =
-              await imageResponse.json();
-
-            if (
-              !imageResponse.ok
-            ) {
-              console.error(
-                "IMAGE UPLOAD FAILED:",
-                imageData
-              );
-
-              throw new Error(
-                `Failed to upload image for ${item.name}`
-              );
-            }
-
-            console.log(
-              "IMAGE UPLOADED:",
+            console.error(
+              "CUSTOM IMAGE UPLOAD FAILED:",
               imageData
             );
 
-            continue;
-          }
-
-          // =================================================
-          // OLD FILE OBJECT
-          // =================================================
-
-          if (
-            value instanceof File
-          ) {
-
-            const imageFormData =
-              new FormData();
-
-            imageFormData.append(
-              "order_item_id",
-              String(orderItemId)
-            );
-
-            imageFormData.append(
-              "product_field_id",
-              String(fieldId)
-            );
-
-            imageFormData.append(
-              "image",
-              value
-            );
-
-            const imageResponse =
-              await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue/image`,
-                {
-                  method: "POST",
-                  body:
-                    imageFormData,
-                }
-              );
-
-            const imageData =
-              await imageResponse.json();
-
-            if (
-              !imageResponse.ok
-            ) {
-              console.error(
-                "IMAGE UPLOAD FAILED:",
-                imageData
-              );
-
-              throw new Error(
-                `Failed to upload image for ${item.name}`
-              );
-            }
-
-            console.log(
-              "IMAGE UPLOADED:",
-              imageData
+            throw new Error(
+              imageData.detail ||
+              `Failed to upload image for ${item.name}`
             );
           }
+
+          fields.push({
+            product_field_id:
+              Number(fieldId),
+
+            value:
+              imageData.image_url
+          });
+
+          continue;
         }
+
+        // =================================================
+        // NORMAL VALUE
+        // =================================================
+
+        fields.push({
+          product_field_id:
+            Number(fieldId),
+
+          value:
+            String(value)
+        });
       }
 
       // =================================================
-      // SUCCESS
+      // ADD ITEM TO CHECKOUT
       // =================================================
 
-      alert(
-        "Order placed successfully! We will contact you soon."
-      );
+      checkoutItems.push({
+        product_id:
+          Number(item.product_id),
 
-      // Clear cart
-      clearCart();
+        quantity:
+          Number(item.quantity),
 
-      // Clear customer information
-      setCustomerName("");
-      setCustomerEmail("");
-      setCustomerPhone("");
-
-    } catch (error) {
-
-      console.error(
-        "ORDER ERROR:",
-        error
-      );
-
-      alert(
-        error.message ||
-        "Something went wrong while placing the order. Please try again."
-      );
-
-    } finally {
-
-      setIsSubmitting(false);
-
+        fields
+      });
     }
+
+    console.log(
+      "CHECKOUT ITEMS:",
+      checkoutItems
+    );
+
+    // =================================================
+    // SEND ONE CHECKOUT REQUEST
+    // =================================================
+
+    const checkoutResponse =
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            customer_name:
+              customerName.trim(),
+
+            customer_email:
+              customerEmail.trim(),
+
+            customer_phone:
+              customerPhone.trim(),
+
+            items:
+              checkoutItems
+          })
+        }
+      );
+
+    const checkoutData =
+      await checkoutResponse.json();
+
+    console.log(
+      "CHECKOUT RESPONSE:",
+      checkoutData
+    );
+
+    // =================================================
+    // CHECK RESPONSE
+    // =================================================
+
+    if (!checkoutResponse.ok) {
+
+      alert(
+        checkoutData.detail ||
+        "Checkout failed."
+      );
+
+      return;
+    }
+
+    // =================================================
+    // SUCCESS
+    // =================================================
+
+    console.log(
+      "ORDER CREATED:",
+      checkoutData.order_id
+    );
+
+    alert(
+      "Order placed successfully! We will contact you soon."
+    );
+
+    // =================================================
+    // CLEAR CART
+    // =================================================
+
+    clearCart();
+
+    // =================================================
+    // CLEAR CUSTOMER DETAILS
+    // =================================================
+
+    setCustomerName("");
+    setCustomerEmail("");
+    setCustomerPhone("");
+
+  } catch (error) {
+
+    console.error(
+      "CHECKOUT ERROR:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "Something went wrong while placing the order. Please try again."
+    );
+
+  } finally {
+
+    setIsSubmitting(false);
+
   }
+}
+
+
 
   // =====================================================
   // UI
