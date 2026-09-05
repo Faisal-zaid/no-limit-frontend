@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -57,9 +58,7 @@ function CustomValuePreview({ value }) {
   if (
     typeof value === "string" &&
     (value.startsWith("http://") ||
-      value.startsWith(
-        "https://"
-      ))
+      value.startsWith("https://"))
   ) {
     return (
       <div className="mt-2">
@@ -229,17 +228,23 @@ export default function CartPage() {
   async function placeOrder(e) {
     e.preventDefault();
 
+    // =================================================
+    // CHECK EMPTY CART
+    // =================================================
+
     if (cart.length === 0) {
-      alert(
-        "Your cart is empty."
-      );
+      alert("Your cart is empty.");
       return;
     }
 
+    // =================================================
+    // CHECK CUSTOMER DETAILS
+    // =================================================
+
     if (
-      !customerName ||
-      !customerEmail ||
-      !customerPhone
+      !customerName.trim() ||
+      !customerEmail.trim() ||
+      !customerPhone.trim()
     ) {
       alert(
         "Please fill in all customer details."
@@ -251,13 +256,95 @@ export default function CartPage() {
       setIsSubmitting(true);
 
       // =================================================
-      // STEP 1
-      // CREATE MAIN ORDER
+      // PREPARE CHECKOUT ITEMS
       // =================================================
 
-      const orderResponse =
+      const checkoutItems = cart.map(
+        (item) => {
+
+          const customValues =
+            item.custom_values || {};
+
+          const fields = [];
+
+          /*
+            Normal custom values are sent directly
+            to /checkout.
+
+            Image values are skipped for now because
+            your current image endpoint requires the
+            order_item_id, which only exists after
+            checkout creates the order item.
+          */
+
+          for (const [
+            fieldId,
+            value,
+          ] of Object.entries(
+            customValues
+          )) {
+
+            // Ignore empty values
+            if (
+              value === null ||
+              value === undefined ||
+              value === ""
+            ) {
+              continue;
+            }
+
+            // -------------------------------------------
+            // IMAGE VALUES
+            // -------------------------------------------
+
+            if (
+              value &&
+              typeof value === "object" &&
+              value.type === "image" &&
+              value.dataUrl
+            ) {
+              continue;
+            }
+
+            if (
+              value instanceof File
+            ) {
+              continue;
+            }
+
+            // -------------------------------------------
+            // NORMAL VALUES
+            // -------------------------------------------
+
+            fields.push({
+              product_field_id:
+                Number(fieldId),
+
+              value:
+                String(value),
+            });
+          }
+
+          return {
+            product_id:
+              Number(item.product_id),
+
+            quantity:
+              Number(item.quantity),
+
+            fields,
+          };
+        }
+      );
+
+      // =================================================
+      // STEP 1
+      // SEND EVERYTHING TO CHECKOUT
+      // =================================================
+
+      const checkoutResponse =
         await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/order`,
+          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
           {
             method: "POST",
 
@@ -268,43 +355,44 @@ export default function CartPage() {
 
             body: JSON.stringify({
               customer_name:
-                customerName,
+                customerName.trim(),
 
               customer_email:
-                customerEmail,
+                customerEmail.trim(),
 
               customer_phone:
-                customerPhone,
+                customerPhone.trim(),
 
-              status: "Pending",
-
-              total_price:
-                cartTotal,
+              items:
+                checkoutItems,
             }),
           }
         );
 
-      const orderData =
-        await orderResponse.json();
-
-      if (!orderResponse.ok) {
-        console.error(
-          "ORDER CREATION FAILED:",
-          orderData
-        );
-
-        throw new Error(
-          "Failed to create order"
-        );
-      }
+      const checkoutData =
+        await checkoutResponse.json();
 
       console.log(
-        "ORDER CREATED:",
-        orderData
+        "CHECKOUT RESPONSE:",
+        checkoutData
       );
 
+      // =================================================
+      // CHECK CHECKOUT RESULT
+      // =================================================
+
+      if (!checkoutResponse.ok) {
+
+        alert(
+          checkoutData.detail ||
+          "Checkout failed."
+        );
+
+        return;
+      }
+
       const orderId =
-        orderData.order_id;
+        checkoutData.order_id;
 
       if (!orderId) {
         throw new Error(
@@ -312,93 +400,105 @@ export default function CartPage() {
         );
       }
 
+      console.log(
+        "ORDER CREATED:",
+        orderId
+      );
+
       // =================================================
       // STEP 2
-      // CREATE ORDER ITEMS
+      // UPLOAD CUSTOM IMAGES
       // =================================================
 
-      for (const item of cart) {
-        const orderItemData = {
-          order_id:
-            orderId,
+      /*
+        The order and order items have now been created.
 
-          product_id:
-            item.product_id,
+        Therefore we can use the existing
+        /orderitemfieldvalue/image endpoint.
 
-          quantity:
-            item.quantity,
-        };
+        We first need to know which order_item_id
+        belongs to each cart item.
 
-        console.log(
-          "SENDING ORDER ITEM:",
-          orderItemData
+        We retrieve the order items for this order.
+      */
+
+      const orderItemsResponse =
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/orderitem`
         );
 
-        const itemResponse =
-          await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/orderitem`,
-            {
-              method: "POST",
+      const allOrderItems =
+        await orderItemsResponse.json();
 
-              headers: {
-                "Content-Type":
-                  "application/json",
-              },
+      if (
+        !orderItemsResponse.ok
+      ) {
+        throw new Error(
+          "Could not retrieve order items."
+        );
+      }
 
-              body: JSON.stringify(
-                orderItemData
-              ),
-            }
-          );
+      // =================================================
+      // UPLOAD IMAGES FOR EACH CART ITEM
+      // =================================================
 
-        const itemData =
-          await itemResponse.json();
+      for (
+        const item of cart
+      ) {
 
-        if (!itemResponse.ok) {
+        const customValues =
+          item.custom_values || {};
+
+        // Find this item's order item
+        const orderItem =
+          allOrderItems
+            .filter(
+              (orderItem) =>
+                Number(
+                  orderItem.order_id
+                ) === Number(orderId)
+            )
+            .filter(
+              (orderItem) =>
+                Number(
+                  orderItem.product_id
+                ) ===
+                Number(
+                  item.product_id
+                )
+            )
+            .sort(
+              (a, b) =>
+                Number(b.id) -
+                Number(a.id)
+            )[0];
+
+        if (!orderItem) {
           console.error(
-            "ORDER ITEM FAILED:",
-            itemData
+            "Could not find order item for:",
+            item
           );
 
-          throw new Error(
-            `Failed to create order item for ${item.name}`
-          );
+          continue;
         }
 
         const orderItemId =
-          itemData.order_item_id ||
-          itemData.id;
-
-        if (!orderItemId) {
-          throw new Error(
-            `Order item ID was not returned for ${item.name}`
-          );
-        }
-
-        console.log(
-          "ORDER ITEM CREATED:",
-          orderItemId
-        );
+          orderItem.id;
 
         // =================================================
-        // STEP 3
-        // CUSTOM VALUES
+        // PROCESS CUSTOM VALUES
         // =================================================
 
-        const customValues =
-          item.custom_values ||
-          {};
+        for (
+          const [
+            fieldId,
+            value,
+          ] of Object.entries(
+            customValues
+          )
+        ) {
 
-        for (const [
-          fieldId,
-          value,
-        ] of Object.entries(
-          customValues
-        )) {
-          // -----------------------------------------------
-          // IGNORE EMPTY VALUES
-          // -----------------------------------------------
-
+          // Ignore empty values
           if (
             value === null ||
             value === undefined ||
@@ -408,25 +508,20 @@ export default function CartPage() {
           }
 
           // =================================================
-          // IMAGE OBJECT
+          // NEW IMAGE OBJECT
           // =================================================
 
           if (
             value &&
-            typeof value ===
-              "object" &&
-            value.type ===
-              "image" &&
+            typeof value === "object" &&
+            value.type === "image" &&
             value.dataUrl
           ) {
+
             console.log(
               "UPLOADING CUSTOM IMAGE:",
               value.name
             );
-
-            // -----------------------------------------------
-            // CONVERT DATA URL -> FILE
-            // -----------------------------------------------
 
             const imageFile =
               await dataURLToFile(
@@ -435,18 +530,12 @@ export default function CartPage() {
                 value.mimeType
               );
 
-            // -----------------------------------------------
-            // FORM DATA
-            // -----------------------------------------------
-
             const imageFormData =
               new FormData();
 
             imageFormData.append(
               "order_item_id",
-              String(
-                orderItemId
-              )
+              String(orderItemId)
             );
 
             imageFormData.append(
@@ -459,16 +548,11 @@ export default function CartPage() {
               imageFile
             );
 
-            // -----------------------------------------------
-            // SEND IMAGE
-            // -----------------------------------------------
-
             const imageResponse =
               await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue/image`,
                 {
                   method: "POST",
-
                   body:
                     imageFormData,
                 }
@@ -505,14 +589,13 @@ export default function CartPage() {
           if (
             value instanceof File
           ) {
+
             const imageFormData =
               new FormData();
 
             imageFormData.append(
               "order_item_id",
-              String(
-                orderItemId
-              )
+              String(orderItemId)
             );
 
             imageFormData.append(
@@ -530,7 +613,6 @@ export default function CartPage() {
                 `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue/image`,
                 {
                   method: "POST",
-
                   body:
                     imageFormData,
                 }
@@ -556,60 +638,7 @@ export default function CartPage() {
               "IMAGE UPLOADED:",
               imageData
             );
-
-            continue;
           }
-
-          // =================================================
-          // NORMAL TEXT / NUMBER / DROPDOWN / DATE
-          // =================================================
-
-          const fieldResponse =
-            await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/orderitemfieldvalue`,
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json",
-                },
-
-                body: JSON.stringify({
-                  order_item_id:
-                    orderItemId,
-
-                  product_field_id:
-                    Number(
-                      fieldId
-                    ),
-
-                  value:
-                    String(value),
-                }),
-              }
-            );
-
-          const fieldData =
-            await fieldResponse.json();
-
-          if (
-            !fieldResponse.ok
-          ) {
-            console.error(
-              "CUSTOMIZATION FAILED:",
-              fieldData
-            );
-
-            throw new Error(
-              `Failed to save customization for ${item.name}`
-            );
-          }
-
-          console.log(
-            "CUSTOMIZATION SAVED:",
-            fieldData
-          );
         }
       }
 
@@ -621,22 +650,30 @@ export default function CartPage() {
         "Order placed successfully! We will contact you soon."
       );
 
+      // Clear cart
       clearCart();
 
+      // Clear customer information
       setCustomerName("");
       setCustomerEmail("");
       setCustomerPhone("");
+
     } catch (error) {
+
       console.error(
         "ORDER ERROR:",
         error
       );
 
       alert(
+        error.message ||
         "Something went wrong while placing the order. Please try again."
       );
+
     } finally {
+
       setIsSubmitting(false);
+
     }
   }
 
@@ -652,9 +689,11 @@ export default function CartPage() {
       {/* ================================================= */}
 
       <div className="bg-white shadow-sm border-b">
+
         <div className="flex items-center justify-between px-[5%] py-4 max-w-7xl mx-auto">
 
           <Link href="/productspage">
+
             <Image
               src="/images/nolimit-logo.png"
               alt="No Limit"
@@ -662,6 +701,7 @@ export default function CartPage() {
               height={75}
               className="h-auto w-auto"
             />
+
           </Link>
 
           <h1 className="text-2xl font-bold text-gray-800">
@@ -676,7 +716,9 @@ export default function CartPage() {
           </Link>
 
         </div>
+
       </div>
+
 
       {/* ================================================= */}
       {/* CONTENT */}
@@ -749,6 +791,7 @@ export default function CartPage() {
 
               </div>
 
+
               {cart.map(
                 (item) => (
 
@@ -769,6 +812,7 @@ export default function CartPage() {
                         />
                       )}
 
+
                       {/* DETAILS */}
 
                       <div className="flex-1">
@@ -783,12 +827,11 @@ export default function CartPage() {
 
                             <p className="text-purple-600 font-semibold mt-1">
                               KSh{" "}
-                              {
-                                item.base_price
-                              }
+                              {item.base_price}
                             </p>
 
                           </div>
+
 
                           <button
                             onClick={() =>
@@ -803,6 +846,7 @@ export default function CartPage() {
 
                         </div>
 
+
                         {/* ================================= */}
                         {/* CUSTOMIZATIONS */}
                         {/* ================================= */}
@@ -810,14 +854,14 @@ export default function CartPage() {
                         {item.custom_values &&
                           Object.keys(
                             item.custom_values
-                          ).length >
-                            0 && (
+                          ).length > 0 && (
 
                             <div className="mt-4 bg-gray-50 rounded-lg p-4">
 
                               <p className="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-3">
                                 Customizations
                               </p>
+
 
                               <div className="space-y-4">
 
@@ -843,6 +887,7 @@ export default function CartPage() {
                                         }
                                       </p>
 
+
                                       <div className="mt-1 text-gray-800">
 
                                         <CustomValuePreview
@@ -864,6 +909,7 @@ export default function CartPage() {
 
                           )}
 
+
                         {/* ================================= */}
                         {/* QUANTITY */}
                         {/* ================================= */}
@@ -873,6 +919,7 @@ export default function CartPage() {
                           <span className="text-sm font-medium text-gray-700">
                             Quantity:
                           </span>
+
 
                           <div className="flex items-center border rounded-lg overflow-hidden bg-gray-50">
 
@@ -887,11 +934,13 @@ export default function CartPage() {
                               -
                             </button>
 
+
                             <span className="px-4 py-1 text-sm font-semibold text-gray-800">
                               {
                                 item.quantity
                               }
                             </span>
+
 
                             <button
                               onClick={() =>
@@ -919,6 +968,7 @@ export default function CartPage() {
 
             </div>
 
+
             {/* =========================================== */}
             {/* CHECKOUT */}
             {/* =========================================== */}
@@ -929,10 +979,9 @@ export default function CartPage() {
                 Order Summary
               </h2>
 
+
               <form
-                onSubmit={
-                  placeOrder
-                }
+                onSubmit={placeOrder}
                 className="space-y-4"
               >
 
@@ -961,6 +1010,7 @@ export default function CartPage() {
 
                 </div>
 
+
                 {/* EMAIL */}
 
                 <div>
@@ -985,6 +1035,7 @@ export default function CartPage() {
                   />
 
                 </div>
+
 
                 {/* PHONE */}
 
@@ -1011,6 +1062,7 @@ export default function CartPage() {
 
                 </div>
 
+
                 {/* TOTAL */}
 
                 <div className="border-t pt-4 mt-4">
@@ -1023,14 +1075,13 @@ export default function CartPage() {
 
                     <span className="text-purple-600">
                       KSh{" "}
-                      {
-                        cartTotal
-                      }
+                      {cartTotal}
                     </span>
 
                   </div>
 
                 </div>
+
 
                 {/* SUBMIT */}
 
@@ -1059,3 +1110,4 @@ export default function CartPage() {
     </section>
   );
 }
+
