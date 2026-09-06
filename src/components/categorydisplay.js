@@ -56,7 +56,7 @@ return ( <div className="p-4 sm:p-6 bg-white rounded-xl">
       text-gray-800
     "
   >
-    All Categories
+    All Services
   </h2>
 
 

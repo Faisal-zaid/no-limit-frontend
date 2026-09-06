@@ -301,7 +301,7 @@ export default function Services() {
                 font-semibold
                 text-lg
               ">
-                Categories
+                Services
               </h2>
 
               <div className="py-4">

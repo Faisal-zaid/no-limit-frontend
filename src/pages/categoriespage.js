@@ -303,7 +303,7 @@ export default function CategoriesPage() {
           />
 
           <span>
-            Categories
+            Services
           </span>
 
         </button>
