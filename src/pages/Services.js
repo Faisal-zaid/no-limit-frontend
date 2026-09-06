@@ -426,7 +426,7 @@ export default function Services() {
               font-semibold
               text-lg
             ">
-              Categories
+              Services
             </h2>
 
 
