@@ -339,7 +339,7 @@ export default function Services() {
                       border-purple-600
                     "
                   >
-                    View all Categories
+                    View all Services
                   </Link>
 
                 </div>
