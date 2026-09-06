@@ -828,7 +828,7 @@ export default function CartPage() {
                 /* ======================================= */
 
                 <div className="text-center py-6">
-                  <div className="text-5xl mb-4">📱</div>
+                  <div className="text-5xl mb-4"></div>
 
                   <h2 className="text-2xl font-bold text-gray-800">
                     M-Pesa Payment
