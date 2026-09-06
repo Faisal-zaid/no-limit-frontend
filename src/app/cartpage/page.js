@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -25,17 +24,12 @@ function CustomValuePreview({ value }) {
       <div className="mt-2">
         <img
           src={value.dataUrl}
-          alt={
-            value.name ||
-            "Custom uploaded image"
-          }
+          alt={value.name || "Custom uploaded image"}
           className="w-40 h-40 object-cover rounded-lg border border-gray-300"
         />
 
         <p className="text-purple-600 text-xs mt-2">
-          📎{" "}
-          {value.name ||
-            "Uploaded image"}
+          📎 {value.name || "Uploaded image"}
         </p>
       </div>
     );
@@ -46,9 +40,7 @@ function CustomValuePreview({ value }) {
   // ===================================================
 
   if (value instanceof File) {
-    return (
-      <FilePreview file={value} />
-    );
+    return <FilePreview file={value} />;
   }
 
   // ===================================================
@@ -57,10 +49,7 @@ function CustomValuePreview({ value }) {
 
   if (
     typeof value === "string" &&
-    (
-      value.startsWith("http://") ||
-      value.startsWith("https://")
-    )
+    (value.startsWith("http://") || value.startsWith("https://"))
   ) {
     return (
       <div className="mt-2">
@@ -86,10 +75,7 @@ function CustomValuePreview({ value }) {
   // DATA URL
   // ===================================================
 
-  if (
-    typeof value === "string" &&
-    value.startsWith("data:image/")
-  ) {
+  if (typeof value === "string" && value.startsWith("data:image/")) {
     return (
       <div className="mt-2">
         <img
@@ -105,11 +91,7 @@ function CustomValuePreview({ value }) {
   // NORMAL VALUE
   // ===================================================
 
-  return (
-    <span>
-      {String(value)}
-    </span>
-  );
+  return <span>{String(value)}</span>;
 }
 
 // =====================================================
@@ -117,10 +99,7 @@ function CustomValuePreview({ value }) {
 // =====================================================
 
 function FilePreview({ file }) {
-  const [
-    previewUrl,
-    setPreviewUrl,
-  ] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
     if (!(file instanceof File)) {
@@ -128,8 +107,7 @@ function FilePreview({ file }) {
       return;
     }
 
-    const url =
-      URL.createObjectURL(file);
+    const url = URL.createObjectURL(file);
 
     setPreviewUrl(url);
 
@@ -139,11 +117,7 @@ function FilePreview({ file }) {
   }, [file]);
 
   if (!previewUrl) {
-    return (
-      <span className="text-gray-500">
-        Unable to preview image
-      </span>
-    );
+    return <span className="text-gray-500">Unable to preview image</span>;
   }
 
   return (
@@ -154,9 +128,7 @@ function FilePreview({ file }) {
         className="w-40 h-40 object-cover rounded-lg border border-gray-300"
       />
 
-      <p className="text-purple-600 text-xs mt-2">
-        📎 {file.name}
-      </p>
+      <p className="text-purple-600 text-xs mt-2">📎 {file.name}</p>
     </div>
   );
 }
@@ -165,27 +137,14 @@ function FilePreview({ file }) {
 // CONVERT DATA URL BACK TO FILE
 // =====================================================
 
-async function dataURLToFile(
-  dataUrl,
-  fileName,
-  mimeType
-) {
-  const response =
-    await fetch(dataUrl);
+async function dataURLToFile(dataUrl, fileName, mimeType) {
+  const response = await fetch(dataUrl);
 
-  const blob =
-    await response.blob();
+  const blob = await response.blob();
 
-  return new File(
-    [blob],
-    fileName || "uploaded-image",
-    {
-      type:
-        mimeType ||
-        blob.type ||
-        "image/jpeg",
-    }
-  );
+  return new File([blob], fileName || "uploaded-image", {
+    type: mimeType || blob.type || "image/jpeg",
+  });
 }
 
 // =====================================================
@@ -206,53 +165,29 @@ export default function CartPage() {
   // CUSTOMER DETAILS
   // ===================================================
 
-  const [
-    customerName,
-    setCustomerName,
-  ] = useState("");
+  const [customerName, setCustomerName] = useState("");
 
-  const [
-    customerEmail,
-    setCustomerEmail,
-  ] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
 
-  const [
-    customerPhone,
-    setCustomerPhone,
-  ] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
 
   // ===================================================
   // CHECKOUT STATE
   // ===================================================
 
-  const [
-    isSubmitting,
-    setIsSubmitting,
-  ] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // ===================================================
   // PAYMENT STATE
   // ===================================================
 
-  const [
-    paymentStatus,
-    setPaymentStatus,
-  ] = useState(null);
+  const [paymentStatus, setPaymentStatus] = useState(null);
 
-  const [
-    currentOrderId,
-    setCurrentOrderId,
-  ] = useState(null);
+  const [currentOrderId, setCurrentOrderId] = useState(null);
 
-  const [
-    mpesaReceipt,
-    setMpesaReceipt,
-  ] = useState(null);
+  const [mpesaReceipt, setMpesaReceipt] = useState(null);
 
-  const [
-    paymentMessage,
-    setPaymentMessage,
-  ] = useState("");
+  const [paymentMessage, setPaymentMessage] = useState("");
 
   // =====================================================
   // POLL PAYMENT STATUS
@@ -271,42 +206,28 @@ export default function CartPage() {
       try {
         attempts++;
 
-        const response =
-          await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/mpesa/payment-status/${currentOrderId}`
-          );
-
-        const data =
-          await response.json();
-
-        console.log(
-          "PAYMENT STATUS:",
-          data
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/mpesa/payment-status/${currentOrderId}`,
         );
 
+        const data = await response.json();
+
+        console.log("PAYMENT STATUS:", data);
+
         if (!response.ok) {
-          throw new Error(
-            data.detail ||
-            "Unable to check payment status."
-          );
+          throw new Error(data.detail || "Unable to check payment status.");
         }
 
         // =============================================
         // PAYMENT SUCCESS
         // =============================================
 
-        if (
-          data.payment_status === "Paid"
-        ) {
+        if (data.payment_status === "Paid") {
           setPaymentStatus("Paid");
 
-          setMpesaReceipt(
-            data.mpesa_receipt_number
-          );
+          setMpesaReceipt(data.mpesa_receipt_number);
 
-          setPaymentMessage(
-            "Payment received successfully!"
-          );
+          setPaymentMessage("Payment received successfully!");
 
           setIsSubmitting(false);
 
@@ -324,13 +245,11 @@ export default function CartPage() {
         // PAYMENT FAILED
         // =============================================
 
-        if (
-          data.payment_status === "Failed"
-        ) {
+        if (data.payment_status === "Failed") {
           setPaymentStatus("Failed");
 
           setPaymentMessage(
-            "M-Pesa payment was cancelled or failed. Your cart has been kept."
+            "M-Pesa payment was cancelled or failed. Your cart has been kept.",
           );
 
           setIsSubmitting(false);
@@ -346,7 +265,7 @@ export default function CartPage() {
           setPaymentStatus("Timeout");
 
           setPaymentMessage(
-            "We could not confirm your payment. Please check your M-Pesa messages before trying again."
+            "We could not confirm your payment. Please check your M-Pesa messages before trying again.",
           );
 
           setIsSubmitting(false);
@@ -360,30 +279,16 @@ export default function CartPage() {
 
         setPaymentStatus("Pending");
 
-        setPaymentMessage(
-          "Waiting for M-Pesa payment confirmation..."
-        );
+        setPaymentMessage("Waiting for M-Pesa payment confirmation...");
 
-        setTimeout(
-          checkPaymentStatus,
-          3000
-        );
-
+        setTimeout(checkPaymentStatus, 3000);
       } catch (error) {
-        console.error(
-          "PAYMENT STATUS ERROR:",
-          error
-        );
+        console.error("PAYMENT STATUS ERROR:", error);
 
-        setPaymentMessage(
-          "Unable to check payment status. Please wait..."
-        );
+        setPaymentMessage("Unable to check payment status. Please wait...");
 
         if (attempts < maxAttempts) {
-          setTimeout(
-            checkPaymentStatus,
-            3000
-          );
+          setTimeout(checkPaymentStatus, 3000);
         } else {
           setIsSubmitting(false);
         }
@@ -393,10 +298,7 @@ export default function CartPage() {
     checkPaymentStatus();
 
     // No cleanup needed for the simple timeout chain.
-  }, [
-    currentOrderId,
-    clearCart
-  ]);
+  }, [currentOrderId, clearCart]);
 
   // =====================================================
   // PLACE ORDER
@@ -415,9 +317,7 @@ export default function CartPage() {
       !customerEmail.trim() ||
       !customerPhone.trim()
     ) {
-      alert(
-        "Please fill in all customer details."
-      );
+      alert("Please fill in all customer details.");
       return;
     }
 
@@ -440,8 +340,7 @@ export default function CartPage() {
       // =================================================
 
       for (const item of cart) {
-        const customValues =
-          item.custom_values || {};
+        const customValues = item.custom_values || {};
 
         const fields = [];
 
@@ -449,22 +348,12 @@ export default function CartPage() {
         // PROCESS CUSTOM VALUES
         // =================================================
 
-        for (const [
-          fieldId,
-          value
-        ] of Object.entries(
-          customValues
-        )) {
-
+        for (const [fieldId, value] of Object.entries(customValues)) {
           // -----------------------------------------------
           // IGNORE EMPTY VALUES
           // -----------------------------------------------
 
-          if (
-            value === null ||
-            value === undefined ||
-            value === ""
-          ) {
+          if (value === null || value === undefined || value === "") {
             continue;
           }
 
@@ -478,63 +367,42 @@ export default function CartPage() {
             value.type === "image" &&
             value.dataUrl
           ) {
+            console.log("UPLOADING CUSTOM IMAGE:", value.name);
 
-            console.log(
-              "UPLOADING CUSTOM IMAGE:",
-              value.name
+            const imageFile = await dataURLToFile(
+              value.dataUrl,
+              value.name,
+              value.mimeType,
             );
 
-            const imageFile =
-              await dataURLToFile(
-                value.dataUrl,
-                value.name,
-                value.mimeType
-              );
+            const imageFormData = new FormData();
 
-            const imageFormData =
-              new FormData();
+            imageFormData.append("image", imageFile);
 
-            imageFormData.append(
-              "image",
-              imageFile
+            const imageResponse = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
+              {
+                method: "POST",
+                body: imageFormData,
+              },
             );
 
-            const imageResponse =
-              await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
-                {
-                  method: "POST",
-                  body: imageFormData
-                }
-              );
-
-            const imageData =
-              await imageResponse.json();
+            const imageData = await imageResponse.json();
 
             if (!imageResponse.ok) {
-
-              console.error(
-                "CUSTOM IMAGE UPLOAD FAILED:",
-                imageData
-              );
+              console.error("CUSTOM IMAGE UPLOAD FAILED:", imageData);
 
               throw new Error(
-                imageData.detail ||
-                `Failed to upload image for ${item.name}`
+                imageData.detail || `Failed to upload image for ${item.name}`,
               );
             }
 
-            console.log(
-              "CUSTOM IMAGE UPLOADED:",
-              imageData.image_url
-            );
+            console.log("CUSTOM IMAGE UPLOADED:", imageData.image_url);
 
             fields.push({
-              product_field_id:
-                Number(fieldId),
+              product_field_id: Number(fieldId),
 
-              value:
-                imageData.image_url
+              value: imageData.image_url,
             });
 
             continue;
@@ -544,54 +412,35 @@ export default function CartPage() {
           // OLD FILE OBJECT
           // =================================================
 
-          if (
-            value instanceof File
-          ) {
+          if (value instanceof File) {
+            console.log("UPLOADING FILE:", value.name);
 
-            console.log(
-              "UPLOADING FILE:",
-              value.name
+            const imageFormData = new FormData();
+
+            imageFormData.append("image", value);
+
+            const imageResponse = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
+              {
+                method: "POST",
+                body: imageFormData,
+              },
             );
 
-            const imageFormData =
-              new FormData();
-
-            imageFormData.append(
-              "image",
-              value
-            );
-
-            const imageResponse =
-              await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
-                {
-                  method: "POST",
-                  body: imageFormData
-                }
-              );
-
-            const imageData =
-              await imageResponse.json();
+            const imageData = await imageResponse.json();
 
             if (!imageResponse.ok) {
-
-              console.error(
-                "CUSTOM IMAGE UPLOAD FAILED:",
-                imageData
-              );
+              console.error("CUSTOM IMAGE UPLOAD FAILED:", imageData);
 
               throw new Error(
-                imageData.detail ||
-                `Failed to upload image for ${item.name}`
+                imageData.detail || `Failed to upload image for ${item.name}`,
               );
             }
 
             fields.push({
-              product_field_id:
-                Number(fieldId),
+              product_field_id: Number(fieldId),
 
-              value:
-                imageData.image_url
+              value: imageData.image_url,
             });
 
             continue;
@@ -602,11 +451,9 @@ export default function CartPage() {
           // =================================================
 
           fields.push({
-            product_field_id:
-              Number(fieldId),
+            product_field_id: Number(fieldId),
 
-            value:
-              String(value)
+            value: String(value),
           });
         }
 
@@ -615,85 +462,60 @@ export default function CartPage() {
         // =================================================
 
         checkoutItems.push({
-          product_id:
-            Number(item.product_id),
+          product_id: Number(item.product_id),
 
-          quantity:
-            Number(item.quantity),
+          quantity: Number(item.quantity),
 
-          fields
+          fields,
         });
       }
 
-      console.log(
-        "CHECKOUT ITEMS:",
-        checkoutItems
-      );
+      console.log("CHECKOUT ITEMS:", checkoutItems);
 
       // =================================================
       // CREATE ORDER
       // =================================================
 
-      const checkoutResponse =
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-          {
-            method: "POST",
+      const checkoutResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+        {
+          method: "POST",
 
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-            body: JSON.stringify({
-              customer_name:
-                customerName.trim(),
+          body: JSON.stringify({
+            customer_name: customerName.trim(),
 
-              customer_email:
-                customerEmail.trim(),
+            customer_email: customerEmail.trim(),
 
-              customer_phone:
-                customerPhone.trim(),
+            customer_phone: customerPhone.trim(),
 
-              items:
-                checkoutItems
-            })
-          }
-        );
-
-      const checkoutData =
-        await checkoutResponse.json();
-
-      console.log(
-        "CHECKOUT RESPONSE:",
-        checkoutData
+            items: checkoutItems,
+          }),
+        },
       );
+
+      const checkoutData = await checkoutResponse.json();
+
+      console.log("CHECKOUT RESPONSE:", checkoutData);
 
       // =================================================
       // CHECK CHECKOUT RESPONSE
       // =================================================
 
       if (!checkoutResponse.ok) {
-
-        throw new Error(
-          checkoutData.detail ||
-          "Checkout failed."
-        );
+        throw new Error(checkoutData.detail || "Checkout failed.");
       }
 
-      const orderId =
-        checkoutData.order_id;
+      const orderId = checkoutData.order_id;
 
       if (!orderId) {
-        throw new Error(
-          "Order was created but no order ID was returned."
-        );
+        throw new Error("Order was created but no order ID was returned.");
       }
 
-      console.log(
-        "ORDER CREATED:",
-        orderId
-      );
+      console.log("ORDER CREATED:", orderId);
 
       setCurrentOrderId(orderId);
 
@@ -703,49 +525,35 @@ export default function CartPage() {
 
       setPaymentStatus("Sending");
 
-      setPaymentMessage(
-        "Sending M-Pesa payment request..."
+      setPaymentMessage("Sending M-Pesa payment request...");
+
+      const mpesaResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/mpesa/stkpush`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            order_id: orderId,
+
+            phone_number: customerPhone.trim(),
+          }),
+        },
       );
 
-      const mpesaResponse =
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/mpesa/stkpush`,
-          {
-            method: "POST",
+      const mpesaData = await mpesaResponse.json();
 
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body: JSON.stringify({
-              order_id:
-                orderId,
-
-              phone_number:
-                customerPhone.trim()
-            })
-          }
-        );
-
-      const mpesaData =
-        await mpesaResponse.json();
-
-      console.log(
-        "M-PESA RESPONSE:",
-        mpesaData
-      );
+      console.log("M-PESA RESPONSE:", mpesaData);
 
       // =================================================
       // CHECK M-PESA RESPONSE
       // =================================================
 
       if (!mpesaResponse.ok) {
-
-        throw new Error(
-          mpesaData.detail ||
-          "Could not start M-Pesa payment."
-        );
+        throw new Error(mpesaData.detail || "Could not start M-Pesa payment.");
       }
 
       // =================================================
@@ -755,30 +563,20 @@ export default function CartPage() {
       setPaymentStatus("Pending");
 
       setPaymentMessage(
-        mpesaData.message ||
-        "Check your phone and enter your M-Pesa PIN."
+        mpesaData.message || "Check your phone and enter your M-Pesa PIN.",
       );
 
-      console.log(
-        "STK PUSH SENT SUCCESSFULLY"
-      );
-
+      console.log("STK PUSH SENT SUCCESSFULLY");
     } catch (error) {
-
-      console.error(
-        "CHECKOUT ERROR:",
-        error
-      );
+      console.error("CHECKOUT ERROR:", error);
 
       setPaymentStatus("Failed");
 
       setPaymentMessage(
-        error.message ||
-        "Something went wrong while placing the order."
+        error.message || "Something went wrong while placing the order.",
       );
 
       setIsSubmitting(false);
-
     }
   }
 
@@ -788,17 +586,13 @@ export default function CartPage() {
 
   return (
     <section className="min-h-screen bg-gray-50 pb-12">
-
       {/* ================================================= */}
       {/* HEADER */}
       {/* ================================================= */}
 
       <div className="bg-white shadow-sm border-b">
-
         <div className="flex items-center justify-between px-[5%] py-4 max-w-7xl mx-auto">
-
           <Link href="/productspage">
-
             <Image
               src="/images/nolimit-logo.png"
               alt="No Limit"
@@ -806,12 +600,9 @@ export default function CartPage() {
               height={75}
               className="h-auto w-auto"
             />
-
           </Link>
 
-          <h1 className="text-2xl font-bold text-gray-800">
-            Your Cart
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-800">Your Cart</h1>
 
           <Link
             href="/productspage"
@@ -819,9 +610,7 @@ export default function CartPage() {
           >
             Continue Shopping
           </Link>
-
         </div>
-
       </div>
 
       {/* ================================================= */}
@@ -829,24 +618,19 @@ export default function CartPage() {
       {/* ================================================= */}
 
       <div className="max-w-7xl mx-auto p-6 mt-6">
-
         {cart.length === 0 && !paymentStatus ? (
-
           /* ============================================= */
           /* EMPTY CART */
           /* ============================================= */
 
           <div className="bg-white rounded-xl shadow-sm border p-12 text-center max-w-md mx-auto">
-
             <div className="flex justify-center mb-5">
-
               <Image
                 src="/images/Cart--Streamline-Platinum.png"
                 alt="Empty cart"
                 width={70}
                 height={70}
               />
-
             </div>
 
             <h2 className="text-2xl font-bold text-gray-800 mb-2">
@@ -863,25 +647,19 @@ export default function CartPage() {
             >
               Start Shopping
             </Link>
-
           </div>
-
         ) : (
-
           /* ============================================= */
           /* ACTIVE CART */
           /* ============================================= */
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
             {/* =========================================== */}
             {/* CART ITEMS */}
             {/* =========================================== */}
 
             <div className="lg:col-span-2 space-y-4">
-
               <div className="flex justify-between items-center mb-2">
-
                 <h2 className="text-xl font-bold text-gray-800">
                   Items ({cart.length})
                 </h2>
@@ -893,177 +671,114 @@ export default function CartPage() {
                 >
                   Clear Cart
                 </button>
-
               </div>
 
-              {cart.map(
-                (item) => (
+              {cart.map((item) => (
+                <div
+                  key={item.cart_id}
+                  className="bg-white rounded-xl shadow-sm border border-gray-200 p-5"
+                >
+                  <div className="flex gap-5">
+                    {/* PRODUCT IMAGE */}
 
-                  <div
-                    key={item.cart_id}
-                    className="bg-white rounded-xl shadow-sm border border-gray-200 p-5"
-                  >
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-24 h-24 object-cover rounded-lg border flex-shrink-0"
+                      />
+                    )}
 
-                    <div className="flex gap-5">
+                    {/* DETAILS */}
 
-                      {/* PRODUCT IMAGE */}
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start gap-4">
+                        <div>
+                          <h3 className="text-lg font-bold text-gray-900">
+                            {item.name}
+                          </h3>
 
-                      {item.image && (
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-24 h-24 object-cover rounded-lg border flex-shrink-0"
-                        />
-                      )}
-
-                      {/* DETAILS */}
-
-                      <div className="flex-1">
-
-                        <div className="flex justify-between items-start gap-4">
-
-                          <div>
-
-                            <h3 className="text-lg font-bold text-gray-900">
-                              {item.name}
-                            </h3>
-
-                            <p className="text-purple-600 font-semibold mt-1">
-                              KSh{" "}
-                              {item.base_price}
-                            </p>
-
-                          </div>
-
-                          <button
-                            onClick={() =>
-                              removeFromCart(
-                                item.cart_id
-                              )
-                            }
-                            disabled={isSubmitting}
-                            className="text-red-500 hover:text-red-700 disabled:text-gray-400 text-sm font-medium"
-                          >
-                            Remove
-                          </button>
-
+                          <p className="text-purple-600 font-semibold mt-1">
+                            KSh {item.base_price}
+                          </p>
                         </div>
 
-                        {/* ================================= */}
-                        {/* CUSTOMIZATIONS */}
-                        {/* ================================= */}
-
-                        {item.custom_values &&
-                          Object.keys(
-                            item.custom_values
-                          ).length > 0 && (
-
-                            <div className="mt-4 bg-gray-50 rounded-lg p-4">
-
-                              <p className="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-3">
-                                Customizations
-                              </p>
-
-                              <div className="space-y-4">
-
-                                {Object.entries(
-                                  item.custom_values
-                                ).map(
-                                  ([
-                                    fieldId,
-                                    value,
-                                  ]) => (
-
-                                    <div
-                                      key={
-                                        fieldId
-                                      }
-                                      className="text-sm text-gray-600"
-                                    >
-
-                                      <p className="font-medium">
-                                        Field #
-                                        {
-                                          fieldId
-                                        }
-                                      </p>
-
-                                      <div className="mt-1 text-gray-800">
-
-                                        <CustomValuePreview
-                                          value={
-                                            value
-                                          }
-                                        />
-
-                                      </div>
-
-                                    </div>
-
-                                  )
-                                )}
-
-                              </div>
-
-                            </div>
-
-                          )}
-
-                        {/* ================================= */}
-                        {/* QUANTITY */}
-                        {/* ================================= */}
-
-                        <div className="flex items-center gap-3 mt-4">
-
-                          <span className="text-sm font-medium text-gray-700">
-                            Quantity:
-                          </span>
-
-                          <div className="flex items-center border rounded-lg overflow-hidden bg-gray-50">
-
-                            <button
-                              onClick={() =>
-                                decreaseQuantity(
-                                  item.cart_id
-                                )
-                              }
-                              disabled={isSubmitting}
-                              className="px-3 py-1 hover:bg-gray-200 disabled:bg-gray-100 text-gray-600 font-bold"
-                            >
-                              -
-                            </button>
-
-                            <span className="px-4 py-1 text-sm font-semibold text-gray-800">
-                              {
-                                item.quantity
-                              }
-                            </span>
-
-                            <button
-                              onClick={() =>
-                                increaseQuantity(
-                                  item.cart_id
-                                )
-                              }
-                              disabled={isSubmitting}
-                              className="px-3 py-1 hover:bg-gray-200 disabled:bg-gray-100 text-gray-600 font-bold"
-                            >
-                              +
-                            </button>
-
-                          </div>
-
-                        </div>
-
+                        <button
+                          onClick={() => removeFromCart(item.cart_id)}
+                          disabled={isSubmitting}
+                          className="text-red-500 hover:text-red-700 disabled:text-gray-400 text-sm font-medium"
+                        >
+                          Remove
+                        </button>
                       </div>
 
+                      {/* ================================= */}
+                      {/* CUSTOMIZATIONS */}
+                      {/* ================================= */}
+
+                      {item.custom_values &&
+                        Object.keys(item.custom_values).length > 0 && (
+                          <div className="mt-4 bg-gray-50 rounded-lg p-4">
+                            <p className="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-3">
+                              Customizations
+                            </p>
+
+                            <div className="space-y-4">
+                              {Object.entries(item.custom_values).map(
+                                ([fieldId, value]) => (
+                                  <div
+                                    key={fieldId}
+                                    className="text-sm text-gray-600"
+                                  >
+                                    <p className="font-medium">
+                                      Field #{fieldId}
+                                    </p>
+
+                                    <div className="mt-1 text-gray-800">
+                                      <CustomValuePreview value={value} />
+                                    </div>
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                      {/* ================================= */}
+                      {/* QUANTITY */}
+                      {/* ================================= */}
+
+                      <div className="flex items-center gap-3 mt-4">
+                        <span className="text-sm font-medium text-gray-700">
+                          Quantity:
+                        </span>
+
+                        <div className="flex items-center border rounded-lg overflow-hidden bg-gray-50">
+                          <button
+                            onClick={() => decreaseQuantity(item.cart_id)}
+                            disabled={isSubmitting}
+                            className="px-3 py-1 hover:bg-gray-200 disabled:bg-gray-100 text-gray-600 font-bold"
+                          >
+                            -
+                          </button>
+
+                          <span className="px-4 py-1 text-sm font-semibold text-gray-800">
+                            {item.quantity}
+                          </span>
+
+                          <button
+                            onClick={() => increaseQuantity(item.cart_id)}
+                            disabled={isSubmitting}
+                            className="px-3 py-1 hover:bg-gray-200 disabled:bg-gray-100 text-gray-600 font-bold"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
                     </div>
-
                   </div>
-
-                )
-              )}
-
+                </div>
+              ))}
             </div>
 
             {/* =========================================== */}
@@ -1071,18 +786,13 @@ export default function CartPage() {
             {/* =========================================== */}
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-fit sticky top-6">
-
               {/* ========================================= */}
               {/* PAYMENT SUCCESS */}
               {/* ========================================= */}
 
               {paymentStatus === "Paid" ? (
-
                 <div className="text-center py-6">
-
-                  <div className="text-5xl mb-4">
-                    ✓
-                  </div>
+                  <div className="text-5xl mb-4">✓</div>
 
                   <h2 className="text-2xl font-bold text-green-600">
                     Payment Successful
@@ -1101,9 +811,7 @@ export default function CartPage() {
                   {mpesaReceipt && (
                     <p className="text-sm text-gray-500 mt-1">
                       M-Pesa Receipt:{" "}
-                      <span className="font-semibold">
-                        {mpesaReceipt}
-                      </span>
+                      <span className="font-semibold">{mpesaReceipt}</span>
                     </p>
                   )}
 
@@ -1113,21 +821,14 @@ export default function CartPage() {
                   >
                     Continue Shopping
                   </Link>
-
                 </div>
-
-              ) : paymentStatus === "Pending" ||
-                paymentStatus === "Sending" ? (
-
+              ) : paymentStatus === "Pending" || paymentStatus === "Sending" ? (
                 /* ======================================= */
                 /* WAITING FOR PAYMENT */
                 /* ======================================= */
 
                 <div className="text-center py-6">
-
-                  <div className="text-5xl mb-4">
-                    📱
-                  </div>
+                  <div className="text-5xl mb-4">📱</div>
 
                   <h2 className="text-2xl font-bold text-gray-800">
                     M-Pesa Payment
@@ -1138,10 +839,7 @@ export default function CartPage() {
                   </p>
 
                   <div className="mt-6">
-
-                    <div className="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-purple-600 mx-auto">
-                    </div>
-
+                    <div className="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-purple-600 mx-auto"></div>
                   </div>
 
                   <p className="text-sm text-gray-500 mt-5">
@@ -1153,22 +851,15 @@ export default function CartPage() {
                       Order #{currentOrderId}
                     </p>
                   )}
-
                 </div>
-
-              ) : paymentStatus === "Failed" ||
-                paymentStatus === "Timeout" ? (
-
+              ) : paymentStatus === "Failed" || paymentStatus === "Timeout" ? (
                 /* ======================================= */
                 /* PAYMENT FAILED */
                 /* ======================================= */
 
                 <div className="text-center py-6">
-
                   <div className="text-5xl mb-4">
-                    {paymentStatus === "Timeout"
-                      ? "⏳"
-                      : "❌"}
+                    {paymentStatus === "Timeout" ? "" : ""}
                   </div>
 
                   <h2 className="text-2xl font-bold text-red-600">
@@ -1177,9 +868,7 @@ export default function CartPage() {
                       : "Payment Failed"}
                   </h2>
 
-                  <p className="text-gray-600 mt-3">
-                    {paymentMessage}
-                  </p>
+                  <p className="text-gray-600 mt-3">{paymentMessage}</p>
 
                   <button
                     onClick={() => {
@@ -1192,11 +881,8 @@ export default function CartPage() {
                   >
                     Try Again
                   </button>
-
                 </div>
-
               ) : (
-
                 /* ======================================= */
                 /* NORMAL CHECKOUT */
                 /* ======================================= */
@@ -1206,15 +892,10 @@ export default function CartPage() {
                     Order Summary
                   </h2>
 
-                  <form
-                    onSubmit={placeOrder}
-                    className="space-y-4"
-                  >
-
+                  <form onSubmit={placeOrder} className="space-y-4">
                     {/* NAME */}
 
                     <div>
-
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Full Name
                       </label>
@@ -1222,25 +903,17 @@ export default function CartPage() {
                       <input
                         type="text"
                         required
-                        value={
-                          customerName
-                        }
-                        onChange={(e) =>
-                          setCustomerName(
-                            e.target.value
-                          )
-                        }
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
                         placeholder="John Doe"
                         disabled={isSubmitting}
                         className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
                       />
-
                     </div>
 
                     {/* EMAIL */}
 
                     <div>
-
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Email Address
                       </label>
@@ -1248,25 +921,17 @@ export default function CartPage() {
                       <input
                         type="email"
                         required
-                        value={
-                          customerEmail
-                        }
-                        onChange={(e) =>
-                          setCustomerEmail(
-                            e.target.value
-                          )
-                        }
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
                         placeholder="john@example.com"
                         disabled={isSubmitting}
                         className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
                       />
-
                     </div>
 
                     {/* PHONE */}
 
                     <div>
-
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         M-Pesa Phone Number
                       </label>
@@ -1274,14 +939,8 @@ export default function CartPage() {
                       <input
                         type="tel"
                         required
-                        value={
-                          customerPhone
-                        }
-                        onChange={(e) =>
-                          setCustomerPhone(
-                            e.target.value
-                          )
-                        }
+                        value={customerPhone}
+                        onChange={(e) => setCustomerPhone(e.target.value)}
                         placeholder="0712345678"
                         disabled={isSubmitting}
                         className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
@@ -1290,56 +949,36 @@ export default function CartPage() {
                       <p className="text-xs text-gray-500 mt-1">
                         You'll receive the M-Pesa payment prompt on this number.
                       </p>
-
                     </div>
 
                     {/* TOTAL */}
 
                     <div className="border-t pt-4 mt-4">
-
                       <div className="flex justify-between text-base font-bold text-gray-900">
+                        <span>Total Amount</span>
 
-                        <span>
-                          Total Amount
-                        </span>
-
-                        <span className="text-purple-600">
-                          KSh{" "}
-                          {cartTotal}
-                        </span>
-
+                        <span className="text-purple-600">KSh {cartTotal}</span>
                       </div>
-
                     </div>
 
                     {/* SUBMIT */}
 
                     <button
                       type="submit"
-                      disabled={
-                        isSubmitting
-                      }
+                      disabled={isSubmitting}
                       className="w-full mt-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-semibold py-3 rounded-lg transition"
                     >
                       {isSubmitting
                         ? "Starting M-Pesa Payment..."
                         : "Pay with M-Pesa"}
                     </button>
-
                   </form>
                 </>
-
               )}
-
             </div>
-
           </div>
-
         )}
-
       </div>
-
     </section>
   );
 }
-
