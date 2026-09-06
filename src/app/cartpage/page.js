@@ -57,8 +57,10 @@ function CustomValuePreview({ value }) {
 
   if (
     typeof value === "string" &&
-    (value.startsWith("http://") ||
-      value.startsWith("https://"))
+    (
+      value.startsWith("http://") ||
+      value.startsWith("https://")
+    )
   ) {
     return (
       <div className="mt-2">
@@ -176,8 +178,7 @@ async function dataURLToFile(
 
   return new File(
     [blob],
-    fileName ||
-      "uploaded-image",
+    fileName || "uploaded-image",
     {
       type:
         mimeType ||
@@ -201,6 +202,10 @@ export default function CartPage() {
     cartTotal,
   } = useCart();
 
+  // ===================================================
+  // CUSTOMER DETAILS
+  // ===================================================
+
   const [
     customerName,
     setCustomerName,
@@ -216,355 +221,566 @@ export default function CartPage() {
     setCustomerPhone,
   ] = useState("");
 
+  // ===================================================
+  // CHECKOUT STATE
+  // ===================================================
+
   const [
     isSubmitting,
     setIsSubmitting,
   ] = useState(false);
 
-  
-// =====================================================
-// PLACE ORDER
-// =====================================================
-
-async function placeOrder(e) {
-  e.preventDefault();
-
-  if (cart.length === 0) {
-    alert("Your cart is empty.");
-    return;
-  }
-
-  if (
-    !customerName.trim() ||
-    !customerEmail.trim() ||
-    !customerPhone.trim()
-  ) {
-    alert(
-      "Please fill in all customer details."
-    );
-    return;
-  }
-
-  try {
-    setIsSubmitting(true);
-
-    // =================================================
-    // PREPARE CHECKOUT ITEMS
-    // =================================================
-
-    const checkoutItems = [];
-
-    // =================================================
-    // PROCESS EACH CART ITEM
-    // =================================================
-
-    for (const item of cart) {
-      const customValues =
-        item.custom_values || {};
-
-      const fields = [];
-
-      // =================================================
-      // PROCESS CUSTOM VALUES
-      // =================================================
-
-      for (const [
-        fieldId,
-        value
-      ] of Object.entries(
-        customValues
-      )) {
-
-        // -----------------------------------------------
-        // IGNORE EMPTY VALUES
-        // -----------------------------------------------
-
-        if (
-          value === null ||
-          value === undefined ||
-          value === ""
-        ) {
-          continue;
-        }
-
-        // =================================================
-        // NEW IMAGE OBJECT
-        // =================================================
-
-        if (
-          value &&
-          typeof value === "object" &&
-          value.type === "image" &&
-          value.dataUrl
-        ) {
-
-          console.log(
-            "UPLOADING CUSTOM IMAGE:",
-            value.name
-          );
-
-          // ---------------------------------------------
-          // Convert data URL → File
-          // ---------------------------------------------
-
-          const imageFile =
-            await dataURLToFile(
-              value.dataUrl,
-              value.name,
-              value.mimeType
-            );
-
-          // ---------------------------------------------
-          // FormData
-          // ---------------------------------------------
-
-          const imageFormData =
-            new FormData();
-
-          imageFormData.append(
-            "image",
-            imageFile
-          );
-
-          // ---------------------------------------------
-          // Upload to backend
-          // ---------------------------------------------
-
-          const imageResponse =
-            await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
-              {
-                method: "POST",
-                body: imageFormData
-              }
-            );
-
-          const imageData =
-            await imageResponse.json();
-
-          if (!imageResponse.ok) {
-
-            console.error(
-              "CUSTOM IMAGE UPLOAD FAILED:",
-              imageData
-            );
-
-            throw new Error(
-              imageData.detail ||
-              `Failed to upload image for ${item.name}`
-            );
-          }
-
-          console.log(
-            "CUSTOM IMAGE UPLOADED:",
-            imageData.image_url
-          );
-
-          // ---------------------------------------------
-          // Save Cloudinary URL as field value
-          // ---------------------------------------------
-
-          fields.push({
-            product_field_id:
-              Number(fieldId),
-
-            value:
-              imageData.image_url
-          });
-
-          continue;
-        }
-
-        // =================================================
-        // OLD FILE OBJECT
-        // =================================================
-
-        if (
-          value instanceof File
-        ) {
-
-          console.log(
-            "UPLOADING FILE:",
-            value.name
-          );
-
-          const imageFormData =
-            new FormData();
-
-          imageFormData.append(
-            "image",
-            value
-          );
-
-          const imageResponse =
-            await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
-              {
-                method: "POST",
-                body: imageFormData
-              }
-            );
-
-          const imageData =
-            await imageResponse.json();
-
-          if (!imageResponse.ok) {
-
-            console.error(
-              "CUSTOM IMAGE UPLOAD FAILED:",
-              imageData
-            );
-
-            throw new Error(
-              imageData.detail ||
-              `Failed to upload image for ${item.name}`
-            );
-          }
-
-          fields.push({
-            product_field_id:
-              Number(fieldId),
-
-            value:
-              imageData.image_url
-          });
-
-          continue;
-        }
-
-        // =================================================
-        // NORMAL VALUE
-        // =================================================
-
-        fields.push({
-          product_field_id:
-            Number(fieldId),
-
-          value:
-            String(value)
-        });
-      }
-
-      // =================================================
-      // ADD ITEM TO CHECKOUT
-      // =================================================
-
-      checkoutItems.push({
-        product_id:
-          Number(item.product_id),
-
-        quantity:
-          Number(item.quantity),
-
-        fields
-      });
-    }
-
-    console.log(
-      "CHECKOUT ITEMS:",
-      checkoutItems
-    );
-
-    // =================================================
-    // SEND ONE CHECKOUT REQUEST
-    // =================================================
-
-    const checkoutResponse =
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            customer_name:
-              customerName.trim(),
-
-            customer_email:
-              customerEmail.trim(),
-
-            customer_phone:
-              customerPhone.trim(),
-
-            items:
-              checkoutItems
-          })
-        }
-      );
-
-    const checkoutData =
-      await checkoutResponse.json();
-
-    console.log(
-      "CHECKOUT RESPONSE:",
-      checkoutData
-    );
-
-    // =================================================
-    // CHECK RESPONSE
-    // =================================================
-
-    if (!checkoutResponse.ok) {
-
-      alert(
-        checkoutData.detail ||
-        "Checkout failed."
-      );
-
+  // ===================================================
+  // PAYMENT STATE
+  // ===================================================
+
+  const [
+    paymentStatus,
+    setPaymentStatus,
+  ] = useState(null);
+
+  const [
+    currentOrderId,
+    setCurrentOrderId,
+  ] = useState(null);
+
+  const [
+    mpesaReceipt,
+    setMpesaReceipt,
+  ] = useState(null);
+
+  const [
+    paymentMessage,
+    setPaymentMessage,
+  ] = useState("");
+
+  // =====================================================
+  // POLL PAYMENT STATUS
+  // =====================================================
+
+  useEffect(() => {
+    if (!currentOrderId) {
       return;
     }
 
-    // =================================================
-    // SUCCESS
-    // =================================================
+    let attempts = 0;
 
-    console.log(
-      "ORDER CREATED:",
-      checkoutData.order_id
-    );
+    const maxAttempts = 60;
 
-    alert(
-      "Order placed successfully! We will contact you soon."
-    );
+    const checkPaymentStatus = async () => {
+      try {
+        attempts++;
 
-    // =================================================
-    // CLEAR CART
-    // =================================================
+        const response =
+          await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/mpesa/payment-status/${currentOrderId}`
+          );
 
-    clearCart();
+        const data =
+          await response.json();
 
-    // =================================================
-    // CLEAR CUSTOMER DETAILS
-    // =================================================
+        console.log(
+          "PAYMENT STATUS:",
+          data
+        );
 
-    setCustomerName("");
-    setCustomerEmail("");
-    setCustomerPhone("");
+        if (!response.ok) {
+          throw new Error(
+            data.detail ||
+            "Unable to check payment status."
+          );
+        }
 
-  } catch (error) {
+        // =============================================
+        // PAYMENT SUCCESS
+        // =============================================
 
-    console.error(
-      "CHECKOUT ERROR:",
-      error
-    );
+        if (
+          data.payment_status === "Paid"
+        ) {
+          setPaymentStatus("Paid");
 
-    alert(
-      error.message ||
-      "Something went wrong while placing the order. Please try again."
-    );
+          setMpesaReceipt(
+            data.mpesa_receipt_number
+          );
 
-  } finally {
+          setPaymentMessage(
+            "Payment received successfully!"
+          );
 
-    setIsSubmitting(false);
+          setIsSubmitting(false);
 
+          // Clear cart only AFTER payment succeeds
+          clearCart();
+
+          setCustomerName("");
+          setCustomerEmail("");
+          setCustomerPhone("");
+
+          return;
+        }
+
+        // =============================================
+        // PAYMENT FAILED
+        // =============================================
+
+        if (
+          data.payment_status === "Failed"
+        ) {
+          setPaymentStatus("Failed");
+
+          setPaymentMessage(
+            "M-Pesa payment was cancelled or failed. Your cart has been kept."
+          );
+
+          setIsSubmitting(false);
+
+          return;
+        }
+
+        // =============================================
+        // TIMEOUT
+        // =============================================
+
+        if (attempts >= maxAttempts) {
+          setPaymentStatus("Timeout");
+
+          setPaymentMessage(
+            "We could not confirm your payment. Please check your M-Pesa messages before trying again."
+          );
+
+          setIsSubmitting(false);
+
+          return;
+        }
+
+        // =============================================
+        // STILL PENDING
+        // =============================================
+
+        setPaymentStatus("Pending");
+
+        setPaymentMessage(
+          "Waiting for M-Pesa payment confirmation..."
+        );
+
+        setTimeout(
+          checkPaymentStatus,
+          3000
+        );
+
+      } catch (error) {
+        console.error(
+          "PAYMENT STATUS ERROR:",
+          error
+        );
+
+        setPaymentMessage(
+          "Unable to check payment status. Please wait..."
+        );
+
+        if (attempts < maxAttempts) {
+          setTimeout(
+            checkPaymentStatus,
+            3000
+          );
+        } else {
+          setIsSubmitting(false);
+        }
+      }
+    };
+
+    checkPaymentStatus();
+
+    // No cleanup needed for the simple timeout chain.
+  }, [
+    currentOrderId,
+    clearCart
+  ]);
+
+  // =====================================================
+  // PLACE ORDER
+  // =====================================================
+
+  async function placeOrder(e) {
+    e.preventDefault();
+
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+
+    if (
+      !customerName.trim() ||
+      !customerEmail.trim() ||
+      !customerPhone.trim()
+    ) {
+      alert(
+        "Please fill in all customer details."
+      );
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      setPaymentStatus(null);
+      setPaymentMessage("");
+      setMpesaReceipt(null);
+      setCurrentOrderId(null);
+
+      // =================================================
+      // PREPARE CHECKOUT ITEMS
+      // =================================================
+
+      const checkoutItems = [];
+
+      // =================================================
+      // PROCESS EACH CART ITEM
+      // =================================================
+
+      for (const item of cart) {
+        const customValues =
+          item.custom_values || {};
+
+        const fields = [];
+
+        // =================================================
+        // PROCESS CUSTOM VALUES
+        // =================================================
+
+        for (const [
+          fieldId,
+          value
+        ] of Object.entries(
+          customValues
+        )) {
+
+          // -----------------------------------------------
+          // IGNORE EMPTY VALUES
+          // -----------------------------------------------
+
+          if (
+            value === null ||
+            value === undefined ||
+            value === ""
+          ) {
+            continue;
+          }
+
+          // =================================================
+          // NEW IMAGE OBJECT
+          // =================================================
+
+          if (
+            value &&
+            typeof value === "object" &&
+            value.type === "image" &&
+            value.dataUrl
+          ) {
+
+            console.log(
+              "UPLOADING CUSTOM IMAGE:",
+              value.name
+            );
+
+            const imageFile =
+              await dataURLToFile(
+                value.dataUrl,
+                value.name,
+                value.mimeType
+              );
+
+            const imageFormData =
+              new FormData();
+
+            imageFormData.append(
+              "image",
+              imageFile
+            );
+
+            const imageResponse =
+              await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
+                {
+                  method: "POST",
+                  body: imageFormData
+                }
+              );
+
+            const imageData =
+              await imageResponse.json();
+
+            if (!imageResponse.ok) {
+
+              console.error(
+                "CUSTOM IMAGE UPLOAD FAILED:",
+                imageData
+              );
+
+              throw new Error(
+                imageData.detail ||
+                `Failed to upload image for ${item.name}`
+              );
+            }
+
+            console.log(
+              "CUSTOM IMAGE UPLOADED:",
+              imageData.image_url
+            );
+
+            fields.push({
+              product_field_id:
+                Number(fieldId),
+
+              value:
+                imageData.image_url
+            });
+
+            continue;
+          }
+
+          // =================================================
+          // OLD FILE OBJECT
+          // =================================================
+
+          if (
+            value instanceof File
+          ) {
+
+            console.log(
+              "UPLOADING FILE:",
+              value.name
+            );
+
+            const imageFormData =
+              new FormData();
+
+            imageFormData.append(
+              "image",
+              value
+            );
+
+            const imageResponse =
+              await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/upload-custom-image`,
+                {
+                  method: "POST",
+                  body: imageFormData
+                }
+              );
+
+            const imageData =
+              await imageResponse.json();
+
+            if (!imageResponse.ok) {
+
+              console.error(
+                "CUSTOM IMAGE UPLOAD FAILED:",
+                imageData
+              );
+
+              throw new Error(
+                imageData.detail ||
+                `Failed to upload image for ${item.name}`
+              );
+            }
+
+            fields.push({
+              product_field_id:
+                Number(fieldId),
+
+              value:
+                imageData.image_url
+            });
+
+            continue;
+          }
+
+          // =================================================
+          // NORMAL VALUE
+          // =================================================
+
+          fields.push({
+            product_field_id:
+              Number(fieldId),
+
+            value:
+              String(value)
+          });
+        }
+
+        // =================================================
+        // ADD ITEM TO CHECKOUT
+        // =================================================
+
+        checkoutItems.push({
+          product_id:
+            Number(item.product_id),
+
+          quantity:
+            Number(item.quantity),
+
+          fields
+        });
+      }
+
+      console.log(
+        "CHECKOUT ITEMS:",
+        checkoutItems
+      );
+
+      // =================================================
+      // CREATE ORDER
+      // =================================================
+
+      const checkoutResponse =
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              customer_name:
+                customerName.trim(),
+
+              customer_email:
+                customerEmail.trim(),
+
+              customer_phone:
+                customerPhone.trim(),
+
+              items:
+                checkoutItems
+            })
+          }
+        );
+
+      const checkoutData =
+        await checkoutResponse.json();
+
+      console.log(
+        "CHECKOUT RESPONSE:",
+        checkoutData
+      );
+
+      // =================================================
+      // CHECK CHECKOUT RESPONSE
+      // =================================================
+
+      if (!checkoutResponse.ok) {
+
+        throw new Error(
+          checkoutData.detail ||
+          "Checkout failed."
+        );
+      }
+
+      const orderId =
+        checkoutData.order_id;
+
+      if (!orderId) {
+        throw new Error(
+          "Order was created but no order ID was returned."
+        );
+      }
+
+      console.log(
+        "ORDER CREATED:",
+        orderId
+      );
+
+      setCurrentOrderId(orderId);
+
+      // =================================================
+      // SEND M-PESA STK PUSH
+      // =================================================
+
+      setPaymentStatus("Sending");
+
+      setPaymentMessage(
+        "Sending M-Pesa payment request..."
+      );
+
+      const mpesaResponse =
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/mpesa/stkpush`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              order_id:
+                orderId,
+
+              phone_number:
+                customerPhone.trim()
+            })
+          }
+        );
+
+      const mpesaData =
+        await mpesaResponse.json();
+
+      console.log(
+        "M-PESA RESPONSE:",
+        mpesaData
+      );
+
+      // =================================================
+      // CHECK M-PESA RESPONSE
+      // =================================================
+
+      if (!mpesaResponse.ok) {
+
+        throw new Error(
+          mpesaData.detail ||
+          "Could not start M-Pesa payment."
+        );
+      }
+
+      // =================================================
+      // STK PUSH SENT
+      // =================================================
+
+      setPaymentStatus("Pending");
+
+      setPaymentMessage(
+        mpesaData.message ||
+        "Check your phone and enter your M-Pesa PIN."
+      );
+
+      console.log(
+        "STK PUSH SENT SUCCESSFULLY"
+      );
+
+    } catch (error) {
+
+      console.error(
+        "CHECKOUT ERROR:",
+        error
+      );
+
+      setPaymentStatus("Failed");
+
+      setPaymentMessage(
+        error.message ||
+        "Something went wrong while placing the order."
+      );
+
+      setIsSubmitting(false);
+
+    }
   }
-}
-
-
 
   // =====================================================
   // UI
@@ -608,14 +824,13 @@ async function placeOrder(e) {
 
       </div>
 
-
       {/* ================================================= */}
       {/* CONTENT */}
       {/* ================================================= */}
 
       <div className="max-w-7xl mx-auto p-6 mt-6">
 
-        {cart.length === 0 ? (
+        {cart.length === 0 && !paymentStatus ? (
 
           /* ============================================= */
           /* EMPTY CART */
@@ -673,13 +888,13 @@ async function placeOrder(e) {
 
                 <button
                   onClick={clearCart}
-                  className="text-sm text-red-500 hover:text-red-700 font-medium"
+                  disabled={isSubmitting}
+                  className="text-sm text-red-500 hover:text-red-700 disabled:text-gray-400 font-medium"
                 >
                   Clear Cart
                 </button>
 
               </div>
-
 
               {cart.map(
                 (item) => (
@@ -701,7 +916,6 @@ async function placeOrder(e) {
                         />
                       )}
 
-
                       {/* DETAILS */}
 
                       <div className="flex-1">
@@ -721,20 +935,19 @@ async function placeOrder(e) {
 
                           </div>
 
-
                           <button
                             onClick={() =>
                               removeFromCart(
                                 item.cart_id
                               )
                             }
-                            className="text-red-500 hover:text-red-700 text-sm font-medium"
+                            disabled={isSubmitting}
+                            className="text-red-500 hover:text-red-700 disabled:text-gray-400 text-sm font-medium"
                           >
                             Remove
                           </button>
 
                         </div>
-
 
                         {/* ================================= */}
                         {/* CUSTOMIZATIONS */}
@@ -750,7 +963,6 @@ async function placeOrder(e) {
                               <p className="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-3">
                                 Customizations
                               </p>
-
 
                               <div className="space-y-4">
 
@@ -776,7 +988,6 @@ async function placeOrder(e) {
                                         }
                                       </p>
 
-
                                       <div className="mt-1 text-gray-800">
 
                                         <CustomValuePreview
@@ -798,7 +1009,6 @@ async function placeOrder(e) {
 
                           )}
 
-
                         {/* ================================= */}
                         {/* QUANTITY */}
                         {/* ================================= */}
@@ -809,7 +1019,6 @@ async function placeOrder(e) {
                             Quantity:
                           </span>
 
-
                           <div className="flex items-center border rounded-lg overflow-hidden bg-gray-50">
 
                             <button
@@ -818,11 +1027,11 @@ async function placeOrder(e) {
                                   item.cart_id
                                 )
                               }
-                              className="px-3 py-1 hover:bg-gray-200 text-gray-600 font-bold"
+                              disabled={isSubmitting}
+                              className="px-3 py-1 hover:bg-gray-200 disabled:bg-gray-100 text-gray-600 font-bold"
                             >
                               -
                             </button>
-
 
                             <span className="px-4 py-1 text-sm font-semibold text-gray-800">
                               {
@@ -830,14 +1039,14 @@ async function placeOrder(e) {
                               }
                             </span>
 
-
                             <button
                               onClick={() =>
                                 increaseQuantity(
                                   item.cart_id
                                 )
                               }
-                              className="px-3 py-1 hover:bg-gray-200 text-gray-600 font-bold"
+                              disabled={isSubmitting}
+                              className="px-3 py-1 hover:bg-gray-200 disabled:bg-gray-100 text-gray-600 font-bold"
                             >
                               +
                             </button>
@@ -857,136 +1066,270 @@ async function placeOrder(e) {
 
             </div>
 
-
             {/* =========================================== */}
             {/* CHECKOUT */}
             {/* =========================================== */}
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-fit sticky top-6">
 
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
-                Order Summary
-              </h2>
+              {/* ========================================= */}
+              {/* PAYMENT SUCCESS */}
+              {/* ========================================= */}
 
+              {paymentStatus === "Paid" ? (
 
-              <form
-                onSubmit={placeOrder}
-                className="space-y-4"
-              >
+                <div className="text-center py-6">
 
-                {/* NAME */}
+                  <div className="text-5xl mb-4">
+                    ✓
+                  </div>
 
-                <div>
+                  <h2 className="text-2xl font-bold text-green-600">
+                    Payment Successful
+                  </h2>
 
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name
-                  </label>
+                  <p className="text-gray-600 mt-3">
+                    Your order has been received and is now being processed.
+                  </p>
 
-                  <input
-                    type="text"
-                    required
-                    value={
-                      customerName
-                    }
-                    onChange={(e) =>
-                      setCustomerName(
-                        e.target.value
-                      )
-                    }
-                    placeholder="John Doe"
-                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
+                  {currentOrderId && (
+                    <p className="text-sm text-gray-500 mt-4">
+                      Order #{currentOrderId}
+                    </p>
+                  )}
 
-                </div>
+                  {mpesaReceipt && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      M-Pesa Receipt:{" "}
+                      <span className="font-semibold">
+                        {mpesaReceipt}
+                      </span>
+                    </p>
+                  )}
 
-
-                {/* EMAIL */}
-
-                <div>
-
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email Address
-                  </label>
-
-                  <input
-                    type="email"
-                    required
-                    value={
-                      customerEmail
-                    }
-                    onChange={(e) =>
-                      setCustomerEmail(
-                        e.target.value
-                      )
-                    }
-                    placeholder="john@example.com"
-                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
+                  <Link
+                    href="/productspage"
+                    className="inline-block mt-6 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+                  >
+                    Continue Shopping
+                  </Link>
 
                 </div>
 
+              ) : paymentStatus === "Pending" ||
+                paymentStatus === "Sending" ? (
 
-                {/* PHONE */}
+                /* ======================================= */
+                /* WAITING FOR PAYMENT */
+                /* ======================================= */
 
-                <div>
+                <div className="text-center py-6">
 
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number
-                  </label>
+                  <div className="text-5xl mb-4">
+                    📱
+                  </div>
 
-                  <input
-                    type="tel"
-                    required
-                    value={
-                      customerPhone
-                    }
-                    onChange={(e) =>
-                      setCustomerPhone(
-                        e.target.value
-                      )
-                    }
-                    placeholder="0712345678"
-                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    M-Pesa Payment
+                  </h2>
 
-                </div>
+                  <p className="text-purple-600 font-semibold mt-3">
+                    {paymentMessage}
+                  </p>
 
+                  <div className="mt-6">
 
-                {/* TOTAL */}
-
-                <div className="border-t pt-4 mt-4">
-
-                  <div className="flex justify-between text-base font-bold text-gray-900">
-
-                    <span>
-                      Total Amount
-                    </span>
-
-                    <span className="text-purple-600">
-                      KSh{" "}
-                      {cartTotal}
-                    </span>
+                    <div className="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-purple-600 mx-auto">
+                    </div>
 
                   </div>
 
+                  <p className="text-sm text-gray-500 mt-5">
+                    Please don't close this page while we wait for confirmation.
+                  </p>
+
+                  {currentOrderId && (
+                    <p className="text-xs text-gray-400 mt-4">
+                      Order #{currentOrderId}
+                    </p>
+                  )}
+
                 </div>
 
+              ) : paymentStatus === "Failed" ||
+                paymentStatus === "Timeout" ? (
 
-                {/* SUBMIT */}
+                /* ======================================= */
+                /* PAYMENT FAILED */
+                /* ======================================= */
 
-                <button
-                  type="submit"
-                  disabled={
-                    isSubmitting
-                  }
-                  className="w-full mt-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-semibold py-3 rounded-lg transition"
-                >
-                  {isSubmitting
-                    ? "Placing Order..."
-                    : "Place Order"}
-                </button>
+                <div className="text-center py-6">
 
-              </form>
+                  <div className="text-5xl mb-4">
+                    {paymentStatus === "Timeout"
+                      ? "⏳"
+                      : "❌"}
+                  </div>
+
+                  <h2 className="text-2xl font-bold text-red-600">
+                    {paymentStatus === "Timeout"
+                      ? "Payment Not Confirmed"
+                      : "Payment Failed"}
+                  </h2>
+
+                  <p className="text-gray-600 mt-3">
+                    {paymentMessage}
+                  </p>
+
+                  <button
+                    onClick={() => {
+                      setPaymentStatus(null);
+                      setCurrentOrderId(null);
+                      setPaymentMessage("");
+                      setMpesaReceipt(null);
+                    }}
+                    className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition"
+                  >
+                    Try Again
+                  </button>
+
+                </div>
+
+              ) : (
+
+                /* ======================================= */
+                /* NORMAL CHECKOUT */
+                /* ======================================= */
+
+                <>
+                  <h2 className="text-xl font-bold text-gray-800 mb-4">
+                    Order Summary
+                  </h2>
+
+                  <form
+                    onSubmit={placeOrder}
+                    className="space-y-4"
+                  >
+
+                    {/* NAME */}
+
+                    <div>
+
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Full Name
+                      </label>
+
+                      <input
+                        type="text"
+                        required
+                        value={
+                          customerName
+                        }
+                        onChange={(e) =>
+                          setCustomerName(
+                            e.target.value
+                          )
+                        }
+                        placeholder="John Doe"
+                        disabled={isSubmitting}
+                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+                      />
+
+                    </div>
+
+                    {/* EMAIL */}
+
+                    <div>
+
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Email Address
+                      </label>
+
+                      <input
+                        type="email"
+                        required
+                        value={
+                          customerEmail
+                        }
+                        onChange={(e) =>
+                          setCustomerEmail(
+                            e.target.value
+                          )
+                        }
+                        placeholder="john@example.com"
+                        disabled={isSubmitting}
+                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+                      />
+
+                    </div>
+
+                    {/* PHONE */}
+
+                    <div>
+
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        M-Pesa Phone Number
+                      </label>
+
+                      <input
+                        type="tel"
+                        required
+                        value={
+                          customerPhone
+                        }
+                        onChange={(e) =>
+                          setCustomerPhone(
+                            e.target.value
+                          )
+                        }
+                        placeholder="0712345678"
+                        disabled={isSubmitting}
+                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+                      />
+
+                      <p className="text-xs text-gray-500 mt-1">
+                        You'll receive the M-Pesa payment prompt on this number.
+                      </p>
+
+                    </div>
+
+                    {/* TOTAL */}
+
+                    <div className="border-t pt-4 mt-4">
+
+                      <div className="flex justify-between text-base font-bold text-gray-900">
+
+                        <span>
+                          Total Amount
+                        </span>
+
+                        <span className="text-purple-600">
+                          KSh{" "}
+                          {cartTotal}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                    {/* SUBMIT */}
+
+                    <button
+                      type="submit"
+                      disabled={
+                        isSubmitting
+                      }
+                      className="w-full mt-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-semibold py-3 rounded-lg transition"
+                    >
+                      {isSubmitting
+                        ? "Starting M-Pesa Payment..."
+                        : "Pay with M-Pesa"}
+                    </button>
+
+                  </form>
+                </>
+
+              )}
 
             </div>
 
