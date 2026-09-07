@@ -2,41 +2,33 @@
 
 import {
   useSearchParams,
-  usePathname,
-  useRouter
+  useRouter,
 } from "next/navigation";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SearchBar() {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("q") || ""
   );
 
+  useEffect(() => {
+    setSearchTerm(searchParams.get("q") || "");
+  }, [searchParams]);
+
   function handleSearch() {
-    const params = new URLSearchParams(
-      searchParams.toString()
-    );
+    const term = searchTerm.trim();
 
-    const value = searchTerm.trim();
-
-    if (value) {
-      params.set("q", value);
+    if (term) {
+      router.push(
+        `/productspage?q=${encodeURIComponent(term)}`
+      );
     } else {
-      params.delete("q");
+      router.push("/productspage");
     }
-
-    const queryString = params.toString();
-
-    router.push(
-      queryString
-        ? `${pathname}?${queryString}`
-        : pathname
-    );
   }
 
   function handleKeyDown(e) {
@@ -62,9 +54,7 @@ export default function SearchBar() {
         type="text"
         placeholder="Search product..."
         value={searchTerm}
-        onChange={(e) =>
-          setSearchTerm(e.target.value)
-        }
+        onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={handleKeyDown}
         className="
           w-full
@@ -81,7 +71,6 @@ export default function SearchBar() {
       />
 
       <button
-        type="button"
         onClick={handleSearch}
         className="
           shrink-0
