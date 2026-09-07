@@ -409,16 +409,10 @@ export default function Services() {
             </h2>
 
             <div>
-              <div
-                className="
-                flex
-                justify-center
-                pl-[25%]
-                py-4
-              "
-              >
-                <Categories onSelectCategory={setSelectedCategory} />
-              </div>
+              <div className="w-full px-4 py-4">
+  <Categories onSelectCategory={setSelectedCategory} />
+</div>
+
 
               <div
                 className="
