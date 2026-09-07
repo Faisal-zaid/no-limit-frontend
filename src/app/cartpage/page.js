@@ -928,7 +928,8 @@ export default function CartPage() {
                     Order Summary
                   </h2>
 
-                  <form onSubmit={placeOrder} className="space-y-4">
+                  <form onSubmit={handleSubmit(placeOrder)} className="space-y-4">
+
                     {/* NAME */}
 
                     <div>
