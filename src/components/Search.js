@@ -18,10 +18,16 @@ export default function SearchBar() {
   );
 
   function handleSearch() {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(
+      searchParams.toString()
+    );
 
-    if (searchTerm.trim()) {
-      params.set("q", searchTerm.trim());
+    const value = searchTerm.trim();
+
+    if (value) {
+      params.set("q", value);
+    } else {
+      params.delete("q");
     }
 
     const queryString = params.toString();
@@ -75,6 +81,7 @@ export default function SearchBar() {
       />
 
       <button
+        type="button"
         onClick={handleSearch}
         className="
           shrink-0
