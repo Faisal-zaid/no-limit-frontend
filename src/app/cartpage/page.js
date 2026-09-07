@@ -961,14 +961,19 @@ export default function CartPage() {
                       </label>
 
                       <input
-                        type="email"
-                        required
-                        value={customerEmail}
-                        onChange={(e) => setCustomerEmail(e.target.value)}
-                        placeholder="john@example.com"
-                        disabled={isSubmitting}
-                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
-                      />
+  type="email"
+  placeholder="john@example.com"
+  disabled={isSubmitting}
+  {...register("customerEmail")}
+  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+/>
+
+{errors.customerEmail && (
+  <p className="text-red-500 text-xs mt-1">
+    {errors.customerEmail.message}
+  </p>
+)}
+
                     </div>
 
                     {/* PHONE */}
