@@ -154,6 +154,33 @@ async function dataURLToFile(dataUrl, fileName, mimeType) {
   });
 }
 
+const checkoutSchema = z.object({
+  customerName: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name is too long")
+    .regex(
+      /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/,
+      "Name can only contain letters, spaces, apostrophes and hyphens"
+    ),
+
+  customerEmail: z
+    .string()
+    .trim()
+    .email("Please enter a valid email address")
+    .max(150, "Email is too long"),
+
+  customerPhone: z
+    .string()
+    .trim()
+    .regex(
+      /^(?:07|01)\d{8}$/,
+      "Enter a valid Kenyan phone number e.g. 0712345678"
+    ),
+});
+
+
 // =====================================================
 // CART PAGE
 // =====================================================
