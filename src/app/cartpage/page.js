@@ -984,14 +984,24 @@ export default function CartPage() {
                       </label>
 
                       <input
-                        type="tel"
-                        required
-                        value={customerPhone}
-                        onChange={(e) => setCustomerPhone(e.target.value)}
-                        placeholder="0712345678"
-                        disabled={isSubmitting}
-                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
-                      />
+  type="tel"
+  inputMode="numeric"
+  placeholder="0712345678"
+  disabled={isSubmitting}
+  {...register("customerPhone")}
+  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+/>
+
+{errors.customerPhone && (
+  <p className="text-red-500 text-xs mt-1">
+    {errors.customerPhone.message}
+  </p>
+)}
+
+<p className="text-xs text-gray-500 mt-1">
+  Enter a Kenyan number e.g. 0712345678.
+</p>
+
 
                       <p className="text-xs text-gray-500 mt-1">
                         You'll receive the M-Pesa payment prompt on this number.
