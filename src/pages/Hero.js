@@ -1,6 +1,8 @@
 
 import Image from "next/image";
 import { rancho, londrina } from "../app/fonts";
+import Link from "next/link";
+
 
 export default function Hero() {
   return (
@@ -224,26 +226,29 @@ export default function Hero() {
 
             {/* VISIT SHOP */}
 
-            <button
-              className="
-                bg-black
-                text-white
-                border
-                border-black
-                px-4
-                sm:px-5
-                py-3
-                rounded-[10px]
-                flex-1
-                sm:flex-none
-                text-sm
-                sm:text-base
-                hover:bg-gray-800
-                transition
-              "
-            >
-              VISIT SHOP
-            </button>
+            <Link
+  href="/services"
+  className="
+    bg-black
+    text-white
+    border
+    border-black
+    px-4
+    sm:px-5
+    py-3
+    rounded-[10px]
+    flex-1
+    sm:flex-none
+    text-sm
+    sm:text-base
+    text-center
+    hover:bg-gray-800
+    transition
+  "
+>
+  VISIT SHOP
+</Link>
+
 
 
             {/* CONTACT */}
