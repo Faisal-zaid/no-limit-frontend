@@ -227,7 +227,7 @@ export default function Hero() {
             {/* VISIT SHOP */}
 
             <Link
-  href="/services"
+  href="/Services"
   className="
     bg-black
     text-white
