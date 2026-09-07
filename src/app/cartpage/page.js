@@ -938,14 +938,19 @@ export default function CartPage() {
                       </label>
 
                       <input
-                        type="text"
-                        required
-                        value={customerName}
-                        onChange={(e) => setCustomerName(e.target.value)}
-                        placeholder="John Doe"
-                        disabled={isSubmitting}
-                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
-                      />
+  type="text"
+  placeholder="John Doe"
+  disabled={isSubmitting}
+  {...register("customerName")}
+  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+/>
+
+{errors.customerName && (
+  <p className="text-red-500 text-xs mt-1">
+    {errors.customerName.message}
+  </p>
+)}
+
                     </div>
 
                     {/* EMAIL */}
