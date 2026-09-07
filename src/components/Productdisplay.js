@@ -255,10 +255,13 @@ export default function Productdisplay({ selectedCategory }) {
 
       <div className="p-4 sm:p-6 bg-white rounded-xl">
         <h2 className="text-lg sm:text-xl font-bold mb-6 text-gray-800">
-          {selectedCategory
-            ? `${selectedCategory.name} Products`
-            : "All Products"}
-        </h2>
+  {searchQuery
+    ? `Search results for "${searchQuery}"`
+    : selectedCategory
+      ? `${selectedCategory.name} Products`
+      : "All Products"}
+</h2>
+
 
         {/* RESPONSIVE PRODUCT GRID */}
 
