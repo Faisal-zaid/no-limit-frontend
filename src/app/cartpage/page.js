@@ -5,6 +5,13 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useEffect, useState } from "react";
 
+// imports for react hook form and zod
+
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+
 // =====================================================
 // CUSTOM VALUE PREVIEW
 // =====================================================
