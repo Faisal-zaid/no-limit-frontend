@@ -199,11 +199,16 @@ export default function CartPage() {
   // CUSTOMER DETAILS
   // ===================================================
 
-  const [customerName, setCustomerName] = useState("");
+  const {
+  register,
+  handleSubmit,
+  reset,
+  formState: { errors },
+} = useForm({
+  resolver: zodResolver(checkoutSchema),
+  mode: "onBlur",
+});
 
-  const [customerEmail, setCustomerEmail] = useState("");
-
-  const [customerPhone, setCustomerPhone] = useState("");
 
   // ===================================================
   // CHECKOUT STATE
@@ -338,24 +343,21 @@ export default function CartPage() {
   // PLACE ORDER
   // =====================================================
 
-  async function placeOrder(e) {
-    e.preventDefault();
+  async function placeOrder(formData) {
+  if (cart.length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
 
-    if (cart.length === 0) {
-      alert("Your cart is empty.");
-      return;
-    }
+  try {
+    setIsSubmitting(true);
 
-    if (
-      !customerName.trim() ||
-      !customerEmail.trim() ||
-      !customerPhone.trim()
-    ) {
-      alert("Please fill in all customer details.");
-      return;
-    }
+    const customerName = formData.customerName;
+    const customerEmail = formData.customerEmail;
+    const customerPhone = formData.customerPhone;
 
-    try {
+    // your existing checkout code continues here...
+
       setIsSubmitting(true);
 
       setPaymentStatus(null);
