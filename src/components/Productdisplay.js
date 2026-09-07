@@ -236,12 +236,26 @@ export default function Productdisplay({ selectedCategory }) {
   // ==========================================
 
   if (filteredProducts.length === 0) {
-    return (
-      <div className="p-4 sm:p-6 text-gray-500">
-        No products found for {selectedCategory?.name || "this category"}.
-      </div>
-    );
-  }
+  return (
+    <div className="p-4 sm:p-6 text-gray-500">
+      {searchQuery ? (
+        <>
+          No products found for{" "}
+          <span className="font-semibold">
+            "{searchQuery}"
+          </span>
+          .
+        </>
+      ) : (
+        <>
+          No products found for{" "}
+          {selectedCategory?.name || "this category"}.
+        </>
+      )}
+    </div>
+  );
+}
+
 
   // ==========================================
   // PAGE
