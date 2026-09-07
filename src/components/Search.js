@@ -9,57 +9,37 @@ import {
 import { useState } from "react";
 
 export default function SearchBar() {
-
   const searchParams = useSearchParams();
-
   const pathname = usePathname();
-
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("q") || ""
   );
 
-
   function handleSearch() {
-
-    const params = new URLSearchParams(
-      searchParams.toString()
-    );
+    const params = new URLSearchParams();
 
     if (searchTerm.trim()) {
-
-      params.set(
-        "q",
-        searchTerm.trim()
-      );
-
-    } else {
-
-      params.delete("q");
-
+      params.set("q", searchTerm.trim());
     }
 
-    router.replace(
-      `${pathname}?${params.toString()}`
+    const queryString = params.toString();
+
+    router.push(
+      queryString
+        ? `${pathname}?${queryString}`
+        : pathname
     );
-
   }
-
 
   function handleKeyDown(e) {
-
     if (e.key === "Enter") {
-
       handleSearch();
-
     }
-
   }
 
-
   return (
-
     <div
       className="
         relative
@@ -72,20 +52,14 @@ export default function SearchBar() {
         overflow-hidden
       "
     >
-
       <input
         type="text"
-
         placeholder="Search product..."
-
         value={searchTerm}
-
         onChange={(e) =>
           setSearchTerm(e.target.value)
         }
-
         onKeyDown={handleKeyDown}
-
         className="
           w-full
           min-w-0
@@ -100,10 +74,8 @@ export default function SearchBar() {
         "
       />
 
-
       <button
         onClick={handleSearch}
-
         className="
           shrink-0
           px-3
@@ -120,13 +92,8 @@ export default function SearchBar() {
           transition-colors
         "
       >
-
         Search
-
       </button>
-
     </div>
-
   );
-
 }
