@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 
 export default function Productdisplay({ selectedCategory }) {
   const { addToCart } = useCart();
+  const searchParams = useSearchParams();
+
+  const searchQuery = searchParams.get("q") || "";
 
   const [products, setProducts] = useState([]);
   const [productFields, setProductFields] = useState([]);
@@ -18,21 +22,21 @@ export default function Productdisplay({ selectedCategory }) {
   const [customValues, setCustomValues] = useState({});
   const [quantity, setQuantity] = useState(1);
 
-  // ==========================================
-  // LOAD EVERYTHING
-  // ==========================================
-
+  // LOAD PRODUCTS
   useEffect(() => {
     async function loadData() {
       try {
         setLoading(true);
 
-        const [productsResponse, fieldsResponse, optionsResponse] =
-          await Promise.all([
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`),
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfield`),
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfieldoption`),
-          ]);
+        const [
+          productsResponse,
+          fieldsResponse,
+          optionsResponse,
+        ] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfield`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/productfieldoption`),
+        ]);
 
         if (!productsResponse.ok) {
           throw new Error("Failed to load products");
@@ -50,15 +54,22 @@ export default function Productdisplay({ selectedCategory }) {
         const fieldsData = await fieldsResponse.json();
         const optionsData = await optionsResponse.json();
 
-        console.log("PRODUCTS:", productsData);
-        console.log("PRODUCT FIELDS:", fieldsData);
-        console.log("PRODUCT FIELD OPTIONS:", optionsData);
+        setProducts(
+          Array.isArray(productsData) ? productsData : []
+        );
 
-        setProducts(productsData);
-        setProductFields(fieldsData);
-        setProductFieldOptions(optionsData);
+        setProductFields(
+          Array.isArray(fieldsData) ? fieldsData : []
+        );
+
+        setProductFieldOptions(
+          Array.isArray(optionsData) ? optionsData : []
+        );
       } catch (error) {
-        console.error("Failed to load product data:", error);
+        console.error(
+          "Failed to load product data:",
+          error
+        );
       } finally {
         setLoading(false);
       }
@@ -68,15 +79,26 @@ export default function Productdisplay({ selectedCategory }) {
   }, []);
 
   // ==========================================
-  // FILTER PRODUCTS
+  // FILTER BY CATEGORY + SEARCH
   // ==========================================
 
-  const filteredProducts = selectedCategory
-    ? products.filter(
-        (product) =>
-          Number(product.category_id) === Number(selectedCategory.id),
-      )
-    : products;
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory = selectedCategory
+      ? Number(product.category_id) ===
+        Number(selectedCategory.id)
+      : true;
+
+    const query = searchQuery.trim().toLowerCase();
+
+    const matchesSearch = query
+      ? product.name?.toLowerCase().includes(query) ||
+        product.description?.toLowerCase().includes(query)
+      : true;
+
+    return matchesCategory && matchesSearch;
+  });
+
+  
 
   // ==========================================
   // OPEN CUSTOMIZER
