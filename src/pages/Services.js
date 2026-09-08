@@ -23,26 +23,26 @@ useEffect(() => {
 if (loading) {
   return (
     <section className="min-h-screen flex items-center justify-center bg-white">
-      <div className="flex flex-col items-center gap-4">
-        <div
-          className="
-            w-12
-            h-12
-            border-4
-            border-purple-200
-            border-t-purple-600
-            rounded-full
-            animate-spin
-          "
+      <div className="flex flex-col items-center">
+        <Image
+          src="/images/nolimit-logo.png"
+          alt="No Limit Brands"
+          width={90}
+          height={90}
+          className="animate-pulse"
+          priority
         />
 
-        <p className="text-gray-600 text-sm font-medium animate-pulse">
+        <div className="mt-5 w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+
+        <p className="mt-4 text-gray-500 text-sm">
           Loading services...
         </p>
       </div>
     </section>
   );
 }
+
 
 
   return (
