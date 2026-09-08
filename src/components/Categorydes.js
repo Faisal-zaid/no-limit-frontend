@@ -6,23 +6,31 @@ import Link from "next/link";
 
 export default function Categorydescription({ selectedCategory }) {
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadCategories() {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/category`
-        );
+  async function loadCategories() {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/category`
+      );
 
-        const data = await response.json();
-        setCategories(data);
-      } catch (error) {
-        console.error("Failed to load category details:", error);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch categories: ${response.status}`);
       }
-    }
 
-    loadCategories();
-  }, []);
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error("Failed to load category details:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  loadCategories();
+}, []);
+
 
   // Use clicked category, otherwise use first category
   const activeCategory = selectedCategory || categories[0];
