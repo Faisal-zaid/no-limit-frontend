@@ -20,6 +20,31 @@ useEffect(() => {
   return () => clearTimeout(timer);
 }, []);
 
+if (loading) {
+  return (
+    <section className="min-h-screen flex items-center justify-center bg-white">
+      <div className="flex flex-col items-center gap-4">
+        <div
+          className="
+            w-12
+            h-12
+            border-4
+            border-purple-200
+            border-t-purple-600
+            rounded-full
+            animate-spin
+          "
+        />
+
+        <p className="text-gray-600 text-sm font-medium animate-pulse">
+          Loading services...
+        </p>
+      </div>
+    </section>
+  );
+}
+
+
   return (
     <section
       className="min-h-screen bg-[url('/images/nolimitbackground.png')]
