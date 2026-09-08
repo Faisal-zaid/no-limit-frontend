@@ -10,40 +10,7 @@ import Link from "next/link";
 
 export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setLoading(false);
-  }, 500);
-
-  return () => clearTimeout(timer);
-}, []);
-
-if (loading) {
-  return (
-    <section className="min-h-screen flex items-center justify-center bg-white">
-      <div className="flex flex-col items-center">
-        <Image
-          src="/images/nolimit-logo.png"
-          alt="No Limit Brands"
-          width={90}
-          height={90}
-          className="animate-pulse"
-          priority
-        />
-
-        <div className="mt-5 w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
-
-        <p className="mt-4 text-gray-500 text-sm">
-          Loading services...
-        </p>
-      </div>
-    </section>
-  );
-}
-
-
+  
 
   return (
     <section
@@ -444,8 +411,8 @@ if (loading) {
 
             <div>
               <div className="w-full px-4 py-4">
-  <Categories onSelectCategory={setSelectedCategory} />
-</div>
+                 <Categories onSelectCategory={setSelectedCategory} />
+              </div>
 
 
               <div
