@@ -31,6 +31,64 @@ export default function Categorydescription({ selectedCategory }) {
   loadCategories();
 }, []);
 
+if (loading) {
+  return (
+    <div className="w-full animate-pulse">
+      {/* HEADER SKELETON */}
+      <div className="border-b border-gray-200 px-6 pt-5 pb-5">
+        <div className="h-7 bg-gray-200 rounded-md w-2/3 mx-auto" />
+      </div>
+
+      {/* CONTENT SKELETON */}
+      <div
+        className="
+          flex
+          flex-col
+          lg:flex-row
+          gap-6
+          px-4
+          sm:px-6
+          lg:px-10
+          py-6
+        "
+      >
+        {/* LEFT */}
+        <div className="w-full lg:w-1/2 space-y-4">
+          <div className="h-7 bg-gray-200 rounded-full w-28" />
+
+          <div className="h-6 bg-gray-200 rounded-md w-3/4" />
+
+          <div className="space-y-3 pt-2">
+            <div className="h-4 bg-gray-200 rounded w-full" />
+            <div className="h-4 bg-gray-200 rounded w-full" />
+            <div className="h-4 bg-gray-200 rounded w-5/6" />
+            <div className="h-4 bg-gray-200 rounded w-4/6" />
+          </div>
+
+          {/* BUTTONS */}
+          <div className="flex gap-3 pt-3">
+            <div className="h-10 bg-gray-200 rounded-md w-36" />
+            <div className="h-10 bg-gray-200 rounded-md w-28" />
+          </div>
+
+          {/* FEATURES */}
+          <div className="flex flex-wrap gap-5 pt-4">
+            <div className="h-6 bg-gray-200 rounded w-32" />
+            <div className="h-6 bg-gray-200 rounded w-36" />
+            <div className="h-6 bg-gray-200 rounded w-32" />
+          </div>
+        </div>
+
+        {/* RIGHT IMAGE */}
+        <div className="w-full lg:w-1/2 flex justify-center items-center">
+          <div className="w-full max-w-md h-48 sm:h-56 lg:h-64 bg-gray-200 rounded-lg" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 
   // Use clicked category, otherwise use first category
   const activeCategory = selectedCategory || categories[0];
