@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchWrapper from "@/components/SearchWrapper";
 import Categories from "@/components/Category";
 import Categorydescription from "@/components/Categorydes";
@@ -10,6 +10,15 @@ import Link from "next/link";
 
 export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setLoading(false);
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, []);
 
   return (
     <section
