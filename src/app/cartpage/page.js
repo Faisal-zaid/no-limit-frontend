@@ -311,9 +311,7 @@ useEffect(() => {
           // Clear cart only AFTER payment succeeds
           clearCart();
 
-          setCustomerName("");
-          setCustomerEmail("");
-          setCustomerPhone("");
+          reset();
 
           return;
         }
@@ -551,26 +549,24 @@ useEffect(() => {
       // =================================================
 
       const checkoutResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-        {
-          method: "POST",
+  `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+  {
+    method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-          },
+    headers: {
+      "Content-Type": "application/json",
+    },
 
-          body: JSON.stringify({
-            customer_name: customerName.trim(),
+    credentials: "include",
 
-            customer_email: customerEmail.trim(),
-
-            customer_phone: customerPhone.trim(),
-
-            items: checkoutItems,
-          }),
-        },
-      );
-
+    body: JSON.stringify({
+      customer_name: customerName.trim(),
+      customer_email: customerEmail.trim(),
+      customer_phone: customerPhone.trim(),
+      items: checkoutItems,
+    }),
+  }
+);
       const checkoutData = await checkoutResponse.json();
 
       console.log("CHECKOUT RESPONSE:", checkoutData);
