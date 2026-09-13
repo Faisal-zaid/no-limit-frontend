@@ -127,31 +127,32 @@ export default function Services() {
               </Link>
 
               {/* SIGN IN */}
-              <button
-                className="
-                flex
-                items-center
-                gap-1
-                bg-purple-600
-                hover:bg-purple-700
-                text-white
-                font-medium
-                px-3
-                sm:px-4
-                py-2
-                rounded-lg
-                transition-colors
-              "
-              >
-                <Image
-                  src="/images/login.png"
-                  alt="Sign in"
-                  width={22}
-                  height={22}
-                />
+              <Link
+  href="/signup"
+  className="
+    flex
+    items-center
+    gap-1
+    bg-purple-600
+    hover:bg-purple-700
+    text-white
+    font-medium
+    px-3
+    sm:px-4
+    py-2
+    rounded-lg
+    transition-colors
+  "
+>
+  <Image
+    src="/images/login.png"
+    alt="Sign in"
+    width={22}
+    height={22}
+  />
 
-                <span className="hidden sm:inline">Sign In</span>
-              </button>
+  <span className="hidden sm:inline">Sign In</span>
+</Link>
             </div>
           </div>
 
