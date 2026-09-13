@@ -1,9 +1,11 @@
+
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -54,8 +56,6 @@ export default function SignupPage() {
         return;
       }
 
-      // Registration succeeded.
-      // Send the customer to the login page.
       router.push("/login");
 
     } catch (error) {
@@ -210,9 +210,17 @@ export default function SignupPage() {
                   -translate-y-1/2
                   text-gray-500
                   hover:text-purple-600
+                  transition-colors
                 "
+                aria-label={
+                  showPassword ? "Hide password" : "Show password"
+                }
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? (
+                  <EyeOff size={20} />
+                ) : (
+                  <Eye size={20} />
+                )}
               </button>
             </div>
           </div>
@@ -257,9 +265,19 @@ export default function SignupPage() {
                   -translate-y-1/2
                   text-gray-500
                   hover:text-purple-600
+                  transition-colors
                 "
+                aria-label={
+                  showConfirmPassword
+                    ? "Hide password"
+                    : "Show password"
+                }
               >
-                {showConfirmPassword ? "🙈" : "👁️"}
+                {showConfirmPassword ? (
+                  <EyeOff size={20} />
+                ) : (
+                  <Eye size={20} />
+                )}
               </button>
             </div>
           </div>
@@ -324,3 +342,4 @@ export default function SignupPage() {
     </main>
   );
 }
+
