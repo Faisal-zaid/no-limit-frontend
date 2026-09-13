@@ -63,7 +63,7 @@ export default function LoginPage() {
       console.log("Logged in user:", userData);
 
       // Customer goes back to the shopping area
-      router.push("/services");
+      router.push("/Services");
 
     } catch (error) {
       console.error("Login error:", error);
