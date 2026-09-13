@@ -12,9 +12,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 
-const [orders, setOrders] = useState([]);
-const [ordersLoading, setOrdersLoading] = useState(true);
-const [ordersError, setOrdersError] = useState("");
+
 
 // =====================================================
 // CUSTOM VALUE PREVIEW
@@ -231,6 +229,10 @@ export default function CartPage() {
   const [mpesaReceipt, setMpesaReceipt] = useState(null);
 
   const [paymentMessage, setPaymentMessage] = useState("");
+
+  const [orders, setOrders] = useState([]);
+const [ordersLoading, setOrdersLoading] = useState(true);
+const [ordersError, setOrdersError] = useState("");
 
   // =====================================================
   // POLL PAYMENT STATUS
