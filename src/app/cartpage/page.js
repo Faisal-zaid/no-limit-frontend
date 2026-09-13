@@ -11,9 +11,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-
-
-
 // =====================================================
 // CUSTOM VALUE PREVIEW
 // =====================================================
@@ -164,7 +161,7 @@ const checkoutSchema = z.object({
     .max(100, "Name is too long")
     .regex(
       /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/,
-      "Name can only contain letters, spaces, apostrophes and hyphens"
+      "Name can only contain letters, spaces, apostrophes and hyphens",
     ),
 
   customerEmail: z
@@ -178,10 +175,9 @@ const checkoutSchema = z.object({
     .trim()
     .regex(
       /^(?:07|01)\d{8}$/,
-      "Enter a valid Kenyan phone number e.g. 0712345678"
+      "Enter a valid Kenyan phone number e.g. 0712345678",
     ),
 });
-
 
 // =====================================================
 // CART PAGE
@@ -202,15 +198,14 @@ export default function CartPage() {
   // ===================================================
 
   const {
-  register,
-  handleSubmit,
-  reset,
-  formState: { errors },
-} = useForm({
-  resolver: zodResolver(checkoutSchema),
-  mode: "onBlur",
-});
-
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(checkoutSchema),
+    mode: "onBlur",
+  });
 
   // ===================================================
   // CHECKOUT STATE
@@ -231,40 +226,40 @@ export default function CartPage() {
   const [paymentMessage, setPaymentMessage] = useState("");
 
   const [orders, setOrders] = useState([]);
-const [ordersLoading, setOrdersLoading] = useState(true);
-const [ordersError, setOrdersError] = useState("");
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [ordersError, setOrdersError] = useState("");
 
-useEffect(() => {
-  async function fetchMyOrders() {
-    try {
-      setOrdersLoading(true);
-      setOrdersError("");
+  useEffect(() => {
+    async function fetchMyOrders() {
+      try {
+        setOrdersLoading(true);
+        setOrdersError("");
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/my-orders`,
-        {
-          method: "GET",
-          credentials: "include",
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/my-orders`,
+          {
+            method: "GET",
+            credentials: "include",
+          },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "Unable to load your orders.");
         }
-      );
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || "Unable to load your orders.");
+        setOrders(data);
+      } catch (error) {
+        console.error("MY ORDERS ERROR:", error);
+        setOrdersError(error.message);
+      } finally {
+        setOrdersLoading(false);
       }
-
-      setOrders(data);
-    } catch (error) {
-      console.error("MY ORDERS ERROR:", error);
-      setOrdersError(error.message);
-    } finally {
-      setOrdersLoading(false);
     }
-  }
 
-  fetchMyOrders();
-}, []);
+    fetchMyOrders();
+  }, []);
 
   // =====================================================
   // POLL PAYMENT STATUS
@@ -380,19 +375,19 @@ useEffect(() => {
   // =====================================================
 
   async function placeOrder(formData) {
-  if (cart.length === 0) {
-    alert("Your cart is empty.");
-    return;
-  }
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
 
-  try {
-    setIsSubmitting(true);
+    try {
+      setIsSubmitting(true);
 
-    const customerName = formData.customerName;
-    const customerEmail = formData.customerEmail;
-    const customerPhone = formData.customerPhone;
+      const customerName = formData.customerName;
+      const customerEmail = formData.customerEmail;
+      const customerPhone = formData.customerPhone;
 
-    // your existing checkout code continues here...
+      // your existing checkout code continues here...
 
       setIsSubmitting(true);
 
@@ -549,24 +544,24 @@ useEffect(() => {
       // =================================================
 
       const checkoutResponse = await fetch(
-  `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-  {
-    method: "POST",
+        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+        {
+          method: "POST",
 
-    headers: {
-      "Content-Type": "application/json",
-    },
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-    credentials: "include",
+          credentials: "include",
 
-    body: JSON.stringify({
-      customer_name: customerName.trim(),
-      customer_email: customerEmail.trim(),
-      customer_phone: customerPhone.trim(),
-      items: checkoutItems,
-    }),
-  }
-);
+          body: JSON.stringify({
+            customer_name: customerName.trim(),
+            customer_email: customerEmail.trim(),
+            customer_phone: customerPhone.trim(),
+            items: checkoutItems,
+          }),
+        },
+      );
       const checkoutData = await checkoutResponse.json();
 
       console.log("CHECKOUT RESPONSE:", checkoutData);
@@ -962,8 +957,10 @@ useEffect(() => {
                     Order Summary
                   </h2>
 
-                  <form onSubmit={handleSubmit(placeOrder)} className="space-y-4">
-
+                  <form
+                    onSubmit={handleSubmit(placeOrder)}
+                    className="space-y-4"
+                  >
                     {/* NAME */}
 
                     <div>
@@ -972,19 +969,18 @@ useEffect(() => {
                       </label>
 
                       <input
-  type="text"
-  placeholder="John Doe"
-  disabled={isSubmitting}
-  {...register("customerName")}
-  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
-/>
+                        type="text"
+                        placeholder="John Doe"
+                        disabled={isSubmitting}
+                        {...register("customerName")}
+                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+                      />
 
-{errors.customerName && (
-  <p className="text-red-500 text-xs mt-1">
-    {errors.customerName.message}
-  </p>
-)}
-
+                      {errors.customerName && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.customerName.message}
+                        </p>
+                      )}
                     </div>
 
                     {/* EMAIL */}
@@ -995,19 +991,18 @@ useEffect(() => {
                       </label>
 
                       <input
-  type="email"
-  placeholder="john@example.com"
-  disabled={isSubmitting}
-  {...register("customerEmail")}
-  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
-/>
+                        type="email"
+                        placeholder="john@example.com"
+                        disabled={isSubmitting}
+                        {...register("customerEmail")}
+                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+                      />
 
-{errors.customerEmail && (
-  <p className="text-red-500 text-xs mt-1">
-    {errors.customerEmail.message}
-  </p>
-)}
-
+                      {errors.customerEmail && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.customerEmail.message}
+                        </p>
+                      )}
                     </div>
 
                     {/* PHONE */}
@@ -1018,24 +1013,23 @@ useEffect(() => {
                       </label>
 
                       <input
-  type="tel"
-  inputMode="numeric"
-  placeholder="0712345678"
-  disabled={isSubmitting}
-  {...register("customerPhone")}
-  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
-/>
+                        type="tel"
+                        inputMode="numeric"
+                        placeholder="0712345678"
+                        disabled={isSubmitting}
+                        {...register("customerPhone")}
+                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100"
+                      />
 
-{errors.customerPhone && (
-  <p className="text-red-500 text-xs mt-1">
-    {errors.customerPhone.message}
-  </p>
-)}
+                      {errors.customerPhone && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.customerPhone.message}
+                        </p>
+                      )}
 
-<p className="text-xs text-gray-500 mt-1">
-  Enter a Kenyan number e.g. 0712345678.
-</p>
-
+                      <p className="text-xs text-gray-500 mt-1">
+                        Enter a Kenyan number e.g. 0712345678.
+                      </p>
 
                       <p className="text-xs text-gray-500 mt-1">
                         You'll receive the M-Pesa payment prompt on this number.
@@ -1069,6 +1063,102 @@ useEffect(() => {
             </div>
           </div>
         )}
+        {/* ================================================= */}
+{/* MY ORDERS */}
+{/* ================================================= */}
+
+<div className="mt-12">
+  <h2 className="text-2xl font-bold text-gray-800 mb-5">
+    My Orders
+  </h2>
+
+  {ordersLoading ? (
+    <div className="bg-white rounded-xl shadow-sm border p-6">
+      <p className="text-gray-500">
+        Loading your orders...
+      </p>
+    </div>
+  ) : ordersError ? (
+    <div className="bg-white rounded-xl shadow-sm border p-6">
+      <p className="text-red-500">
+        {ordersError}
+      </p>
+    </div>
+  ) : orders.length === 0 ? (
+    <div className="bg-white rounded-xl shadow-sm border p-6">
+      <p className="text-gray-500">
+        You haven't placed any orders yet.
+      </p>
+    </div>
+  ) : (
+    <div className="space-y-4">
+      {orders.map((order) => (
+        <div
+          key={order.id}
+          className="bg-white rounded-xl shadow-sm border p-5"
+        >
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="font-bold text-gray-800">
+                Order #{order.id}
+              </h3>
+
+              <p className="text-sm text-gray-500 mt-1">
+                {new Date(order.created_at).toLocaleDateString()}
+              </p>
+            </div>
+
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                order.status === "Completed"
+                  ? "bg-green-100 text-green-700"
+                  : order.status === "Cancelled"
+                  ? "bg-red-100 text-red-700"
+                  : order.status === "Processing"
+                  ? "bg-blue-100 text-blue-700"
+                  : "bg-yellow-100 text-yellow-700"
+              }`}
+            >
+              {order.status}
+            </span>
+          </div>
+
+          <div className="border-t mt-4 pt-4 flex justify-between">
+            <span className="text-gray-600">
+              Total
+            </span>
+
+            <span className="font-bold text-purple-600">
+              KSh {order.total_price}
+            </span>
+          </div>
+
+          <div className="mt-2 flex justify-between text-sm">
+            <span className="text-gray-500">
+              Payment
+            </span>
+
+            <span className="font-medium">
+              {order.payment_status}
+            </span>
+          </div>
+
+          {order.mpesa_receipt_number && (
+            <div className="mt-2 flex justify-between text-sm">
+              <span className="text-gray-500">
+                M-Pesa Receipt
+              </span>
+
+              <span className="font-medium">
+                {order.mpesa_receipt_number}
+              </span>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
       </div>
     </section>
   );
