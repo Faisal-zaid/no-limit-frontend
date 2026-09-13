@@ -12,6 +12,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 
+const [orders, setOrders] = useState([]);
+const [ordersLoading, setOrdersLoading] = useState(true);
+const [ordersError, setOrdersError] = useState("");
+
 // =====================================================
 // CUSTOM VALUE PREVIEW
 // =====================================================
