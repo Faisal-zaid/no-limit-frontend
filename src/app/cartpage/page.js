@@ -234,6 +234,38 @@ export default function CartPage() {
 const [ordersLoading, setOrdersLoading] = useState(true);
 const [ordersError, setOrdersError] = useState("");
 
+useEffect(() => {
+  async function fetchMyOrders() {
+    try {
+      setOrdersLoading(true);
+      setOrdersError("");
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/my-orders`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Unable to load your orders.");
+      }
+
+      setOrders(data);
+    } catch (error) {
+      console.error("MY ORDERS ERROR:", error);
+      setOrdersError(error.message);
+    } finally {
+      setOrdersLoading(false);
+    }
+  }
+
+  fetchMyOrders();
+}, []);
+
   // =====================================================
   // POLL PAYMENT STATUS
   // =====================================================
