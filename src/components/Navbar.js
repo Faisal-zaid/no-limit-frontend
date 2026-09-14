@@ -135,6 +135,25 @@ export default function Navbar({ onSelectCategory }) {
         scroll-smooth
       "
     >
+<button
+      type="button"
+      onClick={() => router.push("/account")}
+      className="
+        nav
+        cursor-pointer
+        hover:text-purple-600
+        transition-colors
+        bg-transparent
+        border-0
+        p-0
+        whitespace-nowrap
+        flex-shrink-0
+      "
+    >
+      ACCOUNT
+    </button>
+
+
       {categories.slice(0, 8).map((category) => (
         <button
           key={category.id}
