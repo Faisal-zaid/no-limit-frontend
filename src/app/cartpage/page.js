@@ -308,6 +308,8 @@ export default function CartPage() {
 
           reset();
 
+           await fetchMyOrders();
+
           return;
         }
 
