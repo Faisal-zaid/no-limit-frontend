@@ -32,10 +32,13 @@ export default function AccountPage() {
 
         const userData = await userResponse.json();
 
-        if (!userResponse.ok) {
-          router.push("/login");
-          return;
-        }
+console.log("ACCOUNT USER RESPONSE:", userResponse.status);
+console.log("ACCOUNT USER DATA:", userData);
+
+if (!userResponse.ok) {
+  router.push("/login");
+  return;
+}
 
         setUser(userData);
 
