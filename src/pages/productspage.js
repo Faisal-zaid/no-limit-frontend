@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -35,15 +34,7 @@ export default function ProductsPage() {
   }, []);
 
   return (
-    <section
-      className="
-        min-h-screen
-        bg-[url('/images/nolimitbackground.png')]
-        bg-no-repeat
-        bg-cover
-        bg-fixed
-      "
-    >
+    <section className="min-h-screen bg-nolimit-poster">
 
       {/* =====================================================
           HEADER
@@ -148,6 +139,32 @@ export default function ProductsPage() {
                 </span>
 
               </button>
+
+
+              {/* ================= ACCOUNT ================= */}
+
+              <Link
+                href="/account"
+                className="
+                  hidden
+                  lg:flex
+                  items-center
+                  gap-1
+                  hover:text-purple-600
+                  transition
+                "
+              >
+                <Image
+                  src="/images/user.png"
+                  alt="Account"
+                  width={25}
+                  height={25}
+                />
+
+                <span>
+                  Account
+                </span>
+              </Link>
 
 
               {/* ================= CART ================= */}
@@ -671,4 +688,3 @@ export default function ProductsPage() {
     </section>
   );
 }
-
