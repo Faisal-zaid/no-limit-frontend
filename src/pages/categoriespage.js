@@ -13,31 +13,29 @@ export default function CategoriesPage() {
   const phoneNumber = "254780887324";
 
   const defaultMessage = encodeURIComponent(
-    "Hello No Limit Brands! I would like to consult on your branding services."
+    "Hello No Limit Brands! I would like to consult on your branding services.",
   );
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
 
   return (
     <section className="min-h-screen bg-nolimit-poster">
-
       {/* =====================================================
           HEADER
           ===================================================== */}
       <header className="bg-white shadow-xl text-gray-700 pb-4">
-
         {/* =====================================================
             TOP HEADER
             ===================================================== */}
         <div className="px-4 sm:px-6 lg:px-[3%] pt-4">
-
-          <div className="
+          <div
+            className="
             flex
             items-center
             justify-between
             gap-4
-          ">
-
+          "
+          >
             {/* =================================================
                 LOGO
                 ================================================= */}
@@ -51,41 +49,43 @@ export default function CategoriesPage() {
               />
             </Link>
 
-
             {/* =================================================
                 DESKTOP SEARCH
                 ================================================= */}
-            <div className="
+            <div
+              className="
               hidden
               lg:flex
               flex-1
               max-w-2xl
               mx-8
-            ">
+            "
+            >
               <SearchWrapper />
             </div>
-
 
             {/* =================================================
                 RIGHT SIDE
                 ================================================= */}
-            <div className="
+            <div
+              className="
               flex
               items-center
               gap-3
               sm:gap-5
-            ">
-
+            "
+            >
               {/* ABOUT - DESKTOP ONLY */}
-              <button className="
+              <button
+                className="
                 hidden
                 lg:flex
                 items-center
                 gap-1
                 hover:text-purple-600
                 transition
-              ">
-
+              "
+              >
                 <Image
                   src="/images/info.png"
                   alt="About"
@@ -93,12 +93,8 @@ export default function CategoriesPage() {
                   height={25}
                 />
 
-                <span>
-                  About
-                </span>
-
+                <span>About</span>
               </button>
-
 
               {/* ACCOUNT - DESKTOP ONLY */}
               <Link
@@ -112,18 +108,21 @@ export default function CategoriesPage() {
                   transition
                 "
               >
-                <Image
-                  src="/images/user.png"
-                  alt="Account"
-                  width={25}
-                  height={25}
-                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    fill="currentColor"
+                    d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"
+                  />
+                </svg>
 
-                <span>
-                  Account
-                </span>
+                <span>Account</span>
               </Link>
-
 
               {/* CART */}
               <Link
@@ -136,7 +135,6 @@ export default function CategoriesPage() {
                   transition
                 "
               >
-
                 <Image
                   src="/images/Cart--Streamline-Platinum.png"
                   alt="Cart"
@@ -144,15 +142,12 @@ export default function CategoriesPage() {
                   height={25}
                 />
 
-                <span className="hidden sm:inline">
-                  Cart
-                </span>
-
+                <span className="hidden sm:inline">Cart</span>
               </Link>
 
-
               {/* SIGN IN */}
-              <button className="
+              <button
+                className="
                 flex
                 items-center
                 gap-1
@@ -165,8 +160,8 @@ export default function CategoriesPage() {
                 py-2
                 rounded-lg
                 transition-colors
-              ">
-
+              "
+              >
                 <Image
                   src="/images/login.png"
                   alt="Sign in"
@@ -174,41 +169,35 @@ export default function CategoriesPage() {
                   height={22}
                 />
 
-                <span className="hidden sm:inline">
-                  Sign In
-                </span>
-
+                <span className="hidden sm:inline">Sign In</span>
               </button>
-
             </div>
-
           </div>
-
 
           {/* =====================================================
               MOBILE SEARCH
               ===================================================== */}
-          <div className="
+          <div
+            className="
             lg:hidden
             mt-4
-          ">
-
+          "
+          >
             <SearchWrapper />
-
           </div>
-
 
           {/* =====================================================
               NAVIGATION
               ===================================================== */}
-          <div className="
+          <div
+            className="
             flex
             items-center
             justify-between
             gap-3
             mt-5
-          ">
-
+          "
+          >
             {/* =================================================
                 ALL PRODUCTS
                 ================================================= */}
@@ -229,45 +218,38 @@ export default function CategoriesPage() {
                 flex-shrink-0
               "
             >
+              <Image src="/images/menu.png" alt="Menu" width={22} height={22} />
 
-              <Image
-                src="/images/menu.png"
-                alt="Menu"
-                width={22}
-                height={22}
-              />
-
-              <span className="
+              <span
+                className="
                 text-sm
                 sm:text-base
-              ">
+              "
+              >
                 All Products
               </span>
-
             </Link>
-
 
             {/* =================================================
                 NAVBAR
                 ================================================= */}
-            <div className="
+            <div
+              className="
               flex-1
               overflow-x-auto
               scrollbar-hide
-            ">
-
-              <div className="
+            "
+            >
+              <div
+                className="
                 min-w-max
                 flex
                 justify-center
-              ">
-
+              "
+              >
                 <Navbar />
-
               </div>
-
             </div>
-
 
             {/* =================================================
                 SHOP ALL
@@ -286,27 +268,25 @@ export default function CategoriesPage() {
             >
               Shop All
             </Link>
-
           </div>
-
         </div>
-
       </header>
-
 
       {/* =====================================================
           INTRO
           ===================================================== */}
-      <div className="
+      <div
+        className="
         px-4
         sm:px-6
         pt-8
         sm:pt-10
         text-center
-      ">
-
+      "
+      >
         {/* CATEGORY BADGE */}
-        <button className="
+        <button
+          className="
           inline-flex
           items-center
           gap-2
@@ -317,8 +297,8 @@ export default function CategoriesPage() {
           py-2
           bg-purple-600
           text-white
-        ">
-
+        "
+        >
           <Image
             src="/images/star.png"
             alt="Categories"
@@ -326,92 +306,74 @@ export default function CategoriesPage() {
             height={20}
           />
 
-          <span>
-            Services
-          </span>
-
+          <span>Services</span>
         </button>
 
-
         {/* HEADING */}
-        <h2 className="
+        <h2
+          className="
           font-bold
           text-xl
           sm:text-2xl
           mt-4
-        ">
+        "
+        >
           Professional Branding Services
         </h2>
 
-
         {/* DESCRIPTION */}
-        <p className="
+        <p
+          className="
           mt-3
           text-sm
           sm:text-base
           leading-relaxed
           max-w-4xl
           mx-auto
-        ">
-
-          <span className="font-bold">
-            No Limit Brands
-          </span>{" "}
-
-          delivers high-impact branding solutions across{" "}
-
-          <span className="font-bold">
-            Nairobi, Kenya, and East Africa
-          </span>
-
+        "
+        >
+          <span className="font-bold">No Limit Brands</span> delivers
+          high-impact branding solutions across{" "}
+          <span className="font-bold">Nairobi, Kenya, and East Africa</span>
           <br className="hidden sm:block" />
-
           specializing in{" "}
-
-          <span className="font-bold">
-            complete brand identity
-          </span>{" "}
-
-          development, corporate branding, vehicle wraps and matatu
-          graphics, professional signage, promotional printing, packaging
-          design, and corporate stationery for ambitious startups, SMEs,
-          and enterprise corporations.
-
+          <span className="font-bold">complete brand identity</span>{" "}
+          development, corporate branding, vehicle wraps and matatu graphics,
+          professional signage, promotional printing, packaging design, and
+          corporate stationery for ambitious startups, SMEs, and enterprise
+          corporations.
         </p>
-
       </div>
-
 
       {/* =====================================================
           CATEGORIES
           ===================================================== */}
-      <div className="
+      <div
+        className="
         px-4
         sm:px-6
         lg:px-8
         py-8
-      ">
-
-        <div className="
+      "
+      >
+        <div
+          className="
           border
           border-gray-200
           rounded-xl
           p-4
           sm:p-6
           bg-white
-        ">
-
-          <Categorydisplay
-            onSelectCategory={setSelectedCategory}
-          />
-
+        "
+        >
+          <Categorydisplay onSelectCategory={setSelectedCategory} />
         </div>
-
 
         {/* =================================================
             CONTACT
             ================================================= */}
-        <div className="
+        <div
+          className="
           border
           border-gray-200
           rounded-xl
@@ -423,26 +385,28 @@ export default function CategoriesPage() {
           flex-col
           items-center
           text-center
-        ">
-
-          <h2 className="
+        "
+        >
+          <h2
+            className="
             font-bold
             text-lg
             sm:text-xl
-          ">
+          "
+          >
             Ready to Transform Your Brand?
           </h2>
 
-
-          <p className="
+          <p
+            className="
             mt-1
             text-sm
             sm:text-base
             text-gray-600
-          ">
+          "
+          >
             Contact us for a free consultation
           </p>
-
 
           <Link
             href={whatsappUrl}
@@ -467,19 +431,11 @@ export default function CategoriesPage() {
               sm:w-auto
             "
           >
-
-            <span className="text-lg">
-              WhatsApp
-            </span>
-
+            <span className="text-lg">WhatsApp</span>
             Chat with Us
-
           </Link>
-
         </div>
-
       </div>
-
     </section>
   );
 }
