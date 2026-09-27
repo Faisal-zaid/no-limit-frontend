@@ -98,6 +98,28 @@ export default function Services() {
                 <span>About</span>
               </button>
 
+              {/* ACCOUNT - DESKTOP ONLY */}
+              <Link
+                href="/account"
+                className="
+                hidden
+                lg:flex
+                items-center
+                gap-1
+                hover:text-purple-600
+                transition
+              "
+              >
+                <Image
+                  src="/images/user.png"
+                  alt="Account"
+                  width={25}
+                  height={25}
+                />
+
+                <span>Account</span>
+              </Link>
+
               {/* CART */}
               <Link
                 href="/cartpage"
