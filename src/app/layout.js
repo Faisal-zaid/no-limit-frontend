@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
-// import { rancho, londrina } from "./fonts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,10 +23,9 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover min-h-full flex flex-col">
-        <Providers>
-          {children}
-        </Providers>
+      {/* Updated background to match the radial gold-to-orange gradient */}
+      <body className="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#FCD34D] via-[#F59E0B] to-[#D97706] text-[#4C1D95] min-h-full flex flex-col">
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
