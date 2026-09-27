@@ -15,7 +15,7 @@ export default function ProductsPage() {
     async function loadCategories() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/category`
+          `${process.env.NEXT_PUBLIC_API_URL}/category`,
         );
 
         if (!response.ok) {
@@ -35,44 +35,43 @@ export default function ProductsPage() {
 
   return (
     <section className="min-h-screen bg-nolimit-poster">
-
       {/* =====================================================
           HEADER
       ====================================================== */}
 
-      <div className="
+      <div
+        className="
         bg-white
         border-b
         border-gray-700
         shadow-xl
         text-gray-700
         pb-4
-      ">
-
+      "
+      >
         {/* =====================================================
             TOP HEADER
         ====================================================== */}
 
-        <div className="
+        <div
+          className="
           px-[4%]
           pt-4
-        ">
-
-          <div className="
+        "
+        >
+          <div
+            className="
             flex
             items-center
             justify-between
             gap-4
-          ">
-
+          "
+          >
             {/* =================================================
                 LOGO
             ================================================= */}
 
-            <Link
-              href="/"
-              className="flex-shrink-0"
-            >
+            <Link href="/" className="flex-shrink-0">
               <Image
                 src="/images/nolimit-logo.png"
                 alt="No Limit Brands logo"
@@ -86,34 +85,35 @@ export default function ProductsPage() {
               />
             </Link>
 
-
             {/* =================================================
                 DESKTOP SEARCH
             ================================================= */}
 
-            <div className="
+            <div
+              className="
               hidden
               lg:flex
               flex-1
               max-w-2xl
               mx-8
-            ">
+            "
+            >
               <SearchWrapper />
             </div>
-
 
             {/* =================================================
                 RIGHT SIDE
             ================================================= */}
 
-            <div className="
+            <div
+              className="
               flex
               items-center
               gap-3
               sm:gap-5
               flex-shrink-0
-            ">
-
+            "
+            >
               {/* ================= ABOUT ================= */}
 
               <button
@@ -126,7 +126,6 @@ export default function ProductsPage() {
                   transition
                 "
               >
-
                 <Image
                   src="/images/info.png"
                   alt="About"
@@ -134,12 +133,8 @@ export default function ProductsPage() {
                   height={25}
                 />
 
-                <span>
-                  About
-                </span>
-
+                <span>About</span>
               </button>
-
 
               {/* ================= ACCOUNT ================= */}
 
@@ -154,18 +149,21 @@ export default function ProductsPage() {
                   transition
                 "
               >
-                <Image
-                  src="/images/user.png"
-                  alt="Account"
-                  width={25}
-                  height={25}
-                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    fill="currentColor"
+                    d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"
+                  />
+                </svg>
 
-                <span>
-                  Account
-                </span>
+                <span>Account</span>
               </Link>
-
 
               {/* ================= CART ================= */}
 
@@ -179,7 +177,6 @@ export default function ProductsPage() {
                   transition
                 "
               >
-
                 <Image
                   src="/images/Cart--Streamline-Platinum.png"
                   alt="Cart"
@@ -188,12 +185,8 @@ export default function ProductsPage() {
                 />
 
                 {/* Hide text on very small screens */}
-                <span className="hidden sm:inline">
-                  Cart
-                </span>
-
+                <span className="hidden sm:inline">Cart</span>
               </Link>
-
 
               {/* ================= SIGN IN ================= */}
 
@@ -213,7 +206,6 @@ export default function ProductsPage() {
                   transition-colors
                 "
               >
-
                 <Image
                   src="/images/login.png"
                   alt="Sign in"
@@ -222,44 +214,38 @@ export default function ProductsPage() {
                 />
 
                 {/* Hide text on very small screens */}
-                <span className="hidden sm:inline">
-                  Sign In
-                </span>
-
+                <span className="hidden sm:inline">Sign In</span>
               </button>
-
             </div>
-
           </div>
-
 
           {/* =====================================================
               MOBILE SEARCH
           ===================================================== */}
 
-          <div className="
+          <div
+            className="
             lg:hidden
             mt-4
             w-full
-          ">
-
+          "
+          >
             <SearchWrapper />
-
           </div>
-
 
           {/* =====================================================
               SECOND NAVIGATION
           ===================================================== */}
 
-          <div className="
+          <div
+            className="
             flex
             items-center
             gap-3
             mt-5
             overflow-hidden
-          ">
-
+          "
+          >
             {/* =================================================
                 ALL PRODUCTS
             ================================================= */}
@@ -280,45 +266,40 @@ export default function ProductsPage() {
                 transition
               "
             >
+              <Image src="/images/menu.png" alt="Menu" width={22} height={22} />
 
-              <Image
-                src="/images/menu.png"
-                alt="Menu"
-                width={22}
-                height={22}
-              />
-
-              <span className="
+              <span
+                className="
                 text-sm
                 sm:text-base
-              ">
+              "
+              >
                 All Products
               </span>
-
             </Link>
-
 
             {/* =================================================
                 CATEGORY NAVBAR
             ================================================= */}
 
-            <div className="
+            <div
+              className="
               flex-1
               overflow-x-auto
               scrollbar-hide
               min-w-0
-            ">
-
-              <div className="
+            "
+            >
+              <div
+                className="
                 min-w-max
                 flex
                 justify-center
-              ">
+              "
+              >
                 <Navbar />
               </div>
-
             </div>
-
 
             {/* =================================================
                 SHOP ALL
@@ -338,25 +319,22 @@ export default function ProductsPage() {
             >
               Shop All
             </Link>
-
           </div>
-
         </div>
-
       </div>
-
 
       {/* =====================================================
           PAGE INTRO
       ====================================================== */}
 
-      <div className="
+      <div
+        className="
         pt-8
         sm:pt-10
         px-4
         text-center
-      ">
-
+      "
+      >
         {/* PRODUCTS BADGE */}
 
         <button
@@ -370,13 +348,13 @@ export default function ProductsPage() {
             text-white
           "
         >
-
-          <span className="
+          <span
+            className="
             flex
             items-center
             gap-2
-          ">
-
+          "
+          >
             <Image
               src="/images/star.png"
               alt="Products"
@@ -384,48 +362,45 @@ export default function ProductsPage() {
               height={25}
             />
 
-            <span>
-              Products
-            </span>
-
+            <span>Products</span>
           </span>
-
         </button>
-
 
         {/* TITLE */}
 
-        <h2 className="
+        <h2
+          className="
           font-bold
           text-[22px]
           sm:text-[25px]
           mt-3
-        ">
+        "
+        >
           Shop by Category
         </h2>
 
-
         {/* DESCRIPTION */}
 
-        <p className="
+        <p
+          className="
           text-sm
           sm:text-base
           mt-2
           max-w-2xl
           mx-auto
           px-2
-        ">
+        "
+        >
           Check our Products by Category to find what you would like
         </p>
-
       </div>
-
 
       {/* =====================================================
           SHOP CONTENT
       ====================================================== */}
 
-      <div className="
+      <div
+        className="
         w-full
         gap-6
         flex
@@ -434,9 +409,8 @@ export default function ProductsPage() {
         p-4
         lg:p-6
         shadow-sm
-      ">
-
-
+      "
+      >
         {/* =====================================================
             LEFT SIDEBAR
         ====================================================== */}
@@ -454,50 +428,51 @@ export default function ProductsPage() {
             ${selectedCategory ? "hidden lg:block" : "block"}
           `}
         >
-
           {/* SIDEBAR TITLE */}
 
-          <p className="
+          <p
+            className="
             font-bold
             text-[15px]
-          ">
+          "
+          >
             Browse by Category
           </p>
 
-          <p className="
+          <p
+            className="
             text-[12px]
             mt-2
             mb-4
             text-gray-500
-          ">
+          "
+          >
             Filter according to what interests you
           </p>
-
 
           {/* =================================================
               CATEGORY LIST
           ================================================= */}
 
-          <div className="
+          <div
+            className="
             mt-2
             space-y-3
-          ">
-
+          "
+          >
             {categories.length === 0 ? (
-
-              <p className="
+              <p
+                className="
                 text-sm
                 text-gray-500
                 text-center
                 py-6
-              ">
+              "
+              >
                 No categories available.
               </p>
-
             ) : (
-
               categories.map((category) => (
-
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category)}
@@ -521,12 +496,12 @@ export default function ProductsPage() {
                     active:scale-[0.98]
                   "
                 >
-
                   {/* =========================================
                       CATEGORY IMAGE
                   ========================================= */}
 
-                  <div className="
+                  <div
+                    className="
                     w-14
                     h-14
                     sm:w-16
@@ -535,10 +510,9 @@ export default function ProductsPage() {
                     overflow-hidden
                     rounded-lg
                     bg-gray-100
-                  ">
-
+                  "
+                  >
                     {category.image ? (
-
                       <img
                         src={category.image}
                         alt={category.name}
@@ -548,10 +522,9 @@ export default function ProductsPage() {
                           object-cover
                         "
                       />
-
                     ) : (
-
-                      <div className="
+                      <div
+                        className="
                         w-full
                         h-full
                         flex
@@ -559,68 +532,65 @@ export default function ProductsPage() {
                         justify-center
                         text-gray-400
                         text-xs
-                      ">
+                      "
+                      >
                         No image
                       </div>
-
                     )}
-
                   </div>
-
 
                   {/* =========================================
                       CATEGORY NAME
                   ========================================= */}
 
-                  <div className="
+                  <div
+                    className="
                     flex-1
                     min-w-0
-                  ">
-
-                    <h3 className="
+                  "
+                  >
+                    <h3
+                      className="
                       font-semibold
                       text-gray-900
                       text-sm
                       sm:text-base
                       truncate
-                    ">
+                    "
+                    >
                       {category.name}
                     </h3>
 
-                    <p className="
+                    <p
+                      className="
                       text-xs
                       text-gray-500
                       mt-1
-                    ">
+                    "
+                    >
                       View products
                     </p>
-
                   </div>
-
 
                   {/* =========================================
                       ARROW
                   ========================================= */}
 
-                  <div className="
+                  <div
+                    className="
                     text-purple-600
                     text-xl
                     pr-1
                     flex-shrink-0
-                  ">
+                  "
+                  >
                     →
                   </div>
-
                 </button>
-
               ))
-
             )}
-
           </div>
-
         </div>
-
 
         {/* =====================================================
             PRODUCTS
@@ -640,20 +610,19 @@ export default function ProductsPage() {
             ${!selectedCategory ? "hidden lg:block" : "block"}
           `}
         >
-
           {/* =================================================
               MOBILE BACK BUTTON
           ================================================= */}
 
           {selectedCategory && (
-
-            <div className="
+            <div
+              className="
               lg:hidden
               p-4
               border-b
               bg-gray-50
-            ">
-
+            "
+            >
               <button
                 onClick={() => setSelectedCategory(null)}
                 className="
@@ -667,24 +636,16 @@ export default function ProductsPage() {
               >
                 ← Back to Categories
               </button>
-
             </div>
-
           )}
-
 
           {/* =================================================
               PRODUCT DISPLAY
           ================================================= */}
 
-          <Productdisplay
-            selectedCategory={selectedCategory}
-          />
-
+          <Productdisplay selectedCategory={selectedCategory} />
         </div>
-
       </div>
-
     </section>
   );
 }
