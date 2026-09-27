@@ -135,7 +135,7 @@ export default function Navbar({ onSelectCategory }) {
         scroll-smooth
       "
     >
-<button
+{/* <button
       type="button"
       onClick={() => router.push("/account")}
       className="
@@ -151,7 +151,7 @@ export default function Navbar({ onSelectCategory }) {
       "
     >
       ACCOUNT
-    </button>
+    </button> */}
 
 
       {categories.slice(0, 8).map((category) => (
