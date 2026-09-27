@@ -10,16 +10,9 @@ import Link from "next/link";
 
 export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  
 
   return (
-    <section
-      className="min-h-screen bg-[url('/images/nolimitbackground.png')]
-        bg-no-repeat
-        bg-cover
-        bg-center
-        bg-fixed"
-    >
+    <section className="min-h-screen bg-nolimit-poster">
       {/* ================= HEADER ================= */}
 
       <div className="bg-white shadow-xl text-gray-700 pb-4">
@@ -128,31 +121,31 @@ export default function Services() {
 
               {/* SIGN IN */}
               <Link
-  href="/signup"
-  className="
-    flex
-    items-center
-    gap-1
-    bg-purple-600
-    hover:bg-purple-700
-    text-white
-    font-medium
-    px-3
-    sm:px-4
-    py-2
-    rounded-lg
-    transition-colors
-  "
->
-  <Image
-    src="/images/login.png"
-    alt="Sign in"
-    width={22}
-    height={22}
-  />
+                href="/signup"
+                className="
+                  flex
+                  items-center
+                  gap-1
+                  bg-purple-600
+                  hover:bg-purple-700
+                  text-white
+                  font-medium
+                  px-3
+                  sm:px-4
+                  py-2
+                  rounded-lg
+                  transition-colors
+                "
+              >
+                <Image
+                  src="/images/login.png"
+                  alt="Sign in"
+                  width={22}
+                  height={22}
+                />
 
-  <span className="hidden sm:inline">Sign In</span>
-</Link>
+                <span className="hidden sm:inline">Sign In</span>
+              </Link>
             </div>
           </div>
 
@@ -384,6 +377,8 @@ export default function Services() {
           border
           rounded-[20px]
           gap-6
+          bg-white/80
+          backdrop-blur-sm
         "
         >
           {/* ================= CATEGORIES ================= */}
@@ -396,12 +391,14 @@ export default function Services() {
             lg:ml-7
             lg:mr-7
             lg:mt-[3%]
+            lg:mb-[3%]
+            bg-white
           "
           >
             <h2
               className="
               border-b
-              px-15
+              px-6
               py-3
               font-semibold
               text-lg
@@ -412,9 +409,8 @@ export default function Services() {
 
             <div>
               <div className="w-full px-4 py-4">
-                 <Categories onSelectCategory={setSelectedCategory} />
+                <Categories onSelectCategory={setSelectedCategory} />
               </div>
-
 
               <div
                 className="
@@ -457,6 +453,8 @@ export default function Services() {
             overflow-hidden
             mr-7
             mt-[3%]
+            mb-[3%]
+            bg-white
           "
           >
             <Categorydescription selectedCategory={selectedCategory} />
