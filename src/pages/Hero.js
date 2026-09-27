@@ -4,111 +4,83 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <div className="px-4 sm:px-6 lg:mx-[3%] text-[#5801B8]">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 text-[#5801B8]">
 
       {/* =====================================================
-          HEADER
+          HEADER (Mobile & PC Optimized - Top Line Removed)
       ===================================================== */}
 
-      <header className={rancho.className}>
+      <header className={`${rancho.className} w-full`}>
 
         {/* TOP ROW */}
-        <div className="pt-3 sm:pt-0">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
 
-          <div className="flex flex-row items-center justify-between gap-4">
-
-            {/* LOGO */}
+          {/* LOGO & LOCATION GROUP */}
+          <div className="flex items-center justify-between w-full sm:w-auto gap-4">
             <Image
               src="/images/nolimit-logo.png"
               alt="No Limit Brands logo"
               width={77}
               height={75}
-              className="w-[58px] h-auto sm:w-[77px]"
+              priority
+              className="w-[50px] sm:w-[68px] lg:w-[77px] h-auto object-contain"
             />
 
-            {/* LOCATION */}
-            <p className="text-xs sm:text-sm font-black tracking-wide text-[#5801B8]">
+            <p className="sm:hidden text-xs font-black tracking-wide text-[#5801B8]">
               NAIROBI, KE
             </p>
-
           </div>
 
-          {/* BRAND DESCRIPTION */}
+          <p className="hidden sm:block text-sm lg:text-base font-black tracking-wide text-[#5801B8]">
+            NAIROBI, KE
+          </p>
 
-          <div className="mt-3 text-center sm:text-right">
-            <p className="text-xs sm:text-sm font-black tracking-wide text-[#5801B8]">
+          {/* BRAND DESCRIPTION */}
+          <div className="text-center sm:text-right">
+            <p className="text-xs sm:text-sm lg:text-base font-black tracking-wide text-[#5801B8]">
               CUSTOM BRANDING & MERCHANDISE
             </p>
           </div>
 
         </div>
 
-
-        {/* BOTTOM NAV */}
-
-        <div className="border-t border-[#5801B8]/30 mt-4 pt-3 sm:border-0 sm:mt-2 sm:pt-0">
-
-          <ul className="flex justify-center sm:justify-end items-center gap-5 sm:gap-[15%] text-xs sm:text-[18px] list-none tracking-wide text-[#5801B8]">
-
-            <li className="cursor-pointer hover:opacity-70 transition font-bold">
+        {/* BOTTOM NAV (Border removed) */}
+        <div className="mt-3 sm:mt-4">
+          <ul className="flex justify-center sm:justify-end items-center gap-4 sm:gap-8 lg:gap-12 text-xs sm:text-base lg:text-[18px] list-none tracking-wide font-extrabold text-[#5801B8]">
+            <li className="cursor-pointer hover:opacity-75 transition">
               COLLECTIONS
             </li>
-
-            <li className="font-bold">@</li>
-
-            <li className="cursor-pointer hover:opacity-70 transition font-bold">
+            <li>@</li>
+            <li className="cursor-pointer hover:opacity-75 transition">
               NO LIMIT BRANDS
             </li>
-
           </ul>
-
         </div>
 
       </header>
 
-
       {/* =====================================================
-          HERO
+          HERO SECTION
       ===================================================== */}
 
-      <section className="flex flex-col lg:flex-row justify-between gap-8 lg:gap-[2%] mt-8 sm:mt-10">
+      <section className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 mt-6 sm:mt-10 lg:mt-12">
 
-        {/* =================================================
-            LEFT SIDE
-        ================================================= */}
+        {/* LEFT COLUMN: TEXT & CTA */}
+        <div className={`${londrina.className} w-full lg:w-1/2 flex flex-col text-center lg:text-left items-center lg:items-start`}>
 
-        <div className={`${londrina.className} w-full lg:w-1/2 flex flex-col`}>
-
-          {/* HEADING */}
-
-          <div className="mt-2 sm:mt-6 lg:mt-[8%] mb-5">
-
-            <h1
-              className="
-                text-[#5801B8]
-                drop-shadow-[2px_3px_0px_#2D0063]
-                text-[38px]
-                leading-[1.05]
-                sm:text-[52px]
-                lg:text-[48px]
-                font-black
-                tracking-normal
-              "
-            >
+          {/* HEADLINE */}
+          <div className="mb-4 sm:mb-6">
+            <h1 className="text-[#5801B8] drop-shadow-[2px_3px_0px_#2D0063] text-[36px] sm:text-[54px] lg:text-[62px] leading-[0.98] font-black tracking-tight uppercase">
               NO LIMIT BRANDS
               <br />
               CRAFTED FOR
               <br />
               IMPACT
             </h1>
-
           </div>
 
-
           {/* DESCRIPTION */}
-
-          <div className="text-[17px] sm:text-[20px] leading-[1.7] text-[#5801B8] max-w-2xl font-bold">
-
+          <div className="text-[16px] sm:text-[19px] lg:text-[21px] leading-[1.6] text-[#5801B8] font-extrabold max-w-xl">
             <p>
               Delivering custom print and branding experiences that blend
               visual clarity with premium production. Built for brands,
@@ -117,66 +89,59 @@ export default function Hero() {
               focusing on material durability, vibrant color output, and
               seamless design integration.
             </p>
-
           </div>
 
-
           {/* BUTTONS */}
-
-          <div className="flex flex-row gap-3 mt-7 sm:mt-8 w-full sm:w-auto sm:ml-[5%]">
-
-            {/* VISIT SHOP */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 w-full sm:w-auto">
 
             <Link
               href="/Services"
               className="
                 bg-[#5801B8]
-                text-[#FFAE00]
+                text-[#FFD000]
                 border-2
                 border-[#5801B8]
-                px-4
-                sm:px-5
+                px-6
                 py-3
-                rounded-[10px]
-                flex-1
-                sm:flex-none
+                rounded-[12px]
                 text-sm
                 sm:text-base
                 text-center
-                font-bold
+                font-black
+                shadow-[2px_3px_0px_#2D0063]
                 hover:bg-[#2D0063]
+                hover:text-white
                 transition
-                shadow-md
+                w-full
+                sm:w-auto
               "
             >
               VISIT SHOP
             </Link>
 
-
-            {/* CONTACT */}
-
             <a
-              href="https://wa.me/254712345678?text=Hello%20No%20Limit%20Brands..."
+              href="https://wa.me/254712345678?text=Hello%20No%20Limit%20Brands%2C%20I%27d%20like%20to%20inquire%20about%20your%20custom%20branding%20and%20merchandise%20services."
               target="_blank"
               rel="noopener noreferrer"
               className="
                 border-2
                 border-[#5801B8]
                 text-[#5801B8]
-                px-4
-                sm:px-5
+                bg-white/10
+                backdrop-blur-sm
+                px-6
                 py-3
-                rounded-[10px]
-                flex-1
-                sm:flex-none
+                rounded-[12px]
                 text-center
                 text-sm
                 sm:text-base
-                font-bold
+                font-black
+                shadow-[2px_3px_0px_#2D0063]
                 hover:bg-[#5801B8]
-                hover:text-[#FFAE00]
+                hover:text-[#FFD000]
                 transition
-                shadow-md
+                w-full
+                sm:w-auto
               "
             >
               CONTACT US
@@ -186,22 +151,16 @@ export default function Hero() {
 
         </div>
 
-
-        {/* =================================================
-            RIGHT SIDE / IMAGE
-        ================================================= */}
-
-        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end mt-4 sm:mt-8 lg:mt-0">
-
+        {/* RIGHT COLUMN: HERO IMAGE */}
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end mt-2 sm:mt-6 lg:mt-0">
           <Image
             src="/images/latest background2.png"
             alt="No Limit Brands"
             width={570}
             height={550}
             priority
-            className="w-full max-w-[380px] sm:max-w-[500px] lg:max-w-[570px] h-auto lg:w-[85%]"
+            className="w-full max-w-[320px] sm:max-w-[460px] lg:max-w-[540px] h-auto object-contain drop-shadow-2xl"
           />
-
         </div>
 
       </section>
