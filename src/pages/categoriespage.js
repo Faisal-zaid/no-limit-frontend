@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -20,7 +19,7 @@ export default function CategoriesPage() {
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
 
   return (
-    <section className="min-h-screen bg-[url('/images/nolimitbackground.png')] bg-no-repeat bg-cover">
+    <section className="min-h-screen bg-nolimit-poster">
 
       {/* =====================================================
           HEADER
@@ -99,6 +98,31 @@ export default function CategoriesPage() {
                 </span>
 
               </button>
+
+
+              {/* ACCOUNT - DESKTOP ONLY */}
+              <Link
+                href="/account"
+                className="
+                  hidden
+                  lg:flex
+                  items-center
+                  gap-1
+                  hover:text-purple-600
+                  transition
+                "
+              >
+                <Image
+                  src="/images/user.png"
+                  alt="Account"
+                  width={25}
+                  height={25}
+                />
+
+                <span>
+                  Account
+                </span>
+              </Link>
 
 
               {/* CART */}
@@ -459,4 +483,3 @@ export default function CategoriesPage() {
     </section>
   );
 }
-
