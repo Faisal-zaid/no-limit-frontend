@@ -23,8 +23,7 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      {/* Updated background to match the radial gold-to-orange gradient */}
-      <body className="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#FCD34D] via-[#F59E0B] to-[#D97706] text-[#4C1D95] min-h-full flex flex-col">
+      <body className="bg-[radial-gradient(circle_at_50%_30%,_#FFAE00_0%,_#E87900_100%)] min-h-full flex flex-col text-[#5801B8]">
         <Providers>{children}</Providers>
       </body>
     </html>
