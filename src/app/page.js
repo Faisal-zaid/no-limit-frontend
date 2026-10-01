@@ -1,5 +1,6 @@
 import Hero from "../pages/Hero";
 import Services from "../pages/Services";
+import Footer from "../components/Footer";
 
 export default function Home() {
     return (
